@@ -3,8 +3,12 @@ import config from '../config';
 
 export let pool: Pool;
 
+const testConnection = async () => {
+  await pool.query('SELECT NOW()');
+};
+
 export const connectDb = async () => {
-  const { host, name: database, password, poolMax: max, port, user } = config.db;
+  const { host, database, password, poolMax: max, port, user } = config.db;
   pool = new Pool({
     database,
     host,
@@ -17,6 +21,8 @@ export const connectDb = async () => {
   pool.on('error', (error, client) => {
     console.log('Postgres error.', { error, client })
   })
+
+  await testConnection();
 }
 
 export const disconnectDb = async () => {

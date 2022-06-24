@@ -1,22 +1,40 @@
+import { Server } from 'http';
 import express from 'express';
 import cors from 'cors';
 
 import routes from './routes';
-import { connectDb } from './db';
+import { connectDb, disconnectDb } from './db';
 
-const app = express()
-const port = 8080;
+let httpServer: Server;
 
-connectDb()
+const gracefulShutdown = async () => {
+  console.log('Shutting down...')
+  await httpServer.close();
+  await disconnectDb();
+}
 
-// middleware
-app.use(cors());
-app.use(express.json());
+const start = async () => {
+  try {
+    const app = express()
+    const port = 8080;
 
-// define a route handler for the default home page
-app.use("/api", routes);
+    await connectDb()
 
-// start the Express server
-app.listen(port, () => {
-  console.log( `server started at http://localhost:${ port }` );
-});
+    // middleware
+    app.use(cors());
+    app.use(express.json());
+
+    // define a route handler for the default home page
+    app.use("/api", routes);
+
+    // start the Express server
+    httpServer = new Server(app);
+    httpServer.listen(port);
+    console.log('Started server on port', port)
+    process.on('SIGINT', gracefulShutdown);
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+start();

@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node .",
+    "b:s": "npm run build && npm run start",
     "test": "echo No tests"
   },
   "author": "Christian Daga",
