@@ -1,1 +1,1 @@
-export default require('./local.json');
+export default require('./local.env.json');
