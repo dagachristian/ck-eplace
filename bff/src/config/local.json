@@ -1,0 +1,10 @@
+{
+  "db": {
+    "host": "ck-rdb.cluster-cag5iezxhrmz.us-west-1.rds.amazonaws.com",
+    "database": "ck-bff",
+    "port": 5432,
+    "user": "postgres",
+    "password": "ckoleddev",
+    "poolMax": 10
+  }
+}
