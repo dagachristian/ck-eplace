@@ -1,23 +1,23 @@
 {
-  "name": "ck-web",
+  "name": "@ck/root",
   "version": "1.0.0",
-  "description": "",
-  "main": "./dist/index.js",
+  "description": "ck mono repo",
+  "private": true,
+  "workspaces": [
+    "./bff",
+    "./web"
+  ],
   "scripts": {
-    "build": "tsc",
-    "start": "node ."
+    "test": "npm run test -ws"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ckoled: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@github.com/ckoled/ck-api.git"
   },
   "author": "Christian Daga",
   "license": "ISC",
-  "devDependencies": {
-    "@types/cors": "^2.8.12",
-    "@types/express": "^4.17.13",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.2"
+  "bugs": {
+    "url": "https://github.com/ckoled/ck-api/issues"
   },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.3",
-    "http-status": "^1.5.0"
-  }
+  "homepage": "https://github.com/ckoled/ck-api#readme"
 }
