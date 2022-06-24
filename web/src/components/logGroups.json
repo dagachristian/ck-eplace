@@ -1,0 +1,199 @@
+{
+  "Vehicle Info Service": [
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-gap167ImporterTask",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-gap167ImporterTask",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-gap167ImporterTask",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-gap167SftpTasks",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-gap167SftpTasks",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-gap167SftpTasks",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-inventoryImporterTask",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-inventoryImporterTask",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-inventoryImporterTask",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-mileageImporterTask",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-mileageImporterTask",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-mileageImporterTask",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-pccdLookupsImporterTask",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-pccdLookupsImporterTask",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-pccdLookupsImporterTask",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehicle",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehicle",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehicle",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehicle-event-stream",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehicle-event-stream",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehicle-event-stream",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehicle-stream",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehicle-stream",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehicle-stream",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehiclesApi",
+          "serviceName": "Vehicle Info Service",
+          "lastLogEventsWithErrorsTS": "2022-06-02T23:48:41Z",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehiclesApi",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehiclesApi",
+          "lastUpdateTS": "2022-06-02T23:48:48Z",
+          "logErrorStatus": "ERROR"
+      },
+      {
+          "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-visSupportLambda",
+          "serviceName": "Vehicle Info Service",
+          "awsAccount": "657003001523",
+          "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-visSupportLambda",
+          "awsRegion": "us-east-2",
+          "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-visSupportLambda",
+          "lastUpdateTS": "2022-06-02T22:50:25Z"
+      },
+      {
+        "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-inventoryImporterTask",
+        "serviceName": "Vehicle Info Service",
+        "awsAccount": "657003001523",
+        "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-inventoryImporterTask",
+        "awsRegion": "us-east-2",
+        "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-inventoryImporterTask",
+        "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-mileageImporterTask",
+            "serviceName": "Vehicle Info Service",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-mileageImporterTask",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-mileageImporterTask",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-pccdLookupsImporterTask",
+            "serviceName": "Vehicle Info Service",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-pccdLookupsImporterTask",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-pccdLookupsImporterTask",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehicle",
+            "serviceName": "Vehicle Info Service",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehicle",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehicle",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehicle-event-stream",
+            "serviceName": "Vehicle Info Service",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehicle-event-stream",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehicle-event-stream",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehicle-stream",
+            "serviceName": "Vehicle Info Service",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehicle-stream",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehicle-stream",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-vehiclesApi",
+            "serviceName": "Vehicle Info Service",
+            "lastLogEventsWithErrorsTS": "2022-06-02T23:48:41Z",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-vehiclesApi",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-vehiclesApi",
+            "lastUpdateTS": "2022-06-02T23:48:48Z",
+            "logErrorStatus": "ERROR"
+        },
+        {
+            "logGroupLink": "https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-vehicleser-visSupportLambda",
+            "serviceName": "Vehicle Info Service",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-2:\\aws\\lambda\\slatldisal-ad-vehicleser-visSupportLambda",
+            "awsRegion": "us-east-2",
+            "logGroupName": "/aws/lambda/slatldisal-ad-vehicleser-visSupportLambda",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        }
+    ],
+    "One Sales": [
+        {
+            "logGroupLink": "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-osaappbff-osaAuth",
+            "serviceName": "One Sales",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-1:\\aws\\lambda\\slatldisal-ad-osaappbff-osaAuth",
+            "awsRegion": "us-east-1",
+            "logGroupName": "/aws/lambda/slatldisal-ad-osaappbff-osaAuth",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-osaappbff-osaBFFApp",
+            "serviceName": "One Sales",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-1:\\aws\\lambda\\slatldisal-ad-osaappbff-osaBFFApp",
+            "awsRegion": "us-east-1",
+            "logGroupName": "/aws/lambda/slatldisal-ad-osaappbff-osaBFFApp",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        },
+        {
+            "logGroupLink": "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/%2Faws%2Flambda%2Fslatldisal-ad-osaappbff-osaBFFEvent",
+            "serviceName": "One Sales",
+            "awsAccount": "657003001523",
+            "logGroupId": "657003001523:us-east-1:\\aws\\lambda\\slatldisal-ad-osaappbff-osaBFFEvent",
+            "awsRegion": "us-east-1",
+            "logGroupName": "/aws/lambda/slatldisal-ad-osaappbff-osaBFFEvent",
+            "lastUpdateTS": "2022-06-02T22:50:25Z"
+        }
+    ]
+}
