@@ -1,31 +1,22 @@
 import { Server } from 'http';
-import express from 'express';
-import cors from 'cors';
 
-import routes from './routes';
-import { connectDb, disconnectDb } from './db';
+import { db } from './db';
+import { useApp } from './express';
 
 let httpServer: Server;
 
 const gracefulShutdown = async () => {
   console.log('Shutting down...')
   await httpServer.close();
-  await disconnectDb();
+  await db.disconnectDb();
 }
 
 const start = async () => {
   try {
-    const app = express()
     const port = 8080;
 
-    await connectDb()
-
-    // middleware
-    app.use(cors());
-    app.use(express.json());
-
-    // define a route handler for the default home page
-    app.use("/api", routes);
+    const app = await useApp();
+    await db.connectDb()
 
     // start the Express server
     httpServer = new Server(app);
