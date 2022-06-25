@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { expressjwt as jwt, Request } from 'express-jwt';
 
 import config from './config';
@@ -16,6 +17,7 @@ export const useApp = async () => {
 
   // middleware
   app.use(helmet());
+  app.use(cookieParser())
   app.use(cors());
   app.use(express.json());
   app.use((req, res, next) => {

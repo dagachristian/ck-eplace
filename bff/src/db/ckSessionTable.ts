@@ -1,10 +1,12 @@
+import { v4 } from 'uuid';
+import { Obj, Tx } from './Query';
+
 import Table from './Table';
 
-const tableName = 'ck_session';
-
 class CkSessionTbl extends Table {
-  constructor() {
-    super(tableName);
+  async save(model: Obj, tx: Tx) {
+    model.id = v4();
+    return super.save(model, tx);
   }
 }
-export default new CkSessionTbl();
+export default new CkSessionTbl('ck_session', {});

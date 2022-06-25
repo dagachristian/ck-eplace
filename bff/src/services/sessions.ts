@@ -1,5 +1,6 @@
 import { ckSessionTbl } from '../db';
 import { currentContext } from '../context';
+import { Tx } from '../db/Query';
 
 const deleteExpiredSessions = async () => {
   const ctx = currentContext();
@@ -12,7 +13,7 @@ const deleteExpiredSessions = async () => {
       clause: `t.expire < :now`,
       params: { now: ctx.now }
     };
-    await ckSessionTbl.delete(where);
+    await ckSessionTbl.delete(where, new Tx());
   } finally {
     // Go back to user context.
     ctx.userId = userId;
@@ -27,7 +28,7 @@ export const storeSession = async (session: any) => {
   }
 
   try {
-    await ckSessionTbl.save(session);
+    await ckSessionTbl.save(session, new Tx());
   } catch (error) {
     console.log('Failed to save session.', { error, session });
   }
@@ -38,7 +39,7 @@ export const deleteSession = async (sessionId: any) => {
     clause: `t.id = '${sessionId}'`
   };
   try {
-    await ckSessionTbl.delete(where);
+    await ckSessionTbl.delete(where, new Tx());
   } catch (error) {
     console.log('Failed to delete session.', { error, sessionId });
   }
