@@ -29,9 +29,9 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   try {
     const newUser = await userSvc.createUser(req.body);
     res.status(httpStatus.OK).json({
-      id: newUser!.id,
-      username: newUser!.username,
-      email: newUser!.email,
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
     });
   } catch (e) {
     console.log('Register error', e);
