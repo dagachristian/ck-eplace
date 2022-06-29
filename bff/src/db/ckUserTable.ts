@@ -4,7 +4,7 @@ import Table from './Table';
 import { Obj, Tx } from './Query';
 
 class CkUserTbl extends Table {
-  async save(user: IUser, tx: Tx) {
+  async save(user: IUser, tx?: Tx) {
     const ctx = currentContext();
     user = {
       ...user, 
