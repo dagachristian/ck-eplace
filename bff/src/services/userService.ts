@@ -71,5 +71,7 @@ export const login = async (userInfo: IUserInfo) => {
 export const createUser = async (user: IUser) => {
   user.id = v4();
   user.password = bcrypt.hashSync(user.password!, saltRounds);
-  return await ckUserTbl.save(user);
+  const createdUser = await ckUserTbl.save(user);
+  if (createdUser) return createdUser
+  throw new ApiError(Errors.EXISTS);
 }

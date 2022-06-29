@@ -12,6 +12,10 @@ export const Errors: {[key: string]: ErrorType} = Object.freeze({
     msg: 'Requested entity does not exist',
     code: 404
   },
+  EXISTS: {
+    msg: 'Already exists',
+    code: 409
+  },
   API: {
     msg: 'Internal server error',
     code: 500
