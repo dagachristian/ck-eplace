@@ -3,9 +3,12 @@ export interface IUser {
   username: string,
   password?: string,
   email: string,
-  created?: Date, 
+  enabled?: boolean,
+  defaultLocale: string,
+  meta?: any,
+  created?: Date | moment.Moment, 
   createdBy?: string,
-  lastModified?: Date,
+  lastModified?: Date | moment.Moment,
   lastModifiedBy?: string
 }
 

@@ -9,8 +9,20 @@ import Query, { Tx } from '../db/Query';
 import { currentContext } from '../context';
 import config from '../config';
 import { storeSession } from './sessions';
+import { ApiError, Errors } from '../errors';
 
 const saltRounds = 6;
+
+const publishUser = (user: IUser) => {
+  delete user.enabled;
+  delete user.meta;
+  delete user.created;
+  delete user.createdBy;
+  delete user.lastModified;
+  delete user.lastModifiedBy;
+  delete user.password;
+  return user;
+}
 
 export const login = async (userInfo: IUserInfo) => {
   const user = await Query.findOne(
@@ -49,8 +61,11 @@ export const login = async (userInfo: IUserInfo) => {
     }
     await storeSession(session);
 
-    return { user, sessionId, jwtToken };
-  }
+    return { user: publishUser(user), sessionId, jwtToken };
+  } else if (!user)
+    throw new ApiError(Errors.NOT_EXIST);
+  else
+    throw new ApiError(Errors.UNAUTHORIZED);
 }
 
 export const createUser = async (user: IUser) => {

@@ -2,6 +2,11 @@ export default require('./local.env.json') as {
   api: {
     endpoint: string
   },
+  signed: {
+    cookie: {
+      secret: string[]
+    }
+  },
   db: {
     host: string,
     database: string,

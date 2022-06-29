@@ -14,10 +14,10 @@ const gracefulShutdown = async () => {
 const start = async () => {
   try {
     const port = 8080;
-
-    const app = await useApp();
+    
     await db.connectDb()
-
+    const app = await useApp();
+    
     // start the Express server
     httpServer = new Server(app);
     httpServer.listen(port);

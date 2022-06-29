@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 
-import { IRequest } from '../express';
 import { deleteSession } from '../services/sessions';
 
 import * as userSvc from '../services/userService';
@@ -13,11 +13,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const userAgent = req.get('user-agent') || '';
 
     const { user, sessionId, jwtToken } = (await userSvc.login({username, password, ip, userAgent }))!
-    delete user.created;
-    delete user.createdBy;
-    delete user.lastModified;
-    delete user.lastModifiedBy;
-    delete user.password;
 
     res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({
@@ -25,7 +20,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       user
     })
   } catch (e) {
-    console.log('Login error');
+    console.log('Login error', e);
     next(e);
   }
 }
@@ -39,17 +34,17 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       email: newUser!.email,
     });
   } catch (e) {
-    console.log('Login error');
+    console.log('Register error', e);
     next(e);
   }
 }
 
-export const logout = async (req: IRequest, res: Response, next: NextFunction) => {
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    deleteSession(req.user.jti);
+    deleteSession(req.auth?.jti);
     res.status(httpStatus.OK).end();
   } catch (e) {
-    console.log('Login error');
+    console.log('Logout error', e);
     next(e);
   }
 }

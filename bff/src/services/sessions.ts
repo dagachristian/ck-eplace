@@ -14,7 +14,7 @@ const deleteExpiredSessions = async () => {
       clause: `t.expire < :now`,
       params: { now: ctx.now }
     };
-    await ckSessionTbl.delete(where, new Tx());
+    await ckSessionTbl.delete(where);
   } finally {
     // Go back to user context.
     ctx.userId = userId;
@@ -29,7 +29,7 @@ export const storeSession = async (session: ISession) => {
   }
 
   try {
-    await ckSessionTbl.save(session, new Tx());
+    await ckSessionTbl.save(session);
   } catch (error) {
     console.log('Failed to save session.', { error, session });
   }
@@ -40,7 +40,7 @@ export const deleteSession = async (sessionId: any) => {
     clause: `t.id = '${sessionId}'`
   };
   try {
-    await ckSessionTbl.delete(where, new Tx());
+    await ckSessionTbl.delete(where);
   } catch (error) {
     console.log('Failed to delete session.', { error, sessionId });
   }

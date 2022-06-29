@@ -38,7 +38,7 @@ export default class Table {
     return this.#tableName;
   }
 
-  async save(attribs: Obj, tx: Tx) {
+  async save(attribs: Obj, tx?: Tx) {
     const model = _.cloneDeep(attribs);
 
     const ctx = currentContext();
@@ -47,7 +47,7 @@ export default class Table {
         model.created = ctx.now;
       }
       if (!model.createdBy) {
-        model.createdBy = ctx.principalId;
+        model.createdBy = ctx.userId;
       }
     }
     if (this.#hasLastModified) {
@@ -55,7 +55,7 @@ export default class Table {
         model.lastModified = ctx.now;
       }
       if (!model.lastModifiedBy) {
-        model.lastModifiedBy = ctx.principalId;
+        model.lastModifiedBy = ctx.userId;
       }
     }
 
@@ -81,7 +81,7 @@ export default class Table {
     }
   }
 
-  async update(updateAttribs: Obj, where: Where, tx: Tx) {
+  async update(updateAttribs: Obj, where: Where, tx?: Tx) {
     const model = _.cloneDeep(updateAttribs);
 
     const ctx = currentContext();
@@ -90,7 +90,7 @@ export default class Table {
         model.lastModified = ctx.now;
       }
       if (!model.lastModifiedBy) {
-        model.lastModifiedBy = ctx.principalId;
+        model.lastModifiedBy = ctx.userId;
       }
     }
 
@@ -123,7 +123,7 @@ export default class Table {
     }
   }
 
-  async delete(where: Where, tx: Tx) {
+  async delete(where: Where, tx?: Tx) {
     const { clause, params } = constructWhere(where);
     const text = `DELETE FROM ${this.#tableName} t ${clause} RETURNING *`;
 
