@@ -1,4 +1,7 @@
 export default require('./local.env.json') as {
+  api: {
+    endpoint: string
+  },
   db: {
     host: string,
     database: string,
@@ -8,6 +11,7 @@ export default require('./local.env.json') as {
     poolMax: 10
   },
   jwt: {
-    secret: string
+    secret: string,
+    expiresIn: string
   }
 };

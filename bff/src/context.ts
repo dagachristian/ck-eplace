@@ -57,5 +57,5 @@ export const createContext = (next: NextFunction, requestResponse: { req: any, r
 };
 
 export const currentContext = () => {
-  return getNamespace(namespaceName)?.get(contextName);
+  return getNamespace(namespaceName)?.get(contextName) as Context;
 };

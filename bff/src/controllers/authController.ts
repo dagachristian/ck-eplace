@@ -10,9 +10,20 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   try {
     const { username, password } = req.body;
     const { ip } = req;
-    const userAgent = req.get('user-agent');
+    const userAgent = req.get('user-agent') || '';
 
-    res.status(httpStatus.OK).send('login');
+    const { user, sessionId, jwtToken } = (await userSvc.login({username, password, ip, userAgent }))!
+    delete user.created;
+    delete user.createdBy;
+    delete user.lastModified;
+    delete user.lastModifiedBy;
+    delete user.password;
+
+    res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
+    res.status(httpStatus.OK).json({
+      token: jwtToken,
+      user
+    })
   } catch (e) {
     console.log('Login error');
     next(e);

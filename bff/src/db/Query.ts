@@ -15,9 +15,9 @@ export type Where = {
 }
 
 export type Options = {
-  join: Obj,
-  select: Where,
-  tx: Tx,
+  join?: Obj,
+  select?: Where,
+  tx?: Tx,
   where: Where,
   raw?: boolean
 }
@@ -56,7 +56,7 @@ export const convertDbFieldsToModel = (dbFields: Obj) => {
   }, {});
 };
 
-export const constructSelect = (select: Where) => {
+export const constructSelect = (select: Where | undefined) => {
   if (!select) {
     return 'SELECT *';
   }
@@ -74,7 +74,7 @@ export const constructFrom = (aliases: Obj) => {
   return `FROM ${table} ${alias}`;
 };
 
-export const constructJoin = (join: Obj, aliases: Obj) => {
+export const constructJoin = (join: Obj | undefined, aliases: Obj) => {
   if (!join) {
     return '';
   }

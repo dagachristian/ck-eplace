@@ -1,6 +1,7 @@
 import { ckSessionTbl } from '../db';
 import { currentContext } from '../context';
 import { Tx } from '../db/Query';
+import { ISession } from './interfaces';
 
 const deleteExpiredSessions = async () => {
   const ctx = currentContext();
@@ -20,7 +21,7 @@ const deleteExpiredSessions = async () => {
   }
 };
 
-export const storeSession = async (session: any) => {
+export const storeSession = async (session: ISession) => {
   try {
     await deleteExpiredSessions();
   } catch (error) {
