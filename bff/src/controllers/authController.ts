@@ -25,6 +25,15 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+export const currentSession = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(httpStatus.OK).json({token: req.auth?.jti});
+  } catch (e) {
+    console.log('Current Session error', e);
+    next(e);
+  }
+}
+
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const newUser = await userSvc.createUser(req.body);

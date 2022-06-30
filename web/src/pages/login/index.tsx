@@ -16,7 +16,7 @@ type IFormInput = {
 
 export default function Login() {
   const { t } = useTranslation();
-  const { signIn, verifyCode } = useAuth();
+  const { signIn } = useAuth();
   const { 
     control: eControl,
     handleSubmit: eSubmit, 

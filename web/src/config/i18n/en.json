@@ -5,13 +5,5 @@
   "login": {
     "signin": "Sign In",
     "submit": "Submit"
-  },
-  "serviceInfo": {
-    "status": "Status",
-    "contactInfo": "Contact Info",
-    "team": "Team",
-    "lastUpdate": "Last Update",
-    "logErrorStatus": "Log Error Status",
-    "logGroups": "Log Groups"
   }
 }

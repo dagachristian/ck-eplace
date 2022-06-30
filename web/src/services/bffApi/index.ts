@@ -4,18 +4,16 @@ import { IUser } from '../interfaces'
 
 export class BffApiService {
   private readonly baseUrl: string | undefined
-  token
   /**
    *
    */
   constructor() {
     axiosRetry(axios, { retries: 3, retryDelay: this.retryFunction() })
     this.baseUrl = process.env.API_URL
-    this.token = ''
   }
 
-  public async login(username: string, password: string): Promise<IUser> {
-    const url = `${this.baseUrl}/token/login`
+  public async login(username: string, password: string): Promise<{token: string, user: IUser}> {
+    const url = `${this.baseUrl}/auth/login`
     const response = await axios.request({
       method: 'POST',
       url,
@@ -24,8 +22,19 @@ export class BffApiService {
         password
       }
     })
-    this.token = response.data.token;
-    return response.data.user;
+    return response.data;
+  }
+
+  public async currentSession(token: string): Promise<string> {
+    const url = `${this.baseUrl}/auth/currentSession`
+    const response = await axios.request({
+      method: 'POST',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data.token;
   }
 
   public async register(userInfo: IUser): Promise<{ user: IUser }> {
@@ -38,13 +47,13 @@ export class BffApiService {
     return response.data;
   }
 
-  public async logout() {
+  public async logout(token: string) {
     const url = `${this.baseUrl}/auth/register`
     const response = await axios.request({
       method: 'GET',
       url,
       headers: {
-        Authorization: `Bearer ${this.token}`
+        Authorization: `Bearer ${token}`
       }
     })
     return response.status;
