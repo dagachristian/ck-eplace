@@ -15,7 +15,6 @@ const saltRounds = 6;
 
 const publishUser = (user: IUser) => {
   delete user.enabled;
-  delete user.meta;
   delete user.created;
   delete user.createdBy;
   delete user.lastModified;

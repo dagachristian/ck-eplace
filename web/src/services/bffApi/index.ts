@@ -1,74 +1,54 @@
 import axios, { AxiosError } from 'axios'
 import axiosRetry, { exponentialDelay } from 'axios-retry'
-import {ILogGroup, IService} from '../../interfaces'
+import { IUser } from '../interfaces'
 
 export class BffApiService {
   private readonly baseUrl: string | undefined
+  token
   /**
    *
    */
   constructor() {
     axiosRetry(axios, { retries: 3, retryDelay: this.retryFunction() })
-    this.baseUrl = process.env.REACT_APP_API_BASE_URL
+    this.baseUrl = process.env.API_URL
+    this.token = ''
   }
 
-  public async exchangeToken(authToken: string): Promise<string | null> {
-    const url = `${this.baseUrl}/token/exchange`
+  public async login(username: string, password: string): Promise<IUser> {
+    const url = `${this.baseUrl}/token/login`
     const response = await axios.request({
       method: 'POST',
       url,
-      headers: { Authorization: `Bearer ${authToken}` }
+      data: {
+        username,
+        password
+      }
     })
-    const resObj = response.data as { apiToken: string }
-    return resObj.apiToken
+    this.token = response.data.token;
+    return response.data.user;
   }
 
-  public async getDashboardData(apiToken: string): Promise<{ services: IService[] } | null> {
-    const url = `${this.baseUrl}/dashboard`
+  public async register(userInfo: IUser): Promise<{ user: IUser }> {
+    const url = `${this.baseUrl}/auth/register`
+    const response = await axios.request({
+      method: 'POST',
+      url,
+      data: userInfo
+    })
+    return response.data;
+  }
+
+  public async logout() {
+    const url = `${this.baseUrl}/auth/register`
     const response = await axios.request({
       method: 'GET',
       url,
-      headers: { Authorization: `Bearer ${apiToken}` }
+      headers: {
+        Authorization: `Bearer ${this.token}`
+      }
     })
-    return response?.data
+    return response.status;
   }
-
-  public async getServices(apiToken: string, since?: string): Promise<{ services: IService[] } | null> {
-    const url = `${this.baseUrl}/services?since=${since || ''}`
-    const response = await axios.request({
-      method: 'GET',
-      url,
-      headers: { Authorization: `Bearer ${apiToken}` }
-    })
-    return response?.data
-  }
-
-  public async getLogGroups(serviceName: string, apiToken: string, since?: string): Promise<{ logGroups: ILogGroup[] } | null> {
-    const url = `${this.baseUrl}/loggroups/${serviceName}?since=${since || ''}`
-    const response = await axios.request({
-      method: 'GET',
-      url,
-      headers: { Authorization: `Bearer ${apiToken}` }
-    })
-    return response?.data
-  }
-
-  // private async fetch(apiPath: string, opts) {
-  //   try {
-  //     const url = `${this.config.baseUrl}/${apiPath}`
-  //     const response = await axios.request({
-  //       method: 'GET',
-  //       ...opts,
-  //       url,
-  //       headers: { ...opts?.headers, Authorization: `Bearer ${authRes.data.token}` }
-  //     })
-
-  //     return response.data as T
-  //   } catch (e) {
-  //     console.error('Could not execute the request', { message: e.message, stack: e.stack })
-  //     throw e
-  //   }
-  // }
 
   private retryFunction() {
     return (retryCount: number, error: AxiosError) => {

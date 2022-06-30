@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import GlobalLayout from '../../components/layout';
-import Flow from '../../components/graph';
 import s from '../../services/bffApi/websocket';
 
 import './dashboard.css';
@@ -17,7 +16,6 @@ export default function Dashboard() {
   return (
     <GlobalLayout>
       <div className='graph-div'>
-        <Flow />
       </div>
     </GlobalLayout>
   );
