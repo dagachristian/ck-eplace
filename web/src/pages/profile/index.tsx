@@ -1,6 +1,7 @@
 import GlobalLayout from '../../components/layout';
 
-export function Profile() {
+export default function Profile() {
+  document.title = 'Profile | CK'
   return (
     <GlobalLayout>
       This is the profile

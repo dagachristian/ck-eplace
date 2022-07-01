@@ -13,12 +13,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckoled/ck-api.git"
+    "url": "git+https://github.com/ckoled/ck.git"
   },
   "author": "Christian Daga",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ckoled/ck-api/issues"
+    "url": "https://github.com/ckoled/ck/issues"
   },
-  "homepage": "https://github.com/ckoled/ck-api#readme"
+  "homepage": "https://github.com/ckoled/ck#readme",
+  "overrides": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-router-dom": "^6.3.0"
+  }
 }

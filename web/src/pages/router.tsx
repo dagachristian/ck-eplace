@@ -1,11 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
+import { useEffect, useState } from 'react';
 import { useAuth } from '../config/auth';
 
 import Login from './login';
 import Dashboard from './dashboard';
-import { useEffect, useState } from 'react';
-import { Profile } from './profile';
+import Profile from './profile';
 
 export default function Router() {
   const { loggedIn, currentSession } = useAuth();
@@ -14,10 +13,10 @@ export default function Router() {
   useEffect(() => {
     const checkSession = async () => {
       const authed = await currentSession();
-      setSameSession(authed);
+      setSameSession(authed?true:false);
     }
     checkSession()
-  }, [sameSession, loggedIn])
+  }, [sameSession, loggedIn, currentSession])
 
   return (
     <BrowserRouter>

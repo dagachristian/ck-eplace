@@ -1,5 +1,13 @@
 @import '~antd/dist/antd.css';
 
+:root {
+  --dark-color: #011F26;
+  --primary-color: #03658C;
+  --secondary-color: #F27EA9;
+  --tertiary-color: #03738C;
+  --light-color: #FFF8F6;
+}
+
 html,
 body {
   padding: 0;
@@ -27,19 +35,3 @@ img {
   max-width: 100%;
   display: block;
 }
-
-/* .ant-btn-primary {
-  border-color: #D5001C;
-  background: #D5001C;
-}
-
-.ant-btn-loading {
-  border-color: #D5001C;
-  background: #D5001C;
-}
-
-.ant-btn:hover {
-  background: #b80019;
-  border-color: #b80019;
-  color: black;
-} */

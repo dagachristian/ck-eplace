@@ -1,6 +1,8 @@
 {
   "layout": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "login": "Sign In",
+    "profile": "Profile"
   },
   "login": {
     "signin": "Sign In",

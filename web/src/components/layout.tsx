@@ -4,20 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../config/auth';
 import './layout.css';
+import { useNavigate } from 'react-router-dom';
 
 const { Header, Content, Footer } = Layout;
 
 export default function GlobalLayout({ children, login }: any) {
   const { t } = useTranslation();
   const auth = useAuth();
-
-  const onLogout = async () => {
-    try {
-      await auth.signOut();
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  const nav = useNavigate();
 
   return (
     <Layout id='layout'>
@@ -35,7 +29,13 @@ export default function GlobalLayout({ children, login }: any) {
             {
               key: '1',
               label: (
-                <Button type='text' size='small' danger onClick={onLogout}>{t('layout.logout')}</Button>
+                <Button type='text' size='small' onClick={() => nav('/profile')}>{t('layout.profile')}</Button>
+              ),
+            },
+            {
+              key: '2',
+              label: (
+                <Button type='text' size='small' danger onClick={() => auth.signOut()}>{t('layout.logout')}</Button>
               ),
             }
           ]} />} placement="bottomRight">

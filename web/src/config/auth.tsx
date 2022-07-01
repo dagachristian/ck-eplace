@@ -6,16 +6,18 @@ type AC = {
   loggedIn: boolean
   signIn: (username: string, password: string) => Promise<boolean>
   signOut: () => Promise<any>
-  currentSession: () => Promise<boolean>
+  currentSession: () => Promise<string | null>
   apiToken: string | null
+  user: IUser | null
 }
 
 const AuthContext = createContext<AC>({
   loggedIn: false,
   signIn: () => Promise.resolve(false),
   signOut: () => Promise.resolve(),
-  currentSession: () => Promise.resolve(false),
-  apiToken: null
+  currentSession: () => Promise.resolve(null),
+  apiToken: null,
+  user: null
 })
 
 interface IAuthProviderProps {
@@ -48,24 +50,24 @@ const AuthProvider = (props: IAuthProviderProps) => {
     setApiToken(null)
     setUser(null)
     sessionStorage.clear()
-  }, [])
+  }, [apiToken])
 
   const currentSession = useCallback(async () => {
     try {
-      const tok = sessionStorage.getItem('dashboard.token');
+      const tok = apiToken || sessionStorage.getItem('dashboard.token');
       await bffApi.currentSession(tok!)
       setApiToken(tok);
       setLoggedIn(true);
-      setUser(JSON.parse(sessionStorage.getItem('dashboard.user')!));
+      if (!user) setUser(JSON.parse(sessionStorage.getItem('dashboard.user')!));
       // refresh token
 
-      return true;
+      return tok;
     } catch (e) {
       console.log(e);
       signOut()
     }
-    return false;
-  }, [])
+    return null;
+  }, [apiToken, signOut, user])
 
   return (
     <AuthContext.Provider
@@ -74,7 +76,8 @@ const AuthProvider = (props: IAuthProviderProps) => {
         signIn,
         signOut,
         currentSession,
-        apiToken
+        apiToken,
+        user
       }}
     >
       {props.children}
