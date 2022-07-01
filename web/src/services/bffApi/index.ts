@@ -40,7 +40,7 @@ export class BffApiService {
   public async register(userInfo: IUser): Promise<{ user: IUser }> {
     const url = `${this.baseUrl}/auth/register`
     const response = await axios.request({
-      method: 'POST',
+      method: 'GET',
       url,
       data: userInfo
     })
@@ -48,7 +48,7 @@ export class BffApiService {
   }
 
   public async logout(token: string) {
-    const url = `${this.baseUrl}/auth/register`
+    const url = `${this.baseUrl}/auth/logout`
     const response = await axios.request({
       method: 'GET',
       url,
