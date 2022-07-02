@@ -1,7 +1,7 @@
 import { AuthProvider } from '../config/auth';
 import Router from './router';
 
-import './App.css';
+import './App.less';
 
 function App() {
   return (
