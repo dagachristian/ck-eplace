@@ -5,10 +5,12 @@
   "author": "Christian Daga",
   "license": "ISC",
   "private": true,
+  "homepage": "http://localhost:3000",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test"
+    "test": "craco test",
+    "clean": "rm -rf node_modules"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
