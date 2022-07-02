@@ -20,7 +20,7 @@
   background-size: cover;
 }
 
-#login-div {
+.centered-div {
   background-color: var(--light-color);
   box-shadow: 0.2em 0.4em 5px;
   border-radius: 3px;
@@ -34,11 +34,19 @@
   width: 37%;
   min-width: 200px;
   max-width: 600px;
-  height: 49%;
-  min-height: 450px;
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+#login-div {
+  height: 49%;
+  min-height: 450px;
+}
+
+#register-div {
+  height: 52%;
+  min-height: 470px;
 }
 
 .ant-form-item {
