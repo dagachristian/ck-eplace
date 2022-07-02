@@ -17,6 +17,9 @@ export default require('./local.env.json') as {
   },
   jwt: {
     secret: string,
-    expiresIn: string
+    expiresIn: {
+      api: string,
+      refresh: string
+    }
   }
 };

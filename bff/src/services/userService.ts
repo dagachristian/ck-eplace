@@ -39,17 +39,27 @@ export const login = async (userInfo: IUserInfo) => {
     ctx.appId = userInfo.ip + userInfo.userAgent;
 
     const sessionId = v4();
-    const jwtToken = jwt.sign(
+    const apiToken = jwt.sign(
       { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
       config.jwt.secret,
       {
-        expiresIn: config.jwt.expiresIn,
+        expiresIn: config.jwt.expiresIn.api,
         issuer: config.api.endpoint,
         subject: user.id,
         jwtid: sessionId
       }
     )
-    const { exp } = jwt.decode(jwtToken) as jwt.JwtPayload;
+    const refreshToken = jwt.sign(
+      { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
+      config.jwt.secret,
+      {
+        expiresIn: config.jwt.expiresIn.refresh,
+        issuer: config.api.endpoint,
+        subject: user.id,
+        jwtid: sessionId
+      }
+    )
+    const { exp } = jwt.decode(apiToken) as jwt.JwtPayload;
     const expire = moment(exp).utc();
     const session = {
       id: sessionId,
@@ -60,7 +70,7 @@ export const login = async (userInfo: IUserInfo) => {
     }
     await storeSession(session);
 
-    return { user: publishUser(user), sessionId, jwtToken };
+    return { user: publishUser(user), sessionId, apiToken, refreshToken };
   } else if (!user)
     throw new ApiError(Errors.NOT_EXIST);
   else

@@ -12,7 +12,7 @@ export class BffApiService {
     this.baseUrl = process.env.REACT_APP_API_BASE_URL
   }
 
-  public async login(username: string, password: string): Promise<{token: string, user: IUser}> {
+  public async login(username: string, password: string): Promise<{apiToken: string, refreshToken: string, user: IUser}> {
     const url = `${this.baseUrl}/auth/login`
     const response = await axios.request({
       method: 'POST',
@@ -28,7 +28,7 @@ export class BffApiService {
   public async currentSession(token: string): Promise<string> {
     const url = `${this.baseUrl}/auth/currentSession`
     const response = await axios.request({
-      method: 'POST',
+      method: 'GET',
       url,
       headers: {
         Authorization: `Bearer ${token}`
@@ -37,10 +37,22 @@ export class BffApiService {
     return response.data.token;
   }
 
+  public async renewSession(token: string): Promise<{apiToken: string, user: IUser}> {
+    const url = `${this.baseUrl}/auth/renewSession`
+    const response = await axios.request({
+      method: 'GET',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+  }
+
   public async register(userInfo: IUser): Promise<{ user: IUser }> {
     const url = `${this.baseUrl}/auth/register`
     const response = await axios.request({
-      method: 'GET',
+      method: 'POST',
       url,
       data: userInfo
     })

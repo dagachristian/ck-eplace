@@ -12,11 +12,12 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const { ip } = req;
     const userAgent = req.get('user-agent') || '';
 
-    const { user, sessionId, jwtToken } = (await userSvc.login({username, password, ip, userAgent }))!
+    const { user, sessionId, apiToken, refreshToken } = (await userSvc.login({username, password, ip, userAgent }))!
 
     res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({
-      token: jwtToken,
+      apiToken,
+      refreshToken,
       user
     })
   } catch (e) {
@@ -30,6 +31,15 @@ export const currentSession = async (req: Request, res: Response, next: NextFunc
     res.status(httpStatus.OK).json({token: req.auth?.jti});
   } catch (e) {
     console.log('Current Session error', e);
+    next(e);
+  }
+}
+
+export const renewSession = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(httpStatus.OK).json({user: {}, apiToken: req.auth?.jti});
+  } catch (e) {
+    console.log('Renew Session error', e);
     next(e);
   }
 }
