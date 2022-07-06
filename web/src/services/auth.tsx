@@ -51,6 +51,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
     setApiToken(null)
     setUser(null)
     sessionStorage.clear()
+    localStorage.clear()
   }, [apiToken])
 
   const currentSession = useCallback(async () => {

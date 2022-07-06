@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 
-import { deleteSession } from '../services/sessions';
+// import { deleteSession } from '../services/sessions';
 
 import * as userSvc from '../services/userService';
 
@@ -15,7 +15,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     const { user, sessionId, apiToken, refreshToken } = (await userSvc.login({username, password, ip, userAgent }))!
 
-    res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
+    // res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({
       apiToken,
       refreshToken,
@@ -44,7 +44,7 @@ export const renewSession = async (req: Request, res: Response, next: NextFuncti
     const userAgent = req.get('user-agent') || '';
     const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth!, ip, userAgent);
 
-    res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
+    // res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({
       apiToken,
       user
@@ -73,7 +73,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/logout')
   try {
-    deleteSession(req.auth?.jti);
+    // deleteSession(req.auth?.jti);
     res.status(httpStatus.OK).end();
   } catch (e) {
     console.log('Logout error', e);

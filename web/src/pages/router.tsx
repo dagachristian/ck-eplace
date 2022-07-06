@@ -21,19 +21,25 @@ export default function Router() {
   }, [sameSession, loggedIn, currentSession])
 
   function ProtectedRoute() {
+    return (loggedIn || sameSession)?<Outlet />:<Navigate to='/login' replace />;
+  }
+
+  function PublicRoute() {
     const path = useLocation().pathname;
     if (path !== '/login' && path !== '/') savedPath = path
-    return (loggedIn || sameSession)?<Outlet />:<Navigate to='/login' replace />;
+    return <Outlet />;
   }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Navigate to='/dashboard' replace/>}/>
-        <Route path='/dashboard' element={<Dashboard />}/>
-        <Route path='/login' element={(loggedIn || sameSession)?<Navigate to={savedPath} replace />:<Login />}/>
-        <Route element={<ProtectedRoute />}>
-          <Route path='/profile' element={<Profile />}/>
+        <Route element={<PublicRoute />}>
+          <Route path='/dashboard' element={<Dashboard />}/>
+          <Route path='/login' element={(loggedIn || sameSession)?<Navigate to={savedPath} replace />:<Login />}/>
+          <Route element={<ProtectedRoute />}>
+            <Route path='/profile' element={<Profile />}/>
+          </Route>
         </Route>
         <Route
           path="*"

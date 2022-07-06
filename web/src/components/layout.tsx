@@ -31,7 +31,10 @@ export default function GlobalLayout({ children, login }: any) {
               {
                 key: '2',
                 label: (
-                  <Button type='text' size='small' danger onClick={() => auth.signOut()}>{t('layout.logout')}</Button>
+                  <Button type='text' size='small' danger onClick={async () => {
+                    await auth.signOut()
+                    window.location.reload()
+                  }}>{t('layout.logout')}</Button>
                 ),
               }
             ]} />} placement="bottomRight">

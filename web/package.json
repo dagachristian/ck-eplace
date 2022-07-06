@@ -8,6 +8,7 @@
   "homepage": "http://localhost:3000",
   "scripts": {
     "start": "craco start",
+    "start:dev": "npm start",
     "build": "craco build",
     "test": "craco test",
     "clean": "rm -rf node_modules"

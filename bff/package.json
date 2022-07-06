@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node .",
-    "b:s": "npm run build && npm run start",
+    "start:dev": "npm run build && npm run start",
     "test": "echo No tests",
     "clean": "rm -rf node_modules"
   },

@@ -9,7 +9,6 @@
     "./rdb"
   ],
   "scripts": {
-    "test": "npm run test -ws",
     "clean": "rm -rf node_modules && npm run clean -ws"
   },
   "repository": {

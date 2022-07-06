@@ -8,7 +8,7 @@ import { IUser, IUserInfo } from './interfaces';
 import Query, { Tx } from '../db/Query';
 import { currentContext } from '../context';
 import config from '../config';
-import { storeSession } from './sessions';
+// import { storeSession } from './sessions';
 import { ApiError, Errors } from '../errors';
 
 const saltRounds = 6;
@@ -49,16 +49,16 @@ const newSession = async (user: IUser, ip: string, userAgent: string) => {
       jwtid: sessionId
     }
   )
-  const { exp } = jwt.decode(apiToken) as jwt.JwtPayload;
-  const expire = moment(exp).utc();
-  const session = {
-    id: sessionId,
-    userId: user.id!,
-    address: ip,
-    userAgent: userAgent,
-    expire
-  }
-  await storeSession(session);
+  // const { exp } = jwt.decode(apiToken) as jwt.JwtPayload;
+  // const expire = moment(exp).utc();
+  // const session = {
+  //   id: sessionId,
+  //   userId: user.id!,
+  //   address: ip,
+  //   userAgent: userAgent,
+  //   expire
+  // }
+  // await storeSession(session);
 
   return { sessionId, apiToken, refreshToken }
 }
