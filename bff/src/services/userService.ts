@@ -93,7 +93,7 @@ export const renewSession = async (refreshToken: string, ip: string, userAgent: 
       }
     }
   ) as IUser;
-  if (user) {
+  if (user && dec.aud == ip+userAgent) {
     const { sessionId, apiToken } = await newSession(user, ip, userAgent);
     return { user: publishUser(user), sessionId, apiToken };
   } else if (!user)
