@@ -1,4 +1,4 @@
-import { AuthProvider } from '../config/auth';
+import { AuthProvider } from '../services/auth';
 import Router from './router';
 
 import './App.less';

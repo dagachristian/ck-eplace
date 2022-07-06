@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../config/auth';
+import { useAuth } from '../services/auth';
 
 import Login from './login';
 import Dashboard from './dashboard';

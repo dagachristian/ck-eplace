@@ -2,7 +2,7 @@ import { Button, Dropdown, Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
-import { useAuth } from '../config/auth';
+import { useAuth } from '../services/auth';
 import './layout.css';
 import { useNavigate } from 'react-router-dom';
 

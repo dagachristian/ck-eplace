@@ -1,6 +1,6 @@
 import { useState, createContext, useCallback, ReactNode, useContext } from 'react'
-import { bffApi } from '../services/bffApi'
-import { IUser } from '../services/interfaces'
+import { bffApi } from './bffApi'
+import { IUser } from './interfaces'
 
 type AC = {
   loggedIn: boolean

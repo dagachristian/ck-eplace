@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FormContext } from '.';
-import { useAuth } from '../../config/auth';
+import { useAuth } from '../../services/auth';
 
 interface IFormValues {
   username: string,
