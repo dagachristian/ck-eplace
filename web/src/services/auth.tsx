@@ -4,7 +4,7 @@ import { IUser } from './interfaces'
 
 type AC = {
   loggedIn: boolean
-  signIn: (username: string, password: string) => Promise<boolean>
+  signIn: (username: string, password: string, remember: boolean) => Promise<boolean>
   signOut: () => Promise<any>
   currentSession: () => Promise<string | null>
   apiToken: string | null
@@ -29,7 +29,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
   const [apiToken, setApiToken] = useState<AC['apiToken']>(null)
   const [user, setUser] = useState<IUser | null>(null)
 
-  const signIn = useCallback(async (username: string, password: string): Promise<any> => {
+  const signIn = useCallback(async (username: string, password: string, remember: boolean): Promise<any> => {
     const ret = await bffApi.login(username, password);
     if (ret.user) {
       setUser(ret.user);
@@ -37,7 +37,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
       setApiToken(ret.apiToken);
       sessionStorage.setItem('dashboard.user', JSON.stringify(ret.user));
       sessionStorage.setItem('dashboard.token', ret.apiToken);
-      localStorage.setItem('token.refresh', ret.refreshToken);
+      if (remember) localStorage.setItem('token.refresh', ret.refreshToken);
       return true;
     }
     return false;

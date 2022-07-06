@@ -23,7 +23,7 @@ export default function LoginForm() {
     console.log(vals)
     setIsLoading(true);
     try {
-      await signIn(vals.username, vals.password);
+      await signIn(vals.username, vals.password, vals.remember);
     } catch (e) {
       setError('Invalid Credentials');
     }

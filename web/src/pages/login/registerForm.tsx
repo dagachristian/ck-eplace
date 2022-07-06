@@ -23,6 +23,7 @@ export default function RegisterForm() {
     setIsLoading(true);
     try {
       await bffApi.register({username: vals.username, password: vals.password, email: vals.email});
+      setShowLogin(true);
     } catch (e) {
       setError('User Already Exists');
     }

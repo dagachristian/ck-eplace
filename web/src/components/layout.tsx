@@ -17,7 +17,7 @@ export default function GlobalLayout({ children, login }: any) {
     <Layout id='layout'>
       <Header id='header'>
         <a style={{height: '100%'}} href='/dashboard'>
-          <h1 id='logo'>CK</h1>
+          <h1 id='logo'>LOGO</h1>
         </a>
         {!login && (auth.loggedIn?
           <Dropdown overlay={<Menu

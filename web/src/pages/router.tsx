@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../services/auth';
 
+import { useAuth } from '../services/auth';
 import Login from './login';
 import Dashboard from './dashboard';
 import Profile from './profile';
 
-let savedPath = '/profile';
+let savedPath = '/dashboard';
 
 export default function Router() {
   const { loggedIn, currentSession } = useAuth();
