@@ -82,18 +82,17 @@ export const login = async (userInfo: IUserInfo) => {
     throw new ApiError(Errors.UNAUTHORIZED);
 }
 
-export const renewSession = async (refreshToken: string, ip: string, userAgent: string) => {
-  const dec = jwt.verify(refreshToken, config.jwt.secret) as jwt.JwtPayload;
+export const renewSession = async (refreshToken: jwt.JwtPayload, ip: string, userAgent: string) => {
   const user = await Query.findOne(
     { t: 'ck_user' },
     {
       where: {
         clause: 't.id = :id AND t.enabled = :enabled',
-        params: { id: dec.sub, enabled: true }
+        params: { id: refreshToken.sub, enabled: true }
       }
     }
   ) as IUser;
-  if (user && dec.aud == ip+userAgent) {
+  if (user && refreshToken.audience == ip+userAgent) {
     const { sessionId, apiToken } = await newSession(user, ip, userAgent);
     return { user: publishUser(user), sessionId, apiToken };
   } else if (!user)

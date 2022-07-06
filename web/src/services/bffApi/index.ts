@@ -8,7 +8,7 @@ export class BffApiService {
    *
    */
   constructor() {
-    axiosRetry(axios, { retries: 3, retryDelay: this.retryFunction() })
+    axiosRetry(axios, { retries: 0, retryDelay: this.retryFunction() })
     this.baseUrl = process.env.REACT_APP_API_BASE_URL
   }
 

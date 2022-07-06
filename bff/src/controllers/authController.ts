@@ -7,6 +7,7 @@ import { deleteSession } from '../services/sessions';
 import * as userSvc from '../services/userService';
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('/login')
   try {
     const { username, password } = req.body;
     const { ip } = req;
@@ -27,6 +28,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 }
 
 export const currentSession = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('/currentSession')
   try {
     res.status(httpStatus.OK).json({token: req.auth?.jti});
   } catch (e) {
@@ -36,11 +38,11 @@ export const currentSession = async (req: Request, res: Response, next: NextFunc
 }
 
 export const renewSession = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('/renewSession')
   try {
     const { ip } = req;
     const userAgent = req.get('user-agent') || '';
-
-    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth?.jti!, ip, userAgent);
+    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth!, ip, userAgent);
 
     res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({
@@ -54,6 +56,7 @@ export const renewSession = async (req: Request, res: Response, next: NextFuncti
 }
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('/register')
   try {
     const newUser = await userSvc.createUser(req.body);
     res.status(httpStatus.OK).json({
@@ -68,6 +71,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 }
 
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('/logout')
   try {
     deleteSession(req.auth?.jti);
     res.status(httpStatus.OK).end();

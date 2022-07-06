@@ -64,6 +64,8 @@ const AuthProvider = (props: IAuthProviderProps) => {
       const ret = await bffApi.renewSession(tok!);
       tok = ret.apiToken;
       usr = ret.user;
+      sessionStorage.setItem('dashboard.user', JSON.stringify(ret.user));
+      sessionStorage.setItem('dashboard.token', ret.apiToken);
     }
     setApiToken(tok);
     setLoggedIn(true);
