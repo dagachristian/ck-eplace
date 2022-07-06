@@ -35,7 +35,7 @@ export default function GlobalLayout({ children, login }: any) {
                 ),
               }
             ]} />} placement="bottomRight">
-            <Button id='dropdown-button' type='text' icon={<UserOutlined />} />
+            <Button id='dropdown-button' ghost icon={<UserOutlined />} />
           </Dropdown>
           :<Button id='signin-button' type='primary' onClick={() => nav('/login')}>Sign In</Button>
         )}

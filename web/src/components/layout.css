@@ -45,7 +45,6 @@
   border-radius: 50%;
   -moz-border-radius:50%;
   -webkit-border-radius:50%;
-  color: var(--light-color) !important;
   border: 2px solid !important;
   border-radius: 50% !important;
 }
