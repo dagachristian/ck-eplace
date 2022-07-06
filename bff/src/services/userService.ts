@@ -23,6 +23,46 @@ const publishUser = (user: IUser) => {
   return user;
 }
 
+const newSession = async (user: IUser, ip: string, userAgent: string) => {
+  const ctx = currentContext();
+  ctx.userId = user.id;
+  ctx.appId = ip + userAgent;
+
+  const sessionId = v4();
+  const apiToken = jwt.sign(
+    { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
+    config.jwt.secret,
+    {
+      expiresIn: config.jwt.expiresIn.api,
+      issuer: config.api.endpoint,
+      subject: user.id,
+      jwtid: sessionId
+    }
+  )
+  const refreshToken = jwt.sign(
+    { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
+    config.jwt.secret,
+    {
+      expiresIn: config.jwt.expiresIn.refresh,
+      issuer: config.api.endpoint,
+      subject: user.id,
+      jwtid: sessionId
+    }
+  )
+  const { exp } = jwt.decode(apiToken) as jwt.JwtPayload;
+  const expire = moment(exp).utc();
+  const session = {
+    id: sessionId,
+    userId: user.id!,
+    address: ip,
+    userAgent: userAgent,
+    expire
+  }
+  await storeSession(session);
+
+  return { sessionId, apiToken, refreshToken }
+}
+
 export const login = async (userInfo: IUserInfo) => {
   const user = await Query.findOne(
     { t: 'ck_user' },
@@ -34,43 +74,28 @@ export const login = async (userInfo: IUserInfo) => {
     }
   ) as IUser;
   if (user && bcrypt.compareSync(userInfo.password, user.password!)) {
-    const ctx = currentContext();
-    ctx.userId = user.id;
-    ctx.appId = userInfo.ip + userInfo.userAgent;
-
-    const sessionId = v4();
-    const apiToken = jwt.sign(
-      { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
-      config.jwt.secret,
-      {
-        expiresIn: config.jwt.expiresIn.api,
-        issuer: config.api.endpoint,
-        subject: user.id,
-        jwtid: sessionId
-      }
-    )
-    const refreshToken = jwt.sign(
-      { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
-      config.jwt.secret,
-      {
-        expiresIn: config.jwt.expiresIn.refresh,
-        issuer: config.api.endpoint,
-        subject: user.id,
-        jwtid: sessionId
-      }
-    )
-    const { exp } = jwt.decode(apiToken) as jwt.JwtPayload;
-    const expire = moment(exp).utc();
-    const session = {
-      id: sessionId,
-      userId: user.id!,
-      address: userInfo.ip,
-      userAgent: userInfo.userAgent,
-      expire
-    }
-    await storeSession(session);
-
+    const { sessionId, apiToken, refreshToken } = await newSession(user, userInfo.ip, userInfo.userAgent);
     return { user: publishUser(user), sessionId, apiToken, refreshToken };
+  } else if (!user)
+    throw new ApiError(Errors.NOT_EXIST);
+  else
+    throw new ApiError(Errors.UNAUTHORIZED);
+}
+
+export const renewSession = async (refreshToken: string, ip: string, userAgent: string) => {
+  const dec = jwt.verify(refreshToken, config.jwt.secret) as jwt.JwtPayload;
+  const user = await Query.findOne(
+    { t: 'ck_user' },
+    {
+      where: {
+        clause: 't.id = :id AND t.enabled = :enabled',
+        params: { id: dec.sub, enabled: true }
+      }
+    }
+  ) as IUser;
+  if (user) {
+    const { sessionId, apiToken } = await newSession(user, ip, userAgent);
+    return { user: publishUser(user), sessionId, apiToken };
   } else if (!user)
     throw new ApiError(Errors.NOT_EXIST);
   else

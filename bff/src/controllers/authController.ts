@@ -37,7 +37,16 @@ export const currentSession = async (req: Request, res: Response, next: NextFunc
 
 export const renewSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(httpStatus.OK).json({user: {}, apiToken: req.auth?.jti});
+    const { ip } = req;
+    const userAgent = req.get('user-agent') || '';
+
+    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth?.jti!, ip, userAgent);
+
+    res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
+    res.status(httpStatus.OK).json({
+      apiToken,
+      user
+    })
   } catch (e) {
     console.log('Renew Session error', e);
     next(e);
