@@ -19,6 +19,9 @@ class SocketClient {
     this.socket.on('data', (data) => {
       console.log('Got Data', data)
     })
+    this.socket.on('error', (error) => {
+      console.log('Socket Error', error)
+    });
   }
 
   async closeSocket() {

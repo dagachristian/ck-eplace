@@ -9,7 +9,7 @@ export class BffApiService {
    */
   constructor() {
     axiosRetry(axios, { retries: 0, retryDelay: this.retryFunction() })
-    this.baseUrl = process.env.REACT_APP_API_BASE_URL
+    this.baseUrl = process.env.REACT_APP_API_BASE_URL + '/api'
   }
 
   public async login(username: string, password: string): Promise<{apiToken: string, refreshToken: string, user: IUser}> {

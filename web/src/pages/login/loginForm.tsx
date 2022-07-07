@@ -20,7 +20,6 @@ export default function LoginForm() {
   const [ isLoading, setIsLoading ] = useState(false);
 
   const onSubmit = async (vals: IFormValues) => {
-    console.log(vals)
     setIsLoading(true);
     try {
       await signIn(vals.username, vals.password, vals.remember);

@@ -7,10 +7,14 @@ import config from '../config';
 let io: SocketIO;
 
 export const initSocket = (httpServer: Server) => {
-  io = new SocketIO(httpServer);
+  io = new SocketIO(httpServer, {
+    cors: {
+      origin: "*"
+    }
+  });
 
   io.use((socket, next) => {
-    if (socket.handshake.query && socket.handshake.query.token){
+    if (socket.handshake.auth && socket.handshake.auth.token){
       jwt.verify(socket.handshake.auth.token, config.jwt.secret, (err: any, decoded: any) => {
         if (err) return next(new Error('Authentication error'));
         socket.data.decoded = decoded
@@ -21,7 +25,7 @@ export const initSocket = (httpServer: Server) => {
       next(new Error('Authentication error'));
     }    
   })
-  .on('connection', function(socket) {
+  io.on('connection', function(socket) {
     socket.on('message', (message) => {
       io.emit('message', message);
     });
