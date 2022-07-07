@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { expressjwt as jwt, Request } from 'express-jwt';
+import { ValidationError } from 'express-json-validator-middleware';
 
 import config from './config';
 import routes from './routes';
@@ -50,11 +51,13 @@ export const useApp = async () => {
   });
 
   app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    let err = error;
-    if (!(error instanceof ApiError)) {
-      err = new ApiError(Errors.API);
+    if (error.name === 'UnauthorizedError') {
+      next(new ApiError(Errors.UNAUTHORIZED));
+    } else if (error instanceof ValidationError) {
+      next(new ApiError(Errors.INVALID_REQUEST, error.validationErrors))
+    } else {
+      next(new ApiError(Errors.API));
     }
-    next(err);
   });
 
   app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {

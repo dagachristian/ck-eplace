@@ -4,6 +4,10 @@ type ErrorType = {
 }
 
 export const Errors: {[key: string]: ErrorType} = Object.freeze({
+  INVALID_REQUEST: {
+    msg: 'Invalid request',
+    code: 400
+  },
   UNAUTHORIZED: {
     msg: 'Invalid credentials',
     code: 401
