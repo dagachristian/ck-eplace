@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckoled/ck.git"
+    "url": "git+https://github.com/ckoled/ck-base.git"
   },
   "author": "Christian Daga",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ckoled/ck/issues"
+    "url": "https://github.com/ckoled/ck-base/issues"
   },
-  "homepage": "https://github.com/ckoled/ck#readme",
+  "homepage": "https://github.com/ckoled/ck-base#readme",
   "overrides": {
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
