@@ -11,7 +11,8 @@
     "migrate:resetup": "npm run migrate:reset && npm run migrate:up",
     "migrate:up:sample": "db-migrate up:sample",
     "migrate:reset:sample": "db-migrate reset:sample",
-    "migrate:resetup:sample": "npm run migrate:reset:sample && npm run migrate:up:sample"
+    "migrate:resetup:sample": "npm run migrate:reset:sample && npm run migrate:up:sample",
+    "migrate:create": "db-migrate create"
   },
   "author": "Christian Daga",
   "license": "ISC",
