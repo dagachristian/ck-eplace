@@ -1,35 +1,28 @@
-import { bffApi } from '.';
+import { io, Socket } from 'socket.io-client';
 
-interface IEvent {
-  eventType: string,
-}
+class SocketClient {
+  socket: Socket | undefined;
 
-export class BffSocket {
-  private readonly reconnectAttempts: number;
-  private attempt: number;
-  private lastEvent: string | undefined;
-  public socket: WebSocket | undefined;
-
-  constructor(attempts?: number) {
-    this.reconnectAttempts = attempts || 50;
-    this.lastEvent = undefined;
+  constructor() {
     this.socket = undefined;
-    this.attempt = 0;
   }
 
   async initSocket() {
-    try {
-      
-    } catch (e) {
-      console.log(e)
-    }
+    this.socket = io(process.env.REACT_APP_API_BASE_URL!, {
+      auth: {
+        token: sessionStorage.getItem('dashboard.token')
+      }
+    })
+    this.socket.on('connect', () => {
+      console.log('Socket connected')
+    })
+    this.socket.on('data', (data) => {
+      console.log('Got Data', data)
+    })
   }
-  
-  closeSocket() {
-    try {
-    } catch (e) {
-      console.log(e);
-    }
+
+  async closeSocket() {
+    this.socket?.close()
   }
 }
-export default new BffSocket(20);
+export const wsClient = new SocketClient();

@@ -1,5 +1,7 @@
 import { useState, createContext, useCallback, ReactNode, useContext } from 'react'
+
 import { bffApi } from './bffApi'
+import { wsClient } from './bffApi/websocket'
 import { IUser } from './interfaces'
 
 type AC = {
@@ -38,6 +40,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
       sessionStorage.setItem('dashboard.user', JSON.stringify(ret.user));
       sessionStorage.setItem('dashboard.token', ret.apiToken);
       if (remember) localStorage.setItem('token.refresh', ret.refreshToken);
+      await wsClient.initSocket();
       return true;
     }
     return false;
@@ -52,6 +55,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
     setUser(null)
     sessionStorage.clear()
     localStorage.clear()
+    await wsClient.closeSocket()
   }, [apiToken])
 
   const currentSession = useCallback(async () => {
@@ -67,6 +71,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
       usr = ret.user;
       sessionStorage.setItem('dashboard.user', JSON.stringify(ret.user));
       sessionStorage.setItem('dashboard.token', ret.apiToken);
+      await wsClient.initSocket();
     }
     setApiToken(tok);
     setLoggedIn(true);
