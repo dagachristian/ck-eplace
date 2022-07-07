@@ -18,7 +18,7 @@ export type Options = {
   join?: Obj,
   select?: Where,
   tx?: Tx,
-  where: Where,
+  where?: Where,
   raw?: boolean
 }
 
@@ -84,7 +84,7 @@ export const constructJoin = (join: Obj | undefined, aliases: Obj) => {
     .join(' ');
 };
 
-export const constructWhere = (where: Where, paramIdxStart = 1) => {
+export const constructWhere = (where?: Where, paramIdxStart = 1) => {
   if (!where) {
     return { clause: '', params: [] };
   }
