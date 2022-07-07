@@ -16,15 +16,30 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-    CREATE TABLE ck_canvas (
-      color smallint
-    );
-  `);
+    INSERT INTO ck_canvas
+    VALUES
+    (0),
+    (1),
+    (2),
+    (3),
+    (4),
+    (5),
+    (6),
+    (7),
+    (8),
+    (9),
+    (10),
+    (11),
+    (12),
+    (13),
+    (14),
+    (15);
+  `)
 };
 
 exports.down = function(db) {
   return db.runSql(`
-    DROP TABLE ck_canvas CASCADE;
+    DELETE from ck_user;
   `);
 };
 
