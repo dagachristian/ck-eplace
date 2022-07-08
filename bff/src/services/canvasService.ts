@@ -1,14 +1,7 @@
-import Query from '../db/Query';
+import { client } from '../repositories/redis';
 
-export const fullCanvas = async (): Promise<Uint8Array> => {
-  // use redis?
-  let colors = await Query.findMany(
-    { t: 'ck_canvas' }, { raw: true }
-  );
-  colors = colors.map((v: {color: number}) => v.color)
-  console.log(colors);
-
-  const arr = new Uint8Array(new ArrayBuffer(16));
-  arr.set(colors);
-  return arr;
+export const fullCanvas = async (): Promise<number[]> => {
+  let canvas: string[] | number[] = await client.lRange('canvas', 0, -1);
+  canvas = canvas.map(v => parseInt(v));
+  return canvas;
 }

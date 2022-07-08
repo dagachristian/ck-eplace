@@ -4,6 +4,7 @@
   "description": "ck mono repo",
   "private": true,
   "workspaces": [
+    "./common",
     "./bff",
     "./web",
     "./rdb"

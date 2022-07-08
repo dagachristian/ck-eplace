@@ -15,6 +15,10 @@ export default require('./local.env.json') as {
     password: string,
     poolMax: 10
   },
+  redis: {
+    host: 'localhost',
+    port: 6379
+  },
   jwt: {
     secret: string,
     expiresIn: {

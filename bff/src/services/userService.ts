@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 import { v4 } from 'uuid';
 import moment from 'moment';
 
-import { ckUserTbl } from '../db';
+import { ckUserTbl } from '../repositories/db';
 import { IUser, IUserInfo } from './interfaces';
-import Query, { Tx } from '../db/Query';
+import Query, { Tx } from '../repositories/db/Query';
 import { currentContext } from '../context';
 import config from '../config';
 // import { storeSession } from './sessions';
