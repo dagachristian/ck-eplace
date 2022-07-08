@@ -24,7 +24,8 @@ node_modules/
 .pnp.js
 
 # testing
-coverage
+coverage/
+test_output/
 
 # next.js
 .next/
