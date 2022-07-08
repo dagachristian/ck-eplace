@@ -8,8 +8,8 @@ import * as canvasSvc from '../services/canvasService';
 export const getCanvas = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/canvas')
   try {
-    const vals = await canvasSvc.fullCanvas();
-    res.status(httpStatus.OK).send(Buffer.from(vals));
+    const buffer = await canvasSvc.fullCanvas();
+    res.status(httpStatus.OK).send(buffer);
   } catch (e) {
     console.log('Get Canvas error', e);
     next(e);
@@ -19,8 +19,8 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
 export const getCanvasImage = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/canvas/image')
   try {
-    const vals = await canvasSvc.fullCanvas();
-    const png = canvasFnctns.bytesToPNG(vals);
+    const buffer = await canvasSvc.fullCanvas();
+    const png = canvasFnctns.b8ToPNG(buffer);
     res.setHeader('Content-Type', 'image/png');
     res.status(httpStatus.OK).send(png);
   } catch (e) {
