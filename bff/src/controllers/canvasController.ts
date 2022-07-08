@@ -9,7 +9,8 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
   console.log('/canvas')
   try {
     const buffer = await canvasSvc.fullCanvas();
-    res.status(httpStatus.OK).send(buffer);
+    const ret = canvasFnctns.b8ToBMP(buffer);
+    res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Get Canvas error', e);
     next(e);
@@ -20,9 +21,20 @@ export const getCanvasImage = async (req: Request, res: Response, next: NextFunc
   console.log('/canvas/image')
   try {
     const buffer = await canvasSvc.fullCanvas();
-    const png = canvasFnctns.b8ToPNG(buffer);
-    res.setHeader('Content-Type', 'image/png');
-    res.status(httpStatus.OK).send(png);
+    const type = req.query.type || 'png';
+    let ret;
+    switch (type) {
+      case 'png':
+        ret = canvasFnctns.b8ToPNG(buffer);
+        break;
+      case 'bmp':
+        ret = canvasFnctns.b8ToBMP(buffer);
+        break;
+      default:
+        break;
+    }
+    res.setHeader('Content-Type', `image/${type}`);
+    res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Get Canvas error', e);
     next(e);
