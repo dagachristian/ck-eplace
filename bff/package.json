@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@ck/common": "1.0.0",
+    "@socket.io/redis-adapter": "^7.2.0",
     "bcrypt": "^5.0.1",
     "cls-hooked": "^4.2.2",
     "cookie-parser": "^1.4.6",

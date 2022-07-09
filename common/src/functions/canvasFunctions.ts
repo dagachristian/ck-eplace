@@ -2,16 +2,16 @@ import { PNG } from 'pngjs';
 import bmp from 'bmp-js';
 
 export const bToRGBA = (color: number, rgbaBuf: Buffer, idx: number) => {
-  rgbaBuf[idx] = (color >> 5) * 32;
-  rgbaBuf[idx+1] = ((color & 28) >> 2) * 32;
-  rgbaBuf[idx+2] = (color & 3) * 64;
+  rgbaBuf[idx] = (color >> 5) * 255 / 7;
+  rgbaBuf[idx+1] = ((color >> 2) & 0x07) * 255 / 7;
+  rgbaBuf[idx+2] = (color & 0x03) * 255 / 3;
   rgbaBuf[idx+3] = 255;
 }
 
 export const bToABGR = (color: number, abgrBuf: Buffer, idx: number) => {
-  abgrBuf[idx+3] = (color >> 5) * 32;
-  abgrBuf[idx+2] = ((color & 28) >> 2) * 32;
-  abgrBuf[idx+1] = (color & 3) * 64;
+  abgrBuf[idx+3] = (color >> 5) * 255 / 7;
+  abgrBuf[idx+2] = ((color >> 2) & 0x07) * 255 / 7;
+  abgrBuf[idx+1] = (color & 0x03) * 255 / 3;
   abgrBuf[idx] = 255;
 }
 
