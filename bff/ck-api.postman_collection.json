@@ -173,6 +173,34 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Canvas",
+			"item": [
+				{
+					"name": "Get Canvas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas?type=bmp",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "bmp"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
