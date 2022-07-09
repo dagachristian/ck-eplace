@@ -1,14 +1,14 @@
-import { createClient, RedisClientType } from 'redis';
+import Redis from 'ioredis';
 
 import config from '../../config';
 
-export let client: RedisClientType;
+export let client: Redis;
 
 export const connectRedis = async () => {
-  client = createClient({
-    url: `redis://${config.redis.host}:${config.redis.port}`
+  client = new Redis({
+    port: config.redis.port,
+    host: config.redis.host
   });
-  await client.connect();
 }
 
 export const disconnectRedis = async () => {
