@@ -24,7 +24,7 @@ export const b8ToPNG = (buffer: Buffer) => {
   for (let y = 0; y < png.height; y++) {
     for (let x = 0; x < png.width; x++) {
       const idx = (png.width * y + x) << 2;
-      const color = buffer[y + x];
+      const color = buffer[png.width * y + x];
       bToRGBA(color, png.data, idx);
     }
   }
@@ -45,7 +45,7 @@ export const b8ToBMP = (buffer: Buffer) => {
   for (let y = 0; y < dim; y++) {
     for (let x = 0; x < dim; x++) {
       const idx = (dim * y + x) << 2;
-      const color = buffer[y + x];
+      const color = buffer[dim * y + x];
       bToABGR(color, data, idx);
     }
   }

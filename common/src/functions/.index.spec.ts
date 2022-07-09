@@ -23,9 +23,9 @@ describe('functions', () => {
       expect(png[1]).toBe('P'.charCodeAt(0));
     })
     it('updpngb8', () => {
-      updPNGb8(png, 0, 0, 200);
-      fs.writeFileSync(path.resolve(__dirname, out, 'out2.png'), png);
-      expect(png[1]).toBe('P'.charCodeAt(0));
+      const n = updPNGb8(png, 0, 0, 200);
+      fs.writeFileSync(path.resolve(__dirname, out, 'out2.png'), n);
+      expect(n[1]).toBe('P'.charCodeAt(0));
     })
     
     let bmp: Buffer;
