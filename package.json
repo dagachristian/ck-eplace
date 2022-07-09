@@ -4,6 +4,7 @@
   "description": "ck mono repo",
   "private": true,
   "workspaces": [
+    "./common",
     "./bff",
     "./web",
     "./rdb"
@@ -11,16 +12,8 @@
   "scripts": {
     "clean": "rm -rf node_modules && npm run clean -ws"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ckoled/ck-base.git"
-  },
   "author": "Christian Daga",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ckoled/ck-base/issues"
-  },
-  "homepage": "https://github.com/ckoled/ck-base#readme",
   "overrides": {
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

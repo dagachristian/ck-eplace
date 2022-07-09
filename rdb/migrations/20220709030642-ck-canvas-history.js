@@ -16,22 +16,20 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-    CREATE TABLE ck_session (
-      id uuid PRIMARY KEY,
-      user_id uuid NOT NULL REFERENCES ck_user,
-      address text NOT NULL,
-      user_agent text NOT NULL,
-      expire timestamp NOT NULL
+    CREATE TABLE ck_canvas_history (
+      date timestamp PRIMARY KEY,
+      img bytea NOT NULL
     );
   `);
 };
 
 exports.down = function(db) {
   return db.runSql(`
-    DROP TABLE ck_session CASCADE;
+    DROP TABLE ck_canvas_history CASCADE;
   `);
 };
 
 exports._meta = {
   version: 1
 };
+

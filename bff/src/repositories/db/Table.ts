@@ -10,7 +10,7 @@ import Query, {
   Where
 } from './Query';
 
-import { currentContext } from '../context';
+import { currentContext } from '../../context';
 import { pool } from './db';
 
 export default class Table {

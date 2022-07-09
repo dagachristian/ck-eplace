@@ -29,7 +29,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"billy\",\r\n    \"password\": \"billy\"\r\n}",
+							"raw": "{\r\n    \"username\": \"testuser\",\r\n    \"password\": \"testpass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -167,6 +167,34 @@
 							"path": [
 								"auth",
 								"currentSession"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Canvas",
+			"item": [
+				{
+					"name": "Get Canvas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas?type=bmp",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "bmp"
+								}
 							]
 						}
 					},

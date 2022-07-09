@@ -1,5 +1,5 @@
-import { IUser } from '../services/interfaces';
-import { currentContext } from '../context';
+import { IUser } from '../../services/interfaces';
+import { currentContext } from '../../context';
 import Table from './Table';
 import { Obj, Tx } from './Query';
 
