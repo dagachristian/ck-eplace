@@ -16,8 +16,8 @@ export default require('./local.env.json') as {
     poolMax: 10
   },
   redis: {
-    host: 'localhost',
-    port: 6379
+    host: string,
+    port: number
   },
   jwt: {
     secret: string,
@@ -25,5 +25,8 @@ export default require('./local.env.json') as {
       api: string,
       refresh: string
     }
+  },
+  canvas: {
+    size: number
   }
 };

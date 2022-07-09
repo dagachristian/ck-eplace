@@ -4,7 +4,6 @@ import * as canvas from '../controllers/canvasController';
 
 const router = express.Router();
 
-router.route('/').get(canvas.getCanvas);
-router.route('/image').get(canvas.getCanvasImage);
+router.route('').get(canvas.getCanvas);
 
 export default router;
