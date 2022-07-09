@@ -8,7 +8,7 @@ import * as canvasSvc from '../services/canvasService';
 export const getCanvas = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/canvas')
   try {
-    const buffer = await canvasSvc.fullCanvas();
+    const buffer = await canvasSvc.getCanvas(req.query.date as string | undefined);
     let type = req.query.type?.toString().toLowerCase();
     let ret = buffer;
     switch (type) {
