@@ -55,9 +55,11 @@ export const useApp = async () => {
     if (error.name === 'UnauthorizedError') {
       next(new ApiError(Errors.UNAUTHORIZED));
     } else if (error instanceof ValidationError) {
-      next(new ApiError(Errors.INVALID_REQUEST, error.validationErrors))
-    } else {
+      next(new ApiError(Errors.INVALID_REQUEST, error.validationErrors));
+    } else if (!(error instanceof ApiError)) {
       next(new ApiError(Errors.API));
+    } else {
+      next(error);
     }
   });
 
