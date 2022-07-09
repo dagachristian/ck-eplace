@@ -16,18 +16,20 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-    CREATE TABLE ck_canvas (
-      color smallint
+    CREATE TABLE ck_canvas_history (
+      date timestamp PRIMARY KEY,
+      img bytea NOT NULL
     );
   `);
 };
 
 exports.down = function(db) {
   return db.runSql(`
-    DROP TABLE ck_canvas CASCADE;
+    DROP TABLE ck_canvas_history CASCADE;
   `);
 };
 
 exports._meta = {
   version: 1
 };
+
