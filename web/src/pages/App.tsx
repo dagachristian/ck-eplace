@@ -1,3 +1,5 @@
+import { HelmetProvider } from 'react-helmet-async';
+
 import { AuthProvider } from '../services/auth';
 import Router from './router';
 
@@ -6,7 +8,9 @@ import './App.less';
 function App() {
   return (
     <AuthProvider>
-      <Router />
+      <HelmetProvider>
+        <Router />
+      </HelmetProvider>
     </AuthProvider>
   );
 }

@@ -1,9 +1,8 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import { Form, Input, Checkbox, Divider, Button } from 'antd';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormContext } from '.';
 import { useAuth } from '../../services/auth';
 
 interface IFormValues {
@@ -12,10 +11,9 @@ interface IFormValues {
   remember: boolean
 }
 
-export default function LoginForm() {
+export default function LoginForm({ showLogin }: any) {
   const { t } = useTranslation();
   const { signIn } = useAuth();
-  const [, setShowLogin ] = useContext(FormContext);
   const [ error, setError ] = useState<string | null>(null);
   const [ isLoading, setIsLoading ] = useState(false);
 
@@ -65,7 +63,7 @@ export default function LoginForm() {
           }
         </Form.Item>
       </Form>
-      <Button type="default" onClick={() => setShowLogin(false)}>
+      <Button type="default" onClick={() => showLogin(false)}>
         Register
       </Button>
     </div>
