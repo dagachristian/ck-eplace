@@ -1,10 +1,18 @@
+import { Helmet } from 'react-helmet-async';
+
 import GlobalLayout from '../../components/layout';
 
+const TITLE = 'Profile | CK';
+
 export default function Profile() {
-  document.title = 'Profile | CK'
   return (
-    <GlobalLayout>
-      This is the profile
-    </GlobalLayout>
+    <>
+      <Helmet>
+        <title>{TITLE}</title>
+      </Helmet>
+      <GlobalLayout>
+        This is the profile
+      </GlobalLayout>
+    </>
   )
 }

@@ -1,9 +1,8 @@
 import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Form, Input, Divider, Button } from 'antd';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormContext } from '.';
 import { bffApi } from '../../services/bffApi';
 
 interface IFormValues {
@@ -12,9 +11,8 @@ interface IFormValues {
   email: string
 }
 
-export default function RegisterForm() {
+export default function RegisterForm({ showLogin }: any) {
   const { t } = useTranslation();
-  const [, setShowLogin ] = useContext(FormContext);
   const [ error, setError ] = useState<string | null>(null);
   const [ isLoading, setIsLoading ] = useState(false);
 
@@ -23,7 +21,7 @@ export default function RegisterForm() {
     setIsLoading(true);
     try {
       await bffApi.register({username: vals.username, password: vals.password, email: vals.email});
-      setShowLogin(true);
+      showLogin(true);
     } catch (e) {
       setError('User Already Exists');
     }
@@ -103,7 +101,7 @@ export default function RegisterForm() {
       <Button 
         type="link" 
         icon={<LeftOutlined />} 
-        onClick={() => setShowLogin(true)} 
+        onClick={() => showLogin(true)} 
         style={{
           width: '110px',
           padding: '0px'
