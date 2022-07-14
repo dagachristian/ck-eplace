@@ -71,6 +71,19 @@ export class BffApiService {
     return response.status;
   }
 
+  public async getCanvas(type?: string) {
+    const url = `${this.baseUrl}/canvas`
+    const response = await axios.request({
+      method: 'GET',
+      url,
+      responseType: 'arraybuffer',
+      params: {
+        type: type || 'raw'
+      }
+    })
+    return response.data;
+  }
+
   private retryFunction() {
     return (retryCount: number, error: AxiosError) => {
       console.info('Retrying request', {

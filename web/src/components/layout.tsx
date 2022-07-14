@@ -1,10 +1,10 @@
 import { Button, Dropdown, Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../services/auth';
 import './layout.css';
-import { useNavigate } from 'react-router-dom';
 
 const { Header, Content, Footer } = Layout;
 
