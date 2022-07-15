@@ -1,17 +1,43 @@
 #canvas-div {
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-auto-rows: 100%;
+  grid-auto-columns: 33.33%;
+  grid-template-areas: 
+  "left middle right";
+}
+
+.canvas-container {
+  border: 6px solid black;
+  background: var(--light-color);
+  grid-area: middle;
+  justify-self: center;
+  align-self: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 512px;
+  height: 512px;
 }
 
-canvas {
-  /* border: 3px solid; */
-  width: 500px;
-  height: 500px;
+#canvas {
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+}
+
+#controls-div {
+  grid-area: right;
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#slider {
+  width: 100px;
 }
