@@ -1,14 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { v4 } from 'uuid';
-import moment from 'moment';
 
 import { ckUserTbl } from '../repositories/db';
 import { IUser, IUserInfo } from './interfaces';
-import Query, { Tx } from '../repositories/db/Query';
+import Query from '../repositories/db/Query';
 import { currentContext } from '../context';
 import config from '../config';
-// import { storeSession } from './sessions';
 import { ApiError, Errors } from '../errors';
 
 const saltRounds = 6;
@@ -30,7 +28,7 @@ const newSession = async (user: IUser, ip: string, userAgent: string) => {
 
   const sessionId = v4();
   const apiToken = jwt.sign(
-    { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
+    { username: user.username, iat: ctx.now.unix(), audience: ctx.appId },
     config.jwt.secret,
     {
       expiresIn: config.jwt.expiresIn.api,
@@ -40,7 +38,7 @@ const newSession = async (user: IUser, ip: string, userAgent: string) => {
     }
   )
   const refreshToken = jwt.sign(
-    { email: user.email, iat: ctx.now.unix(), audience: ctx.appId },
+    { username: user.username, iat: ctx.now.unix(), audience: ctx.appId },
     config.jwt.secret,
     {
       expiresIn: config.jwt.expiresIn.refresh,
@@ -49,16 +47,6 @@ const newSession = async (user: IUser, ip: string, userAgent: string) => {
       jwtid: sessionId
     }
   )
-  // const { exp } = jwt.decode(apiToken) as jwt.JwtPayload;
-  // const expire = moment(exp).utc();
-  // const session = {
-  //   id: sessionId,
-  //   userId: user.id!,
-  //   address: ip,
-  //   userAgent: userAgent,
-  //   expire
-  // }
-  // await storeSession(session);
 
   return { sessionId, apiToken, refreshToken }
 }

@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import GlobalLayout from '../../components/layout';
+import Canvas from '../../components/canvas';
 
 import './dashboard.css';
 
@@ -13,7 +14,7 @@ export default function Dashboard() {
         <title>{TITLE}</title>
       </Helmet>
       <GlobalLayout>
-        This is the dashboard
+        <Canvas />
       </GlobalLayout>
     </>
   );

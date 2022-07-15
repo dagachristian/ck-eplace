@@ -1,7 +1,7 @@
 import { PNG } from 'pngjs';
 import bmp from 'bmp-js';
 
-export const bToRGBA = (color: number, rgbaBuf: Buffer, idx: number) => {
+export const bToRGBA = (color: number, rgbaBuf: Buffer | Uint8ClampedArray, idx: number) => {
   rgbaBuf[idx] = (color >> 5) * 255 / 7;
   rgbaBuf[idx+1] = ((color >> 2) & 0x07) * 255 / 7;
   rgbaBuf[idx+2] = (color & 0x03) * 255 / 3;
@@ -13,6 +13,19 @@ export const bToABGR = (color: number, abgrBuf: Buffer, idx: number) => {
   abgrBuf[idx+2] = ((color >> 2) & 0x07) * 255 / 7;
   abgrBuf[idx+1] = (color & 0x03) * 255 / 3;
   abgrBuf[idx] = 255;
+}
+
+export const b8ToRaw = (buffer: Buffer) => {
+  const dim = Math.floor(Math.sqrt(buffer.length));
+  const raw = Buffer.from(new ArrayBuffer((buffer.length) << 2));
+  for (let y = 0; y < dim; y++) {
+    for (let x = 0; x < dim; x++) {
+      const idx = (dim * y + x) << 2;
+      const color = buffer[dim * y + x];
+      bToRGBA(color, raw, idx);
+    }
+  }
+  return raw;
 }
 
 export const b8ToPNG = (buffer: Buffer) => {

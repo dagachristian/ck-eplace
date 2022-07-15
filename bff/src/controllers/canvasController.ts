@@ -18,11 +18,14 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
       case 'bmp':
         ret = canvasFnctns.b8ToBMP(buffer);
         break;
+      case 'rawrgba':
+        ret = canvasFnctns.b8ToRaw(buffer);
+        break;
       default:
         type = 'raw';
         break;
     }
-    if (type != 'raw') res.setHeader('Content-Type', `image/${type}`);
+    if (!type.includes('raw')) res.setHeader('Content-Type', `image/${type}`);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Get Canvas error', e);
