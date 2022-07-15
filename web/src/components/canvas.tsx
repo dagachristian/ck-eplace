@@ -52,6 +52,7 @@ export default function Canvas() {
     canvasRef.current!.width = size;
     canvasRef.current!.height = size;
     ctx.drawImage(canvasImg, 0, 0);
+    await wsClient.initCanvasSocket();
     setLoading(false);
   }
 
@@ -60,8 +61,7 @@ export default function Canvas() {
     const ctx = canvas.getContext('2d')!
     const listener = pick(ctx);
     canvas.addEventListener('click', listener);
-    draw(ctx)
-    wsClient.initCanvasSocket()
+    draw(ctx);
     return function cleanup() {
       wsClient.closeSocket()
       canvas.removeEventListener('click', listener);
@@ -70,10 +70,8 @@ export default function Canvas() {
 
   return (
     <div id='canvas-div'>
-      {loading?
-        <div className='canvas-container'><Spin size='large' /></div>
-        :<canvas className='canvas-container' id='canvas' ref={canvasRef}/>
-      }
+      <div className='canvas-container' hidden={!loading}><Spin size='large' /></div>
+      <canvas className='canvas-container' id='canvas' ref={canvasRef}/>
       <div id='controls-div'>
         <Typography.Title style={{marginBottom: '0px'}}>Choose Color</Typography.Title>
         <Divider style={{margin: '10px 0px 15px'}}/>
