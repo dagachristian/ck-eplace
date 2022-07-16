@@ -10,7 +10,7 @@ services:
       - '5432:5432'
     volumes: 
       - db:/var/lib/postgresql/data
-      - ./rdb/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/create_tables.sql
   cache:
     container_name: ck-redis
     image: redis/redis-stack-server
@@ -47,9 +47,9 @@ services:
     depends_on:
       - bff
     ports:
-      - '3000:3000'
+      - '443:3000'
     environment:
-      REACT_APP_API_BASE_URL: bff:8080
+      REACT_APP_API_BASE_URL: https://3.16.168.62:8080
     links:
       - bff
     volumes:
