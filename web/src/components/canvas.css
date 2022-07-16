@@ -10,6 +10,8 @@
 
 .canvas-container {
   border: 6px solid black;
+  background: black;
+  opacity: 0.2;
   grid-area: middle;
   justify-self: center;
   align-self: center;
@@ -21,6 +23,7 @@
 }
 
 #canvas {
+  opacity: 1;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;

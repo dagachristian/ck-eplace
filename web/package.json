@@ -9,9 +9,9 @@
   "scripts": {
     "start": "craco start",
     "start:dev": "npm start",
-    "build": "echo craco build",
+    "build": "craco build",
     "test": "craco test",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf node_modules build"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -160,7 +160,8 @@
   "babel": {
     "presets": [
       "react-app"
-    ]
+    ],
+    "plugins": [["@babel/plugin-proposal-decorators", { "legacy": true }]]
   },
   "devDependencies": {
     "@types/react-color": "^3.0.6"
