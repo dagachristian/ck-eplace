@@ -10,7 +10,8 @@
     "./rdb"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules && npm run clean -ws"
+    "clean": "rm -rf node_modules && npm run clean -ws",
+    "docker:resetup": "npm run clean && npm install && npm run build -ws && docker-compose up -d"
   },
   "author": "Christian Daga",
   "license": "ISC",
