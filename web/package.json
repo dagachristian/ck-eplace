@@ -9,14 +9,13 @@
   "scripts": {
     "start": "craco start",
     "start:dev": "npm start",
-    "build": "craco build",
+    "build": "echo craco build",
     "test": "craco test",
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
-    "@ck/common": "^1.0.0",
     "@craco/craco": "^7.0.0-alpha.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",

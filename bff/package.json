@@ -9,7 +9,7 @@
     "start": "node .",
     "start:dev": "npm run build && npm run start",
     "test": "echo No tests",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf node_modules dist"
   },
   "author": "Christian Daga",
   "license": "ISC",
@@ -28,7 +28,7 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
-    "@ck/common": "^1.0.0",
+    "@ckoled/common": "^1.0.2",
     "@socket.io/redis-adapter": "^7.2.0",
     "bcrypt": "^5.0.1",
     "cls-hooked": "^4.2.2",
@@ -41,6 +41,7 @@
     "http-status": "^1.5.0",
     "ioredis": "^5.1.0",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "pg": "^8.7.3",
     "shortid": "^2.2.16",
     "socket.io": "^4.5.1",

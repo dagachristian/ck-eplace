@@ -1,4 +1,4 @@
-import { canvasFnctns } from '@ck/common';
+import { canvasFnctns } from '@ckoled/common';
 
 import { currentContext } from '../context';
 import config from '../config';

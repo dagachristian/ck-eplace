@@ -10,7 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-*.env.json
+*.env.ts
 .envrc
 .env
 .env.local
@@ -26,10 +26,6 @@ node_modules/
 # testing
 coverage/
 test_output/
-
-# next.js
-.next/
-out/
 
 # production
 build/

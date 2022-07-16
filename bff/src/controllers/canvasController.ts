@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
 import httpStatus from 'http-status';
-import { canvasFnctns } from '@ck/common';
+import { canvasFnctns } from '@ckoled/common';
 
 import * as canvasSvc from '../services/canvasService';
 

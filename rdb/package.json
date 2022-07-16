@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "test": "echo No Tests",
+    "build": "echo No Build",
     "clean": "rm -rf node_modules",
     "migrate:up": "db-migrate up",
     "migrate:reset": "db-migrate reset",

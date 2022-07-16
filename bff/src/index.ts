@@ -31,6 +31,7 @@ const start = async () => {
     process.on('SIGINT', gracefulShutdown);
   } catch (e) {
     console.log(e)
+    process.exit(1)
   }
 }
 

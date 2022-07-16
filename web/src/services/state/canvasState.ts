@@ -1,4 +1,4 @@
-import { canvasFnctns } from '@ck/common';
+import { canvasFnctns } from '@ckoled/common';
 
 import { bffApi } from '../bffApi';
 

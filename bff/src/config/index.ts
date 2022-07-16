@@ -1,4 +1,7 @@
-export default require('./local.env.json') as {
+import local from './local.env';
+
+const environment = process.env.NODE_ENV || 'dev';
+let config: {
   api: {
     endpoint: string
   },
@@ -13,7 +16,7 @@ export default require('./local.env.json') as {
     port: number,
     user: string,
     password: string,
-    poolMax: 10
+    poolMax: number
   },
   redis: {
     host: string,
@@ -30,3 +33,14 @@ export default require('./local.env.json') as {
     size: number
   }
 };
+
+switch (environment) {
+  case 'dev':
+    config = local;
+    break;
+  default:
+    config = local;
+    break;
+}
+
+export default config;

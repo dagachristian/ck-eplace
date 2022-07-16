@@ -1,16 +1,16 @@
 {
-  "name": "@ck/common",
-  "version": "1.0.0",
+  "name": "@ckoled/common",
+  "version": "1.0.2",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./out/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./out/index.js"
   },
   "types": "./src/index.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf node_modules out"
   },
   "author": "Christian Daga",
   "license": "ISC",
