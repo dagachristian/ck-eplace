@@ -1,6 +1,6 @@
 {
   "name": "@ckoled/common",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "./out/index.js",
   "exports": {
@@ -15,8 +15,6 @@
   "author": "Christian Daga",
   "license": "ISC",
   "devDependencies": {
-    "@types/bmp-js": "^0.1.0",
-    "@types/pngjs": "^6.0.1",
     "jest": "^28.1.2",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.7.0",
@@ -24,6 +22,8 @@
   },
   "dependencies": {
     "bmp-js": "^0.1.0",
-    "pngjs": "^6.0.0"
+    "pngjs": "^6.0.0",
+    "@types/bmp-js": "^0.1.0",
+    "@types/pngjs": "^6.0.1"
   }
 }

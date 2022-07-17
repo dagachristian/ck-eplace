@@ -9,7 +9,8 @@ export class BffApiService {
    */
   constructor() {
     axiosRetry(axios, { retries: 0, retryDelay: this.retryFunction() })
-    this.baseUrl = process.env.REACT_APP_API_BASE_URL + '/api'
+    const { protocol, hostname } = window.location;
+    this.baseUrl = protocol + '//' + hostname + '/api'
   }
 
   public async login(username: string, password: string): Promise<{apiToken: string, refreshToken: string, user: IUser}> {
