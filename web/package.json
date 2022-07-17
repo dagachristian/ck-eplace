@@ -5,7 +5,7 @@
   "author": "Christian Daga",
   "license": "ISC",
   "private": true,
-  "homepage": "http://localhost:8080",
+  "homepage": "http://localhost:3000",
   "scripts": {
     "start": "craco start",
     "start:dev": "npm start",

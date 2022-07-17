@@ -9,8 +9,8 @@ export const connectRedis = async () => {
     port: config.redis.port,
     host: config.redis.host
   });
-  client.get('canvas', (err, data) => {
-    if (err || !data) {
+  client.lrange('canvas', 0, 1, (err, data) => {
+    if (err || data==null || data[0]==null) {
       console.log('populating canvas data')
       var size = config.canvas.size;
       var vals: Buffer[] = [];

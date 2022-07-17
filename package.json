@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules && npm run clean -ws",
-    "docker:resetup": "npm run clean && npm i && npm run build -ws && docker-compose -f docker-compose-dev.yml up"
+    "docker:resetup": "npm run clean && npm i && npm run build -ws && docker-compose -f docker-compose-dev.yml up --build -d"
   },
   "author": "Christian Daga",
   "license": "ISC",

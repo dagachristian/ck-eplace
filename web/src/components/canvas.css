@@ -10,8 +10,6 @@
 
 .canvas-container {
   border: 6px solid black;
-  background: black;
-  opacity: 0.2;
   grid-area: middle;
   justify-self: center;
   align-self: center;

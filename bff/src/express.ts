@@ -1,8 +1,8 @@
 import express, { NextFunction, Response } from 'express';
 import cors from 'cors';
+import path from 'path';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import path from 'path';
 import { expressjwt as jwt, Request } from 'express-jwt';
 import { ValidationError } from 'express-json-validator-middleware';
 
@@ -13,27 +13,16 @@ import { ApiError, Errors } from './errors';
 
 export const useApp = async () => {
   const app = express()
-  const api = express.Router()
-
-  // React App
-  const root = path.join(__dirname, 'build');
-  app.use(/^\/(?!api)/, express.static(root));
-  app.get(/^\/(?!api)/, function (req, res) {
-    res.sendFile('index.html', { root });
-  });
-
-  // API
-  app.use('/api', api)
 
   // middleware
-  api.use(helmet());
-  api.use(cookieParser(config.signed.cookie.secret))
-  api.use(cors());
-  api.use(express.json());
-  api.use((req, res, next) => {
+  app.use(helmet());
+  app.use(cookieParser(config.signed.cookie.secret))
+  app.use(cors());
+  app.use(express.json());
+  app.use((req, res, next) => {
     createContext(next, { req, res })
   });
-  api.use('/api', jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
+  app.use('/api', jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
     path: [
       // API paths.
       /^\/api\/(v\d+\/)?auth\/login/,
@@ -41,7 +30,7 @@ export const useApp = async () => {
       /^\/api\/(v\d+\/)?canvas/,
     ]
   }));
-  api.use((req: Request, res, next) => {
+  app.use((req: Request, res, next) => {
     const ctx = currentContext();
     const { auth } = req;
     if (auth) {
@@ -54,14 +43,20 @@ export const useApp = async () => {
   });
 
   // define a route handler for the default home page
-  api.use(routes);
+  app.use('/api', routes);
 
-  api.use((req, res, next) => {
+  const root = path.join(__dirname, 'build');
+  app.use(express.static(root));
+  app.get('/*', (req, res) => {
+    res.sendFile('index.html', { root });
+  });
+
+  app.use((req, res, next) => {
     const err = new ApiError(Errors.API);
     return next(err);
   });
 
-  api.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     if (error.name === 'UnauthorizedError') {
       next(new ApiError(Errors.UNAUTHORIZED));
     } else if (error instanceof ValidationError) {
@@ -73,7 +68,7 @@ export const useApp = async () => {
     }
   });
 
-  api.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
+  app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
     res.status(err.type.code).json({
       message: err.message,
       data: err.data,
