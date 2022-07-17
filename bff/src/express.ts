@@ -2,6 +2,7 @@ import express, { NextFunction, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 import { expressjwt as jwt, Request } from 'express-jwt';
 import { ValidationError } from 'express-json-validator-middleware';
 
@@ -12,26 +13,35 @@ import { ApiError, Errors } from './errors';
 
 export const useApp = async () => {
   const app = express()
+  const api = express.Router()
+
+  // React App
+  const root = path.join(__dirname, 'build');
+  app.use(/^\/(?!api)/, express.static(root));
+  app.get(/^\/(?!api)/, function (req, res) {
+    res.sendFile('index.html', { root });
+  });
+
+  // API
+  app.use('/api', api)
 
   // middleware
-  app.use(helmet());
-  app.use(cookieParser(config.signed.cookie.secret))
-  app.use(cors());
-  app.use(express.json());
-  app.use((req, res, next) => {
+  api.use(helmet());
+  api.use(cookieParser(config.signed.cookie.secret))
+  api.use(cors());
+  api.use(express.json());
+  api.use((req, res, next) => {
     createContext(next, { req, res })
   });
-  app.use(jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
+  api.use('/api', jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
     path: [
-      /^\/socket.io.*/,
-
       // API paths.
       /^\/api\/(v\d+\/)?auth\/login/,
       /^\/api\/(v\d+\/)?auth\/register/,
       /^\/api\/(v\d+\/)?canvas/,
     ]
   }));
-  app.use((req: Request, res, next) => {
+  api.use((req: Request, res, next) => {
     const ctx = currentContext();
     const { auth } = req;
     if (auth) {
@@ -44,14 +54,14 @@ export const useApp = async () => {
   });
 
   // define a route handler for the default home page
-  app.use("/api", routes);
+  api.use(routes);
 
-  app.use((req, res, next) => {
+  api.use((req, res, next) => {
     const err = new ApiError(Errors.API);
     return next(err);
   });
 
-  app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  api.use((error: any, req: Request, res: Response, next: NextFunction) => {
     if (error.name === 'UnauthorizedError') {
       next(new ApiError(Errors.UNAUTHORIZED));
     } else if (error instanceof ValidationError) {
@@ -63,7 +73,7 @@ export const useApp = async () => {
     }
   });
 
-  app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
+  api.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
     res.status(err.type.code).json({
       message: err.message,
       data: err.data,

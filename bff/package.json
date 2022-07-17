@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "homepage": "http://localhost:8080",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",

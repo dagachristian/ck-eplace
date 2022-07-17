@@ -1,6 +1,7 @@
 FROM node:14.17.0-alpine
 
-COPY ./dist /dist
+COPY ./dist /.
+COPY ./build /build
 COPY ./package.json /package.json
 COPY ./package-lock.json /package-lock.json
 
