@@ -1,4 +1,16 @@
-export default require('./local.env.json') as {
+import local from './local.env';
+
+const environment = process.env.NODE_ENV || 'dev';
+let temp;
+switch (environment) {
+  case 'dev':
+    temp = local;
+    break;
+  default:
+    temp = local;
+    break;
+}
+let config: {
   api: {
     endpoint: string
   },
@@ -13,7 +25,7 @@ export default require('./local.env.json') as {
     port: number,
     user: string,
     password: string,
-    poolMax: 10
+    poolMax: number
   },
   redis: {
     host: string,
@@ -29,4 +41,23 @@ export default require('./local.env.json') as {
   canvas: {
     size: number
   }
+} = {
+  db: {
+    host: process.env.PG_HOST || 'localhost',
+    database: process.env.PG_DATABASE || 'postgres',
+    port: parseInt(process.env.PG_PORT || '5432'),
+    user: process.env.PG_USER || 'postgres',
+    password: process.env.PG_PASSWORD || 'postgres',
+    poolMax: 10
+  },
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379')
+  },
+  canvas: {
+    size: parseInt(process.env.CANVAS_SIZE || '20')
+  },
+  ...temp
 };
+
+export default config;

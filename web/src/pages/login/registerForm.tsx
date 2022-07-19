@@ -17,7 +17,6 @@ export default function RegisterForm({ showLogin }: any) {
   const [ isLoading, setIsLoading ] = useState(false);
 
   const onSubmit = async (vals: IFormValues) => {
-    console.log(vals)
     setIsLoading(true);
     try {
       await bffApi.register({username: vals.username, password: vals.password, email: vals.email});
