@@ -22,9 +22,7 @@ services:
       - cache:/data
   app:
     container_name: ck-app
-    build:
-      context: ./
-      dockerfile: ./Dockerfile.full
+    build: ./
     restart: on-failure
     depends_on:
       - db

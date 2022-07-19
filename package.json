@@ -4,15 +4,13 @@
   "description": "ck mono repo",
   "private": true,
   "workspaces": [
-    "./common",
     "./bff",
-    "./web",
-    "./rdb"
+    "./web"
   ],
   "scripts": {
     "clean": "rm -rf node_modules && npm run clean -ws",
     "docker:dev": "docker-compose -f docker-compose-dev.yml up --build -d",
-    "docker:pp": "npm run clean && npm i && npm run build -ws && docker build -t ckoled/ck-eplace_app -f Dockerfile.small ."
+    "docker:pp": "source .envrc && npm run clean && npm i && npm run build -ws && docker build -t ckoled/ck-eplace_app ."
   },
   "author": "Christian Daga",
   "license": "ISC",

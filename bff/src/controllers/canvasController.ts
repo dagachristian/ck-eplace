@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
 import httpStatus from 'http-status';
-import { canvasFnctns } from '@ckoled/common';
 
+import * as canvasFnctns from '../services/canvasFunctions';
 import * as canvasSvc from '../services/canvasService';
 
 export const getCanvas = async (req: Request, res: Response, next: NextFunction) => {
