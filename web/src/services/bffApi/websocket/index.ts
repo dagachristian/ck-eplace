@@ -10,8 +10,9 @@ class SocketClient {
   }
 
   async initCanvasSocket() {
-    this.socket = io(process.env.REACT_APP_API_BASE_URL! + '/canvas', {
-      reconnectionAttempts: 100,
+    const { protocol, hostname, port } = window.location;
+    this.socket = io(`${protocol}//${hostname}:${port}/canvas`, {
+      reconnectionAttempts: 50,
       auth: {
         token: sessionStorage.getItem('dashboard.token')
       }

@@ -1,12 +1,10 @@
-import { canvasFnctns } from '@ckoled/common';
-
 import { currentContext } from '../context';
 import config from '../config';
 import { ckCanvasHistoryTbl } from '../repositories/db';
 import { client } from '../repositories/redis';
 import Query from '../repositories/db/Query';
 
-export const getCanvas = async (date?: string) => {
+export const getCanvas = async (date?: string): Promise<Buffer> => {
   if (date) {
     return await Query.findOne({t: 'ck_canvas_history'}, {
       where: {
@@ -17,8 +15,8 @@ export const getCanvas = async (date?: string) => {
   }
   // must be consistent with redis list length
   const size = config.canvas.size*config.canvas.size;
-  let canvas = await client.lrangeBuffer('canvas', 0, -1);
-  return Buffer.concat(canvas, size);
+  let canvas = await client.getBuffer('canvas');
+  return canvas!;
 }
 
 export const saveCanvas = async () => {

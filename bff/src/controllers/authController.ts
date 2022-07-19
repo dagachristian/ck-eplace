@@ -2,8 +2,6 @@ import { Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 
-// import { deleteSession } from '../services/sessions';
-
 import * as userSvc from '../services/userService';
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {

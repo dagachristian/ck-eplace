@@ -17,15 +17,17 @@ services:
     restart: always
     expose:
       - '6379:6379'
-  bff:
-    container_name: ck-bff
-    image: ckoled/ck-eplace_bff
+    volumes: 
+      - cache:/data
+  app:
+    container_name: ck-app
+    image: ckoled/ck-eplace_app
     restart: always
     depends_on:
       - db
       - cache
     ports:
-      - '8080:8080'
+      - '80:8080'
     environment:
       NODE_ENV: dev
       PG_HOST: db
@@ -35,24 +37,12 @@ services:
       PG_PASSWORD: postgres
       REDIS_HOST: cache
       REDIS_PORT: 6379
-      CANVAS_SIZE: 20
+      CANVAS_SIZE: 30
     links:
       - db
       - cache
     volumes:
-      - ./:/bff
-  web:
-    container_name: ck-web
-    image: ckoled/ck-eplace_web
-    restart: always
-    depends_on:
-      - bff
-    ports:
-      - '80:3000'
-    links:
-      - bff
-    volumes:
-      - ./:/web
+      - ./:/app
 volumes:
   db:
     driver: local

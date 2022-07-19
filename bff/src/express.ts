@@ -1,5 +1,6 @@
 import express, { NextFunction, Response } from 'express';
 import cors from 'cors';
+import path from 'path';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { expressjwt as jwt, Request } from 'express-jwt';
@@ -21,10 +22,8 @@ export const useApp = async () => {
   app.use((req, res, next) => {
     createContext(next, { req, res })
   });
-  app.use(jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
+  app.use('/api', jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
     path: [
-      /^\/socket.io.*/,
-
       // API paths.
       /^\/api\/(v\d+\/)?auth\/login/,
       /^\/api\/(v\d+\/)?auth\/register/,
@@ -44,7 +43,13 @@ export const useApp = async () => {
   });
 
   // define a route handler for the default home page
-  app.use("/api", routes);
+  app.use('/api', routes);
+
+  const root = path.join(__dirname, 'build');
+  app.use(express.static(root));
+  app.get('/*', (req, res) => {
+    res.sendFile('index.html', { root });
+  });
 
   app.use((req, res, next) => {
     const err = new ApiError(Errors.API);

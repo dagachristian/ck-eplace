@@ -1,6 +1,15 @@
 import local from './local.env';
 
 const environment = process.env.NODE_ENV || 'dev';
+let temp;
+switch (environment) {
+  case 'dev':
+    temp = local;
+    break;
+  default:
+    temp = local;
+    break;
+}
 let config: {
   api: {
     endpoint: string
@@ -32,15 +41,23 @@ let config: {
   canvas: {
     size: number
   }
+} = {
+  db: {
+    host: process.env.PG_HOST || 'localhost',
+    database: process.env.PG_DATABASE || 'postgres',
+    port: parseInt(process.env.PG_PORT || '5432'),
+    user: process.env.PG_USER || 'postgres',
+    password: process.env.PG_PASSWORD || 'postgres',
+    poolMax: 10
+  },
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379')
+  },
+  canvas: {
+    size: parseInt(process.env.CANVAS_SIZE || '20')
+  },
+  ...temp
 };
-
-switch (environment) {
-  case 'dev':
-    config = local;
-    break;
-  default:
-    config = local;
-    break;
-}
 
 export default config;

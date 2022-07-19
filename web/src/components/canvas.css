@@ -10,16 +10,14 @@
 
 .canvas-container {
   border: 6px solid black;
-  background: black;
-  opacity: 0.2;
   grid-area: middle;
   justify-self: center;
   align-self: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 512px;
-  height: 512px;
+  width: 612px;
+  height: 612px;
 }
 
 #canvas {

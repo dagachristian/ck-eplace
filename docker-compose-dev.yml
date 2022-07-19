@@ -6,26 +6,30 @@ services:
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
-    expose:
+    ports:
       - '5432:5432'
     volumes: 
       - db:/var/lib/postgresql/data
       - ./rdb/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
   cache:
     container_name: ck-redis
-    image: redis/redis-stack-server
+    image: redis/redis-stack
     restart: always
-    expose:
+    ports:
       - '6379:6379'
-  bff:
-    container_name: ck-bff
-    build: ./bff
+      - '8001:8001'
+    volumes: 
+      - cache:/data
+  app:
+    container_name: ck-app
+    build: ./
     restart: on-failure
     depends_on:
       - db
       - cache
     ports:
       - '8080:8080'
+      - '8443:8443'
     environment:
       NODE_ENV: dev
       PG_HOST: db
@@ -35,25 +39,12 @@ services:
       PG_PASSWORD: postgres
       REDIS_HOST: cache
       REDIS_PORT: 6379
-      CANVAS_SIZE: 20
+      CANVAS_SIZE: 30
     links:
       - db
       - cache
     volumes:
-      - ./:/bff
-  web:
-    container_name: ck-web
-    build: ./web
-    depends_on:
-      - bff
-    ports:
-      - '3000:3000'
-    environment:
-      REACT_APP_API_BASE_URL: bff:8080
-    links:
-      - bff
-    volumes:
-      - ./:/web
+      - ./:/app
 volumes:
   db:
     driver: local
