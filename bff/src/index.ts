@@ -26,7 +26,6 @@ const start = async () => {
     // start the Express server
     httpServer = new Server(app);
     await initSocket(httpServer);
-    await initSocket(httpServer);
     httpServer.listen(port);
     console.log('Started server on port', port)
     process.on('SIGINT', gracefulShutdown);

@@ -10,8 +10,8 @@ class SocketClient {
   }
 
   async initCanvasSocket() {
-    const { protocol, hostname } = window.location;
-    this.socket = io(protocol + '//' + hostname + '/canvas', {
+    const { protocol, hostname, port } = window.location;
+    this.socket = io(`${protocol}//${hostname}:${port}/canvas`, {
       reconnectionAttempts: 50,
       auth: {
         token: sessionStorage.getItem('dashboard.token')

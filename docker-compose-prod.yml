@@ -17,6 +17,8 @@ services:
     restart: always
     expose:
       - '6379:6379'
+    volumes: 
+      - cache:/data
   app:
     container_name: ck-app
     image: ckoled/ck-eplace_app
@@ -35,7 +37,7 @@ services:
       PG_PASSWORD: postgres
       REDIS_HOST: cache
       REDIS_PORT: 6379
-      CANVAS_SIZE: 20
+      CANVAS_SIZE: 30
     links:
       - db
       - cache

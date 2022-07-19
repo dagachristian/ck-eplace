@@ -5,7 +5,6 @@ COPY ./web /web
 COPY ./bff/package.json /package.json
 COPY ./bff/package-lock.json /package-lock.json
 
-RUN rm web/.env
 RUN rm -rf bff/dist bff/node_modules web/build web/node_modules
 RUN cd bff && npm i && npm run build
 RUN cd web && npm i && npm run build
