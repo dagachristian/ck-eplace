@@ -18,9 +18,11 @@ export const connectDb = async () => {
     user
   });
 
+  pool.on('connect', client => console.log('Postgres Connected.'))
   pool.on('error', (error, client) => {
-    console.log('Postgres error.', { error, client })
+    console.log('Postgres Error.', { error, client })
   })
+  pool.on('remove', client => console.log('Postgres Disconnected.'))
 
   await testConnection();
 }

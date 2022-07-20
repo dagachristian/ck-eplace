@@ -7,7 +7,7 @@ import RegisterForm from './registerForm';
 
 import './login.css';
 
-const TITLE = 'Login | CK';
+const TITLE = 'Login | Eplace';
 
 export default function Login() {
   const [ showLogin, setShowLogin ] = useState(true);
