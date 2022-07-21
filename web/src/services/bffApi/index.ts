@@ -9,7 +9,9 @@ export class BffApiService {
    */
   constructor() {
     axiosRetry(axios, { retries: 0, retryDelay: this.retryFunction() })
-    const { protocol, hostname, port } = window.location;
+    let { protocol, hostname, port } = window.location;
+    // temp for dev
+    if (parseInt(port) === 3000) port = '8080'
     this.baseUrl = `${protocol}//${hostname}:${port}/api`
   }
 

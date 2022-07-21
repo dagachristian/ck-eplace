@@ -3,7 +3,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../services/auth';
+import { useAuth } from '../../services/auth';
 import './layout.css';
 
 const { Header, Content, Footer } = Layout;
