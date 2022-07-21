@@ -11,8 +11,6 @@ class SocketClient {
 
   async initCanvasSocket() {
     let { protocol, hostname, port } = window.location;
-    // temp for dev
-    if (parseInt(port) === 3000) port = '8080'
     this.socket = io(`${protocol}//${hostname}:${port}/canvas`, {
       reconnectionAttempts: 50,
       auth: {

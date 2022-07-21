@@ -27,6 +27,8 @@ const to8bit = ({r, g, b}: {r:number,g:number,b:number}) => {
 export default function Canvas() {
   const [ loading, setLoading ] = useState(true);
   const [ pickedColor, _setPickedColor ] = useState<any>();
+  const isPanning = useRef(false);
+  const isClicking = useRef(false);
   const colorRef = useRef(pickedColor);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
@@ -35,14 +37,24 @@ export default function Canvas() {
     _setPickedColor(val)
   }
 
+  const setIsPanning = () => {
+    isClicking.current = false;
+    setTimeout(() => {
+      if (!isClicking.current)
+        isPanning.current = true;
+    }, 100);
+  }
+
   const pick = (ctx: CanvasRenderingContext2D) => {
     return (event: MouseEvent) => {
-      const scale = Math.floor(
-        (document.getElementById('canvas')?.offsetWidth!)/canvasRef.current?.width!);
-      const x = Math.round((event.offsetX-16)/scale);
-      const y = Math.round((event.offsetY-12)/scale);
-
-      updatePixel(to8bit(colorRef.current.rgb), x, y)
+      isClicking.current = true;
+      if (!isPanning.current) {
+        const scale = document.getElementById('canvas')?.offsetWidth!/canvasRef.current?.width!;
+        const x = Math.round((event.offsetX-16)/scale);
+        const y = Math.round((event.offsetY-14)/scale);
+        updatePixel(to8bit(colorRef.current.rgb), x, y);
+      }
+      isPanning.current = false;
     }
   }
 
@@ -63,10 +75,12 @@ export default function Canvas() {
     const ctx = canvas.getContext('2d')!
     const listener = pick(ctx);
     canvas.addEventListener('click', listener);
+    canvas.addEventListener('mousedown', setIsPanning);
     draw(ctx);
     return function cleanup() {
       wsClient.closeSocket()
       canvas.removeEventListener('click', listener);
+      canvas.removeEventListener('mousedown', setIsPanning);
     };
   }, [])
 
@@ -75,22 +89,20 @@ export default function Canvas() {
       <TransformComponent>
         <div id='canvas-div'>
           <div className='canvas-container' hidden={!loading}><Spin size='large' /></div>
-          <canvas className='canvas-container' id='canvas' ref={canvasRef}/>
+          <canvas className='canvas-container' id='canvas' hidden={loading} ref={canvasRef}/>
         </div>
       </TransformComponent>
-      <div id='drag-div'>
-        <Draggable>
-          <div id='controls-div'>
-            <Typography.Title style={{marginBottom: '0px'}}>Choose Color</Typography.Title>
-            <Divider style={{margin: '10px 0px 15px'}}/>
-            <CirclePicker
-              color={pickedColor}
-              onChange={(c, e) => setPickedColor(c)}
-              colors={colors}
-            />
-          </div>
-        </Draggable>
-      </div>
+      <Draggable>
+        <div id='controls-div'>
+          <Typography.Title style={{marginBottom: '0px'}}>Choose Color</Typography.Title>
+          <Divider style={{margin: '10px 0px 15px'}}/>
+          <CirclePicker
+            color={pickedColor}
+            onChange={(c, e) => setPickedColor(c)}
+            colors={colors}
+          />
+        </div>
+      </Draggable>
     </TransformWrapper>
   )
 }
