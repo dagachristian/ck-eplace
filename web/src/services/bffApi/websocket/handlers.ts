@@ -1,4 +1,3 @@
-
 interface IGotUpdatePixelEvent {
   color: number,
   x: number,

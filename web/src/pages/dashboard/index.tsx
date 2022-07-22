@@ -5,7 +5,7 @@ import Canvas from '../../components/canvas';
 
 import './dashboard.css';
 
-const TITLE = 'Dashboard | CK';
+const TITLE = 'Dashboard | EPlace';
 
 export default function Dashboard() {
   return (

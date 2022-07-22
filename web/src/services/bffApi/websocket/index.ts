@@ -10,7 +10,7 @@ class SocketClient {
   }
 
   async initCanvasSocket() {
-    const { protocol, hostname, port } = window.location;
+    let { protocol, hostname, port } = window.location;
     this.socket = io(`${protocol}//${hostname}:${port}/canvas`, {
       reconnectionAttempts: 50,
       auth: {
