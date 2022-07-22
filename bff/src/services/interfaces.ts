@@ -19,10 +19,22 @@ export interface IUserInfo {
   userAgent: string
 }
 
-export interface ISession {
+export interface ICanvas {
   id: string
   userId: string,
-  address: string,
-  userAgent: string,
-  expire: moment.Moment,
+  size: number,
+  timer: number,
+  private: boolean,
+  img?: Buffer | string,
+  subs?: string[],
+  meta?: any,
+  created?: Date | moment.Moment, 
+  createdBy?: string,
+  lastModified?: Date | moment.Moment,
+  lastModifiedBy?: string
+}
+
+export interface ICanvasSub {
+  userId: string,
+  canvasId: string
 }

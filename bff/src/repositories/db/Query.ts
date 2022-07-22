@@ -195,7 +195,7 @@ export default class Query {
     return rowCount > 0 ? convertDbFieldsToModel(rows[0]) : undefined;
   }
 
-  static async findMany(aliases: Obj, options: Options) {
+  static async findMany(aliases: Obj, options: Options): Promise<any[]> {
     const { where, select, join, raw = false, tx } = options || {};
     const { clause, params } = constructWhere(where);
     const text = `${constructSelect(select)} ${constructFrom(aliases)} ${constructJoin(join, aliases)} ${clause}`;
