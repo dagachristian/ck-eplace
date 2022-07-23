@@ -33,6 +33,7 @@ let config: {
   },
   jwt: {
     secret: string,
+    refreshSecret: string,
     expiresIn: {
       api: string,
       refresh: string

@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 
-import * as userSvc from '../services/userService';
+import * as userSvc from '../services/authService';
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/login')

@@ -22,6 +22,7 @@ export const useApp = async () => {
   app.use((req, res, next) => {
     createContext(next, { req, res })
   });
+  app.use(/^\/api\/(v\d+\/)?auth\/renewSession/, jwt({ secret: config.jwt.refreshSecret, algorithms: ['HS256']}));
   app.use('/api', jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
     path: [
       // API paths.

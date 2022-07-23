@@ -42,7 +42,7 @@ export default function Canvas() {
     setTimeout(() => {
       if (!isClicking.current)
         isPanning.current = true;
-    }, 100);
+    }, 150);
   }
 
   const pick = (ctx: CanvasRenderingContext2D) => {

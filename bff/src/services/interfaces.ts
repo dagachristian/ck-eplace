@@ -38,3 +38,10 @@ export interface ICanvasSub {
   userId: string,
   canvasId: string
 }
+
+export interface ICanvasInfo {
+  size?: number,
+  timer?: number,
+  private?: boolean,
+  subs?: string[]
+}

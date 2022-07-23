@@ -39,7 +39,7 @@ const newSession = async (user: IUser, ip: string, userAgent?: string) => {
   )
   const refreshToken = jwt.sign(
     { username: user.username, iat: ctx.now.unix(), audience: ip },
-    config.jwt.secret,
+    config.jwt.refreshSecret,
     {
       expiresIn: config.jwt.expiresIn.refresh,
       issuer: config.api.endpoint,

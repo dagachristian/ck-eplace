@@ -14,9 +14,10 @@ CREATE TABLE IF NOT EXISTS ck_user (
 );
 CREATE TABLE IF NOT EXISTS ck_canvas (
   id uuid PRIMARY KEY,
-  user_id uuid REFERENCES ck_user,
-  size number NOT NULL DEFAULT 20,
-  timer number NOT NULL DEFAULT 0,
+  user_id uuid REFERENCES ck_user ON DELETE CASCADE,
+  size int NOT NULL DEFAULT 20,
+  timer int NOT NULL DEFAULT 0,
+  private boolean NOT NULL DEFAULT false,
   img bytea,
   meta jsonb NOT NULL DEFAULT '{}'::jsonb,
 
@@ -25,7 +26,7 @@ CREATE TABLE IF NOT EXISTS ck_canvas (
   last_modified timestamp NOT NULL DEFAULT now(),
   last_modified_by uuid NOT NULL
 );
-CREATE TABLE IF NOT EXISTS ck_canvas_subs (
-  user_id uuid REFERENCES ck_user,
-  canvas_id uuid REFERENCES ck_canvas,
+CREATE TABLE IF NOT EXISTS ck_canvas_sub (
+  user_id uuid REFERENCES ck_user ON DELETE CASCADE,
+  canvas_id uuid REFERENCES ck_canvas ON DELETE CASCADE
 );
