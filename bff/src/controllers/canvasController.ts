@@ -11,7 +11,10 @@ import config from '../config';
 export const getCanvases = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/canvases')
   try {
-    const { userId } = req.query;
+    let userId: string | jwt.JwtPayload | undefined = req.get('authorization');
+    if (userId) jwt.verify(userId?.split(' ')[1], config.jwt.secret, (err, decoded) => {
+      userId = decoded?.sub;
+    })
     const ret = await canvasSvc.getCanvases(userId as string | undefined);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
@@ -28,20 +31,18 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
     if (userId) jwt.verify(userId?.split(' ')[1], config.jwt.secret, (err, decoded) => {
       userId = decoded?.sub;
     })
-    let ret: ICanvas | Buffer = await canvasSvc.getCanvas(canvasId, userId);
-    const img = ret.img as Buffer;
+    const { canvas, buffer } = await canvasSvc.getCanvas(canvasId, userId);
+    let ret: ICanvas | Buffer = canvas;
     let type = req.query.type?.toString().toLowerCase();
     switch (type) {
       case 'png':
-        ret = canvasFnctns.b8ToPNG(img);
+        ret = canvasFnctns.b8ToPNG(buffer);
         break;
       case 'bmp':
-        ret = canvasFnctns.b8ToBMP(img);
+        ret = canvasFnctns.b8ToBMP(buffer);
         break;
       default:
         type = 'raw';
-        delete ret.img;
-        // ret.img = canvasFnctns.b8ToRaw(img).toString();
         break;
     }
     if (!type.includes('raw')) res.setHeader('Content-Type', `image/${type}`);

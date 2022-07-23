@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Buffer } from 'buffer';
+// import { Buffer } from 'buffer';
 import { Divider, Spin, Typography } from 'antd';
 import { CirclePicker, ColorResult } from 'react-color';
 import Draggable from 'react-draggable';
@@ -50,8 +50,8 @@ export default function Canvas() {
       isClicking.current = true;
       if (!isPanning.current) {
         const scale = document.getElementById('canvas')?.offsetWidth!/canvasRef.current?.width!;
-        const x = Math.round((event.offsetX-16)/scale);
-        const y = Math.round((event.offsetY-14)/scale);
+        const x = Math.floor((event.offsetX)/scale);
+        const y = Math.floor((event.offsetY)/scale);
         updatePixel(to8bit(colorRef.current.rgb), x, y);
       }
       isPanning.current = false;
@@ -59,15 +59,20 @@ export default function Canvas() {
   }
 
   const draw = async (ctx: CanvasRenderingContext2D) => {
-    const canvasRaw = await bffApi.getCanvas('rawRGBA');
-    const canvasArr = new Uint8ClampedArray(Buffer.from(canvasRaw));
-    const size = Math.floor(Math.sqrt(canvasArr.length >> 2));
-    const canvasImg = await createImageBitmap(new ImageData(canvasArr, size, size));
-    canvasRef.current!.width = size;
-    canvasRef.current!.height = size;
-    ctx.drawImage(canvasImg, 0, 0);
-    await wsClient.initCanvasSocket();
-    setLoading(false);
+    const canvas = await bffApi.getCanvas();
+    // const canvasArr = new Uint8ClampedArray(Buffer.from(canvasRaw));
+    // const size = Math.floor(Math.sqrt(canvasArr.length >> 2));
+    // const canvasImg = await createImageBitmap(new ImageData(canvasArr, size, size));
+    canvasRef.current!.width = canvas.size;
+    canvasRef.current!.height = canvas.size;
+    console.log(canvas)
+    const canvasImg = new Image(canvas.size, canvas.size)
+    canvasImg.src = `${bffApi.baseUrl}${canvas.img}&cache=${performance.now()}`
+    canvasImg.onload = async () => {
+      ctx.drawImage(canvasImg, 0, 0);
+      await wsClient.initCanvasSocket();
+      setLoading(false);
+    }
   }
 
   useEffect(() => {

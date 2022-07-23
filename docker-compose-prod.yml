@@ -37,7 +37,7 @@ services:
       PG_PASSWORD: postgres
       REDIS_HOST: cache
       REDIS_PORT: 6379
-      CANVAS_SIZE: 30
+      CANVAS_SIZE: 100
     links:
       - db
       - cache

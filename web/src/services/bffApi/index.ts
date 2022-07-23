@@ -3,7 +3,7 @@ import axiosRetry, { exponentialDelay } from 'axios-retry'
 import { IUser } from '../interfaces'
 
 export class BffApiService {
-  private readonly baseUrl: string | undefined
+  public readonly baseUrl: string | undefined
   /**
    *
    */
@@ -72,15 +72,11 @@ export class BffApiService {
     return response.status;
   }
 
-  public async getCanvas(type?: string) {
-    const url = `${this.baseUrl}/canvas`
+  public async getCanvas(id?: string) {
+    const url = `${this.baseUrl}/canvas/${id || '0'}`
     const response = await axios.request({
       method: 'GET',
-      url,
-      responseType: 'arraybuffer',
-      params: {
-        type: type || 'raw'
-      }
+      url
     })
     return response.data;
   }

@@ -56,7 +56,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"christian\",\r\n    \"email\": \"christian@mksrc.com\",\r\n    \"password\": \"testpass\"\r\n}",
+							"raw": "{\r\n    \"username\": \"testuser\",\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"testpass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -178,22 +178,263 @@
 			"name": "Canvas",
 			"item": [
 				{
-					"name": "Get Canvas",
+					"name": "Get Canvases",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE_URL}}/canvas?type=bmp",
+							"raw": "{{API_BASE_URL}}/canvas",
 							"host": [
 								"{{API_BASE_URL}}"
 							],
 							"path": [
 								"canvas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Canvas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas/:canvasId",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas",
+								":canvasId"
 							],
 							"query": [
 								{
 									"key": "type",
-									"value": "bmp"
+									"value": "png",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "canvasId",
+									"value": "9350e3e4-0a28-41ed-8d4e-c7af7bbda6f9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Canvas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 20,\r\n    \"timer\": 10,\r\n    \"private\": true,\r\n    \"subs\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas/create",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Canvas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"private\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas/:canvasId",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas",
+								":canvasId"
+							],
+							"variable": [
+								{
+									"key": "canvasId",
+									"value": "de09ac1d-ea4e-4e8a-963e-2312b2620006"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Canvas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas/:canvasId",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas",
+								":canvasId"
+							],
+							"variable": [
+								{
+									"key": "canvasId",
+									"value": "de09ac1d-ea4e-4e8a-963e-2312b2620006"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Sub",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas/:canvasId/sub?subId=df1a1b92-20cf-4ce7-81e2-43411cfc08d5",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas",
+								":canvasId",
+								"sub"
+							],
+							"query": [
+								{
+									"key": "subId",
+									"value": "df1a1b92-20cf-4ce7-81e2-43411cfc08d5"
+								}
+							],
+							"variable": [
+								{
+									"key": "canvasId",
+									"value": "9350e3e4-0a28-41ed-8d4e-c7af7bbda6f9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Sub",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/canvas/:canvasId/sub?subId=df1a1b92-20cf-4ce7-81e2-43411cfc08d5",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"canvas",
+								":canvasId",
+								"sub"
+							],
+							"query": [
+								{
+									"key": "subId",
+									"value": "df1a1b92-20cf-4ce7-81e2-43411cfc08d5"
+								}
+							],
+							"variable": [
+								{
+									"key": "canvasId",
+									"value": "9350e3e4-0a28-41ed-8d4e-c7af7bbda6f9"
 								}
 							]
 						}

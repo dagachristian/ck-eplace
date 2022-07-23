@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS ck_canvas (
   size int NOT NULL DEFAULT 20,
   timer int NOT NULL DEFAULT 0,
   private boolean NOT NULL DEFAULT false,
-  img bytea,
+  img text NOT NULL DEFAULT '/canvas/0?type=png',
   meta jsonb NOT NULL DEFAULT '{}'::jsonb,
 
   created timestamp NOT NULL DEFAULT now(),

@@ -25,7 +25,7 @@ export interface ICanvas {
   size: number,
   timer: number,
   private: boolean,
-  img?: Buffer | string,
+  img?: string,
   subs?: string[],
   meta?: any,
   created?: Date | moment.Moment, 

@@ -6,7 +6,7 @@ function byteString(n: number) {
   if (n < 0 || n > 255 || n % 1 !== 0) {
       throw new Error(n + " does not fit in a byte");
   }
-  return ("000000000" + n.toString(2)).substr(-8)
+  return ("000000000" + n.toString(2)).slice(-8)
 }
 
 export const updatePixel = async ({ color, x, y }: { color: number, x: number, y: number }) => {
@@ -14,7 +14,7 @@ export const updatePixel = async ({ color, x, y }: { color: number, x: number, y
   const bits = byteString(color);
   const pipeline = client.pipeline();
   for (let i=0;i<bits.length;i++) {
-    pipeline.setbit('canvas', idx+i, bits[i])
+    pipeline.setbit('0', idx+i, bits[i])
   }
   await pipeline.exec();
   console.log('updated pixel');
