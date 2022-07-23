@@ -102,6 +102,9 @@ export const createCanvas = async (userId: string, canvasOptions: ICanvasInfo) =
   const data = {
     id,
     userId,
+    size: 20,
+    timer: 0,
+    private: false,
     img: `/canvas/${id}?type=png`,
     ...canvasOptions
   }

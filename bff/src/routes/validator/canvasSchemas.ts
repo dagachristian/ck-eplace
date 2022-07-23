@@ -1,6 +1,6 @@
 import { AllowedSchema } from 'express-json-validator-middleware';
 
-export const getCanvasSch: AllowedSchema = {
+export const canvasIdSch: AllowedSchema = {
   type: "object",
   required: ["canvasId"],
   properties: {
@@ -24,6 +24,16 @@ export const createCanvasSch: AllowedSchema = {
     },
     subs: {
       type: "array"
+    }
+  },
+};
+
+export const subIdSch: AllowedSchema = {
+  type: "object",
+  required: ["subId"],
+  properties: {
+    subId: {
+      type: "string",
     }
   },
 };

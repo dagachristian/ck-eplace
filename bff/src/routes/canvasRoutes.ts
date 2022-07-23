@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.route('/').get(canvas.getCanvases);
 router.route('/create').post(validate({body: canvasSchemas.createCanvasSch}), canvas.createCanvas);
-router.route('/:canvasId').get(validate({params: canvasSchemas.getCanvasSch}), canvas.getCanvas);
-router.route('/:canvasId').patch(canvas.updateCanvas);
-router.route('/:canvasId').delete(canvas.deleteCanvas);
-router.route('/:canvasId/sub').post(canvas.addSub);
-router.route('/:canvasId/sub').delete(canvas.removeSub);
+router.route('/:canvasId').get(validate({params: canvasSchemas.canvasIdSch}), canvas.getCanvas);
+router.route('/:canvasId').patch(validate({params: canvasSchemas.canvasIdSch}), canvas.updateCanvas);
+router.route('/:canvasId').delete(validate({params: canvasSchemas.canvasIdSch}), canvas.deleteCanvas);
+router.route('/:canvasId/sub').post(validate({params: canvasSchemas.canvasIdSch, query: canvasSchemas.subIdSch}), canvas.addSub);
+router.route('/:canvasId/sub').delete(validate({params: canvasSchemas.canvasIdSch, query: canvasSchemas.subIdSch}), canvas.removeSub);
 
 export default router;
