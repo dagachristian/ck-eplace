@@ -22,6 +22,7 @@ export interface IUserInfo {
 export interface ICanvas {
   id: string
   userId: string,
+  name: string,
   size: number,
   timer: number,
   private: boolean,
@@ -40,6 +41,7 @@ export interface ICanvasSub {
 }
 
 export interface ICanvasInfo {
+  name?: string,
   size?: number,
   timer?: number,
   private?: boolean,

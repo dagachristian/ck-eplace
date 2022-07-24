@@ -36,7 +36,7 @@ export const initSocket = (httpServer: Server) => {
     const userId = socket.data.decoded?.sub || '00000000-00000000-00000000-00000000';
     if (canvasId) {
       const subbed = await Query.raw(
-        'SELECT c.id FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR cs.user_id = $2)',
+        'SELECT c.id FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR c.user_id = $2 OR cs.user_id = $2)',
         [canvasId, userId]
       )
       if (!subbed) next(new ApiError(Errors.UNAUTHORIZED));

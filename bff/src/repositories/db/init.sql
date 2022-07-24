@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS ck_user (
 CREATE TABLE IF NOT EXISTS ck_canvas (
   id uuid PRIMARY KEY,
   user_id uuid REFERENCES ck_user ON DELETE CASCADE,
+  name text NOT NULL DEFAULT 'Untitled',
   size int NOT NULL DEFAULT 20,
   timer int NOT NULL DEFAULT 0,
   private boolean NOT NULL DEFAULT false,

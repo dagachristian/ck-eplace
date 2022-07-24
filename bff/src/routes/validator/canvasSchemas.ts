@@ -13,6 +13,9 @@ export const canvasIdSch: AllowedSchema = {
 export const createCanvasSch: AllowedSchema = {
   type: "object",
   properties: {
+    name: {
+      type: "string"
+    },
     size: {
       type: "number",
     },
