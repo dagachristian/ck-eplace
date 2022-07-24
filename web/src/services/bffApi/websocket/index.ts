@@ -14,7 +14,7 @@ class SocketClient {
     this.socket = io(`${protocol}//${hostname}:${port}/canvas`, {
       reconnectionAttempts: 50,
       auth: {
-        token: sessionStorage.getItem('dashboard.token')
+        token: sessionStorage.getItem('token.api')
       }
     })
     this.socket.on('connect', () => {

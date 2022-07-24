@@ -209,4 +209,12 @@ export default class Query {
     }
     return rows.map((row: Obj) => convertDbFieldsToModel(row));
   }
+
+  static async raw(rawSql: string, params?: string[], options?: Options) {
+    const { tx } = options || {};
+    console.log(`raw(),\nquery=${rawSql}`);
+    const dbClient = tx ? tx.db : pool;
+    const { rows } = await dbClient.query(rawSql, params || []);
+    return rows.map((row: Obj) => convertDbFieldsToModel(row));
+  }
 }

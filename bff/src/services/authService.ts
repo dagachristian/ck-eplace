@@ -21,10 +21,10 @@ const publishUser = (user: IUser) => {
   return user;
 }
 
-const newSession = async (user: IUser, ip: string, userAgent?: string) => {
+const newSession = async (user: IUser, ip: string, userAgent: string) => {
   const ctx = currentContext();
   ctx.userId = user.id;
-  ctx.appId = userAgent?ip + userAgent:ip;
+  ctx.appId = ip + userAgent;
 
   const sessionId = v4();
   const apiToken = jwt.sign(
@@ -38,7 +38,7 @@ const newSession = async (user: IUser, ip: string, userAgent?: string) => {
     }
   )
   const refreshToken = jwt.sign(
-    { username: user.username, iat: ctx.now.unix(), audience: ip },
+    { username: user.username, iat: ctx.now.unix(), audience: ctx.appId },
     config.jwt.refreshSecret,
     {
       expiresIn: config.jwt.expiresIn.refresh,
@@ -70,7 +70,7 @@ export const login = async (userInfo: IUserInfo) => {
     throw new ApiError(Errors.UNAUTHORIZED);
 }
 
-export const renewSession = async (refreshToken: jwt.JwtPayload, ip: string) => {
+export const renewSession = async (refreshToken: jwt.JwtPayload, ip: string, userAgent: string) => {
   const user = await Query.findOne(
     { t: 'ck_user' },
     {
@@ -81,7 +81,7 @@ export const renewSession = async (refreshToken: jwt.JwtPayload, ip: string) => 
     }
   ) as IUser;
   if (user && refreshToken.audience == ip) {
-    const { sessionId, apiToken } = await newSession(user, ip);
+    const { sessionId, apiToken } = await newSession(user, ip, userAgent);
     return { user: publishUser(user), sessionId, apiToken };
   } else if (!user)
     throw new ApiError(Errors.NOT_EXIST);

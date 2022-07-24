@@ -22,7 +22,7 @@ export const getCanvases = async (userId?: string) => {
     },
     {
       where: {
-        clause: 'c.private = :private OR c.user_id = :userId',
+        clause: 'c.private = :private AND NOT c.user_id = :userId',
         params: { private: false, userId }
       }
     }
@@ -66,7 +66,7 @@ export const getCanvas = async (canvasId: string, userId?: string) => {
         params: { canvasId }
       }
     })
-    if (canvas.private && !(userId && (subs.filter((v) => v.userId == userId) || canvas.userId == userId)))
+    if (canvas.private && !(userId && subs.filter((v) => v.userId == userId)))
       throw new ApiError(Errors.UNAUTHORIZED);
   }
   // must be consistent with redis list length
@@ -113,6 +113,7 @@ export const createCanvas = async (userId: string, canvasOptions: ICanvasInfo) =
   const tx = new Tx();
   await tx.begin();
   const canvas = await ckCanvasTbl.save(data, tx) as ICanvas;
+  await ckCanvasSubsTbl.save({userId, canvasId: id}, tx)
   canvasOptions.subs?.forEach(async sub => await ckCanvasSubsTbl.save({sub, canvasId: id}, tx))
   await tx.commit();
 

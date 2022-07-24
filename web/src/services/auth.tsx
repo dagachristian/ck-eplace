@@ -37,7 +37,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
       setLoggedIn(true);
       setApiToken(ret.apiToken);
       sessionStorage.setItem('dashboard.user', JSON.stringify(ret.user));
-      sessionStorage.setItem('dashboard.token', ret.apiToken);
+      sessionStorage.setItem('token.api', ret.apiToken);
       if (remember) localStorage.setItem('token.refresh', ret.refreshToken);
       return true;
     }
@@ -56,7 +56,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
   }, [apiToken])
 
   const currentSession = useCallback(async () => {
-    let tok = apiToken || sessionStorage.getItem('dashboard.token');
+    let tok = apiToken || sessionStorage.getItem('token.api');
     let usr = JSON.parse(sessionStorage.getItem('dashboard.user')!);
     try {
       await bffApi.currentSession(tok!)
@@ -67,7 +67,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
       tok = ret.apiToken;
       usr = ret.user;
       sessionStorage.setItem('dashboard.user', JSON.stringify(ret.user));
-      sessionStorage.setItem('dashboard.token', ret.apiToken);
+      sessionStorage.setItem('token.api', ret.apiToken);
     }
     setApiToken(tok);
     setLoggedIn(true);

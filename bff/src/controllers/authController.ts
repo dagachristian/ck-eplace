@@ -39,7 +39,8 @@ export const renewSession = async (req: Request, res: Response, next: NextFuncti
   console.log('/renewSession')
   try {
     const { ip } = req;
-    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth!, ip);
+    const userAgent = req.get('user-agent') || '';
+    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth!, ip, userAgent);
 
     // res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({
