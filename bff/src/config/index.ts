@@ -17,7 +17,8 @@ let config: {
   signed: {
     cookie: {
       secret: string[]
-    }
+    },
+    salt: number
   },
   db: {
     host: string,

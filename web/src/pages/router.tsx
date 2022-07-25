@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 
 import { useAuth } from '../services/auth';
 import Login from './login';
-import Dashboard from './dashboard';
+import Home from './home';
 import Profile from './profile';
 
-let savedPath = '/dashboard';
+let savedPath = '/home';
 
 export default function Router() {
   const { loggedIn, currentSession } = useAuth();
@@ -33,9 +33,9 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Navigate to='/dashboard' replace/>}/>
+        <Route path='/' element={<Navigate to='/home' replace/>}/>
         <Route element={<PublicRoute />}>
-          <Route path='/dashboard' element={<Dashboard />}/>
+          <Route path='/home' element={<Home />}/>
           <Route path='/login' element={(loggedIn || sameSession)?<Navigate to={savedPath} replace />:<Login />}/>
           <Route element={<ProtectedRoute />}>
             <Route path='/profile' element={<Profile />}/>

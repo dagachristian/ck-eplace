@@ -17,7 +17,7 @@ export default function GlobalLayout({ children, login }: any) {
   return (
     <Layout id='layout'>
       <Header id='header'>
-        <a style={{height: '100%'}} href='/dashboard'>
+        <a style={{height: '100%'}} href='/home'>
           <Title id='logo'>Every Place</Title>
         </a>
         {!login && (auth.loggedIn?

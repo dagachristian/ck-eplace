@@ -3,11 +3,11 @@ import { Helmet } from 'react-helmet-async';
 import GlobalLayout from '../../components/layout';
 import Canvas from '../../components/canvas';
 
-import './dashboard.css';
+import './home.css';
 
-const TITLE = 'Dashboard | EPlace';
+const TITLE = 'Home | EPlace';
 
-export default function Dashboard() {
+export default function Home() {
   return (
     <>
       <Helmet>

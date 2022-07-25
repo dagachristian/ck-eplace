@@ -9,8 +9,6 @@ import { currentContext } from '../context';
 import config from '../config';
 import { ApiError, Errors } from '../errors';
 
-const saltRounds = 6;
-
 const publishUser = (user: IUser) => {
   delete user.enabled;
   delete user.created;
@@ -91,7 +89,7 @@ export const renewSession = async (refreshToken: jwt.JwtPayload, ip: string, use
 
 export const createUser = async (user: IUser) => {
   user.id = v4();
-  user.password = bcrypt.hashSync(user.password!, saltRounds);
+  user.password = bcrypt.hashSync(user.password!, config.signed.salt);
   const createdUser = await ckUserTbl.save(user);
   if (createdUser) return createdUser
   throw new ApiError(Errors.EXISTS);

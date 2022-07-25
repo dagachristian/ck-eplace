@@ -24,7 +24,7 @@ const to8bit = ({r, g, b}: {r:number,g:number,b:number}) => {
   return Math.floor((r * 7 / 255) << 5) + Math.floor((g * 7 / 255) << 2) + Math.floor((b * 3 / 255))
 }
 
-export default function Canvas() {
+export default function Canvas({ canvasId='0' }) {
   const [ loading, setLoading ] = useState(true);
   const [ pickedColor, _setPickedColor ] = useState<any>();
   const isPanning = useRef(false);
@@ -59,7 +59,7 @@ export default function Canvas() {
   }
 
   const draw = async (ctx: CanvasRenderingContext2D) => {
-    const canvas = await bffApi.getCanvas();
+    const canvas = await bffApi.getCanvas(canvasId);
     // const canvasArr = new Uint8ClampedArray(Buffer.from(canvasRaw));
     // const size = Math.floor(Math.sqrt(canvasArr.length >> 2));
     // const canvasImg = await createImageBitmap(new ImageData(canvasArr, size, size));
