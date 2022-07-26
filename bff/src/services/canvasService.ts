@@ -5,6 +5,7 @@ import Query, { Tx } from '../repositories/db/Query';
 import { ICanvas, ICanvasInfo, ICanvasSub } from './interfaces';
 import { ApiError, Errors } from '../errors';
 import { v4 } from 'uuid';
+import { currentContext } from '../context';
 
 const publishCanvas = (canvas: ICanvas) => {
   delete canvas.meta;
@@ -98,11 +99,12 @@ export const populateCanvas = async (id: string, size: number) => {
   await client.set(id, Buffer.from(vals))
 }
 
-export const createCanvas = async (userId: string, canvasOptions: ICanvasInfo) => {
+export const createCanvas = async (canvasOptions: ICanvasInfo) => {
+  const ctx = currentContext();
   const id = v4();
   const data = {
     id,
-    userId,
+    userId: ctx.userId,
     size: 20,
     timer: 0,
     private: false,
@@ -124,19 +126,21 @@ export const createCanvas = async (userId: string, canvasOptions: ICanvasInfo) =
   return publishCanvas({...canvas, subs: [], ...canvasOptions} as ICanvas)
 }
 
-export const updateCanvas = async (canvasId: string, userId: string, canvasOptions: ICanvasInfo) => {
+export const updateCanvas = async (canvasId: string, canvasOptions: ICanvasInfo) => {
+  const ctx = currentContext();
   const canvas = await ckCanvasTbl.update(canvasOptions, {
     clause: 't.id = :canvasId AND t.user_id = :userId',
-    params: { canvasId, userId }
+    params: { canvasId, userId: ctx.userId }
   });
   if (!canvas) throw new ApiError(Errors.NOT_EXIST, 'canvas does not exist')
   return publishCanvas(canvas);
 }
 
-export const deleteCanvas = async (userId: string, canvasId: string) => {
+export const deleteCanvas = async (canvasId: string) => {
+  const ctx = currentContext();
   const canvas = await ckCanvasTbl.delete({
     clause: 't.id = :canvasId AND t.user_id = :userId',
-    params: { canvasId, userId }
+    params: { canvasId, userId: ctx.userId }
   }) as ICanvas;
   if (!canvas) throw new ApiError(Errors.NOT_EXIST, 'canvas does not exist')
   await client.del(canvasId)

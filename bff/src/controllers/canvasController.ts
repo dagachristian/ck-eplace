@@ -56,7 +56,7 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
 export const createCanvas = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/createCanvas')
   try {
-    const ret = await canvasSvc.createCanvas(req.auth?.sub!, req.body);
+    const ret = await canvasSvc.createCanvas(req.body);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Create Canvas error', e);
@@ -68,7 +68,7 @@ export const updateCanvas = async (req: Request, res: Response, next: NextFuncti
   console.log('/updateCanvas')
   try {
     const { canvasId } = req.params;
-    const ret = await canvasSvc.updateCanvas(canvasId, req.auth?.sub!, req.body);
+    const ret = await canvasSvc.updateCanvas(canvasId, req.body);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Update Canvas error', e);
@@ -80,7 +80,7 @@ export const deleteCanvas = async (req: Request, res: Response, next: NextFuncti
   console.log('/deleteCanvas')
   try {
     const { canvasId } = req.params
-    const ret = await canvasSvc.deleteCanvas(req.auth?.sub!, canvasId as string);
+    const ret = await canvasSvc.deleteCanvas(canvasId as string);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Delete Canvas error', e);
