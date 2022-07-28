@@ -33,15 +33,19 @@ export const initSocket = (httpServer: Server) => {
       });
     }
     const { canvasId } = socket.handshake.query;
+    socket.data.canvas = {
+      id: canvasId || '0',
+      size: config.canvas.size
+    }
     const userId = socket.data.decoded?.sub || '00000000-00000000-00000000-00000000';
     if (canvasId && canvasId != '0') {
-      const subbed = await Query.raw(
-        'SELECT c.id FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR c.user_id = $2 OR cs.user_id = $2)',
+      const canvas = await Query.raw(
+        'SELECT c.size FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR c.user_id = $2 OR cs.user_id = $2)',
         [canvasId, userId]
       )
-      if (!subbed) next(new ApiError(Errors.UNAUTHORIZED));
+      if (!canvas) next(new ApiError(Errors.UNAUTHORIZED));
+      else socket.data.canvas.size = canvas.size;
     }
-    socket.data.canvas = canvasId || '0';
     next();
   });
   cnvnsp.on('connection', async (socket) => {
@@ -49,10 +53,10 @@ export const initSocket = (httpServer: Server) => {
     socket.conn.on("close", (reason) => {
       console.log('Closed connection', reason);
     });
-    const canvasId = socket.data.canvas;
+    const { id: canvasId, size } = socket.data.canvas;
     socket.join(canvasId)
     console.log(`${usn} joined canvas room ${canvasId}`)
-    socket.on('updatePixel', events.updatePixel(canvasId))
+    socket.on('updatePixel', events.updatePixel(canvasId, size))
   });
 }
 

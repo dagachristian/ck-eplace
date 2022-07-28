@@ -53,7 +53,7 @@ export default function Canvas({ canvasId='0' }) {
         const scale = document.getElementById('canvas')?.offsetWidth!/size;
         const x = Math.floor((event.offsetX)/scale);
         const y = Math.floor((event.offsetY)/scale);
-        updatePixel(size, to8bit(colorRef.current.rgb), x, y);
+        updatePixel(to8bit(colorRef.current.rgb), x, y);
       }
       isPanning.current = false;
     }

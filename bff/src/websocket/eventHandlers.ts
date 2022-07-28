@@ -9,8 +9,8 @@ function byteString(n: number) {
   return ("000000000" + n.toString(2)).slice(-8)
 }
 
-export const updatePixel = (canvasId: string) => {
-  return async ({ size, color, x, y }: { size: number, color: number, x: number, y: number }) => {
+export const updatePixel = (canvasId: string, size: number) => {
+  return async ({ color, x, y }: { size: number, color: number, x: number, y: number }) => {
     const idx = (size * y + x) << 3;
     const bits = byteString(color);
     const pipeline = client.pipeline();
