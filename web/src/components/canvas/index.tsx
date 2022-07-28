@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-// import { Buffer } from 'buffer';
-import { Divider, Spin, Typography } from 'antd';
+import { Divider, Empty, Spin, Typography } from 'antd';
 import { CirclePicker, ColorResult } from 'react-color';
 import Draggable from 'react-draggable';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'; 
@@ -26,6 +25,7 @@ const to8bit = ({r, g, b}: {r:number,g:number,b:number}) => {
 
 export default function Canvas({ canvasId='0' }) {
   const [ loading, setLoading ] = useState(true);
+  const [ noData, setNoData ] = useState(false);
   const [ pickedColor, _setPickedColor ] = useState<any>();
   const isPanning = useRef(false);
   const isClicking = useRef(false);
@@ -49,29 +49,31 @@ export default function Canvas({ canvasId='0' }) {
     return (event: MouseEvent) => {
       isClicking.current = true;
       if (!isPanning.current) {
-        const scale = document.getElementById('canvas')?.offsetWidth!/canvasRef.current?.width!;
+        const size = canvasRef.current?.width!
+        const scale = document.getElementById('canvas')?.offsetWidth!/size;
         const x = Math.floor((event.offsetX)/scale);
         const y = Math.floor((event.offsetY)/scale);
-        updatePixel(to8bit(colorRef.current.rgb), x, y);
+        updatePixel(size, to8bit(colorRef.current.rgb), x, y);
       }
       isPanning.current = false;
     }
   }
 
   const draw = async (ctx: CanvasRenderingContext2D) => {
-    const canvas = await bffApi.getCanvas(canvasId);
-    // const canvasArr = new Uint8ClampedArray(Buffer.from(canvasRaw));
-    // const size = Math.floor(Math.sqrt(canvasArr.length >> 2));
-    // const canvasImg = await createImageBitmap(new ImageData(canvasArr, size, size));
-    canvasRef.current!.width = canvas.size;
-    canvasRef.current!.height = canvas.size;
-    console.log(canvas)
-    const canvasImg = new Image(canvas.size, canvas.size)
-    canvasImg.src = `${bffApi.baseUrl}${canvas.img}&cache=${performance.now()}`
-    canvasImg.onload = async () => {
-      ctx.drawImage(canvasImg, 0, 0);
-      await wsClient.initCanvasSocket();
-      setLoading(false);
+    try {
+      const canvas = await bffApi.getCanvas(canvasId);
+      canvasRef.current!.width = canvas.size;
+      canvasRef.current!.height = canvas.size;
+      console.log(canvas)
+      const canvasImg = new Image(canvas.size, canvas.size)
+      canvasImg.src = `${bffApi.baseUrl}${canvas.img}&cache=${performance.now()}`
+      canvasImg.onload = async () => {
+        ctx.drawImage(canvasImg, 0, 0);
+        await wsClient.initCanvasSocket(canvasId);
+        setLoading(false);
+      }
+    } catch (e) {
+      setNoData(true);
     }
   }
 
@@ -93,7 +95,9 @@ export default function Canvas({ canvasId='0' }) {
     <TransformWrapper>
       <TransformComponent>
         <div id='canvas-div'>
-          <div className='canvas-container' hidden={!loading}><Spin size='large' /></div>
+          <div className='canvas-container' hidden={!loading}>
+            {noData?<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{color: 'gray'}} />:<Spin size='large' />}
+          </div>
           <canvas className='canvas-container' id='canvas' hidden={loading} ref={canvasRef}/>
         </div>
       </TransformComponent>

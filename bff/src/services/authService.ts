@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { v4 } from 'uuid';
 
 import { ckUserTbl } from '../repositories/db';
-import { IUser, IUserInfo } from './interfaces';
+import type { IUser, IUserInfo } from './interfaces';
 import Query from '../repositories/db/Query';
 import { currentContext } from '../context';
 import config from '../config';

@@ -1,4 +1,4 @@
-import { AllowedSchema } from 'express-json-validator-middleware';
+import type { AllowedSchema } from 'express-json-validator-middleware';
 
 export const canvasIdSch: AllowedSchema = {
   type: "object",

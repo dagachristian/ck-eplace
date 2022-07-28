@@ -9,12 +9,15 @@ class SocketClient {
     this.socket = undefined;
   }
 
-  async initCanvasSocket() {
+  async initCanvasSocket(canvasId?: string) {
     let { protocol, hostname, port } = window.location;
     this.socket = io(`${protocol}//${hostname}:${port}/canvas`, {
       reconnectionAttempts: 50,
       auth: {
         token: sessionStorage.getItem('token.api')
+      },
+      query: {
+        canvasId
       }
     })
     this.socket.on('connect', () => {

@@ -1,13 +1,25 @@
-#layout {
-  min-height: 100vh !important;
+/* .layout {
+  height: 100vh !important;
   position: relative !important;
-}
+} */
 
 #header {
   color: #f0f2f5;
   display: flex;
   align-items: center;
+  padding-left: 15px;
+  gap: 15px;
   background: black !important;
+}
+
+#sider {
+  background: black !important;
+}
+
+.trigger:hover {
+  transition: all .35s ease;
+  -webkit-transition: all .35s ease;
+  color: var(--primary-color)
 }
 
 #footer {
@@ -16,7 +28,7 @@
   padding: 20px;
   position: absolute !important;
   bottom: 0 !important;
-  width: 100% !important;
+  width: 100%;
   background: var(--secondary-color) !important;
 }
 
@@ -26,7 +38,7 @@
 
 #content {
   background: var(--dark-color);
-  min-height: calc(100%-60px) !important;
+  min-height: calc(100vh - 64px) !important;
   padding-bottom: 60px !important;
   margin-top: auto !important;
   position: relative !important;
@@ -39,7 +51,6 @@
 }
 
 #logo {
-  color: white;
   margin-top: 5px;
 }
 

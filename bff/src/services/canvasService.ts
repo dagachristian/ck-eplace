@@ -2,7 +2,7 @@ import config from '../config';
 import { ckCanvasTbl, ckCanvasSubsTbl } from '../repositories/db';
 import { client } from '../repositories/redis';
 import Query, { Tx } from '../repositories/db/Query';
-import { ICanvas, ICanvasInfo, ICanvasSub } from './interfaces';
+import type { ICanvas, ICanvasInfo, ICanvasSub } from './interfaces';
 import { ApiError, Errors } from '../errors';
 import { v4 } from 'uuid';
 import { currentContext } from '../context';

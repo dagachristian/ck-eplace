@@ -1,5 +1,5 @@
 #canvas-div {
-  width: 100vw;
+  width: calc(100vw - 80px);
   height: calc(100vh - 124px);
   overflow: hidden;
   display: flex;

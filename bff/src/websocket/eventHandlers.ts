@@ -10,12 +10,12 @@ function byteString(n: number) {
 }
 
 export const updatePixel = (canvasId: string) => {
-  return async ({ color, x, y }: { color: number, x: number, y: number }) => {
-    const idx = (config.canvas.size * y + x) << 3;
+  return async ({ size, color, x, y }: { size: number, color: number, x: number, y: number }) => {
+    const idx = (size * y + x) << 3;
     const bits = byteString(color);
     const pipeline = client.pipeline();
     for (let i=0;i<bits.length;i++) {
-      pipeline.setbit('0', idx+i, bits[i])
+      pipeline.setbit(canvasId, idx+i, bits[i])
     }
     await pipeline.exec();
     console.log('updated pixel', canvasId);

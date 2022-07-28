@@ -1,5 +1,5 @@
-import { Response, NextFunction } from 'express';
-import { Request } from 'express-jwt';
+import type { Response, NextFunction } from 'express';
+import type { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 
 import * as userSvc from '../services/userService';

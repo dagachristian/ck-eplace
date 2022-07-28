@@ -6,3 +6,13 @@ export interface IUser {
   defaultLocale?: string,
   meta?: any,
 }
+
+export interface ICanvas {
+  id: string
+  userId: string,
+  name: string,
+  size: number,
+  timer: number,
+  private: boolean,
+  img?: string,
+}

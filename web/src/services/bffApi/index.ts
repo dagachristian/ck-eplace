@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import axiosRetry, { exponentialDelay } from 'axios-retry'
-import { IUser } from '../interfaces'
+import { ICanvas, IUser } from '../interfaces'
 
 export class BffApiService {
   public readonly baseUrl: string | undefined
@@ -72,13 +72,41 @@ export class BffApiService {
     return response.status;
   }
 
-  public async getCanvas(id?: string) {
+  public async getCanvases(filters?: string, token?: string) {
+    const url = `${this.baseUrl}/canvas`
+    const response = await axios.request({
+      method: 'GET',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+    return response.data;
+  }
+
+  public async getCanvas(id?: string, token?: string) {
     const url = `${this.baseUrl}/canvas/${id || '0'}`
     const response = await axios.request({
       method: 'GET',
-      url
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
     })
     return response.data;
+  }
+
+  public async createCanvas(token: string, data: Partial<ICanvas>) {
+    const url = `${this.baseUrl}/canvas/create`
+    const response = await axios.request({
+      method: 'POST',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data
+    })
+    return response.status;
   }
 
   private retryFunction() {

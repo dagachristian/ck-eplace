@@ -1,12 +1,15 @@
-import { Response, NextFunction } from 'express';
-import { Request } from 'express-jwt';
+import type { Response, NextFunction } from 'express';
+import type { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
+import { DatabaseError } from 'pg';
 
-import { ICanvas } from '../services/interfaces';
+import type { ICanvas } from '../services/interfaces';
 import * as canvasFnctns from '../services/canvasFunctions';
 import * as canvasSvc from '../services/canvasService';
 import config from '../config';
+import { ApiError, Errors } from '../errors';
+
 
 export const getCanvases = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/canvases')
@@ -49,7 +52,10 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Get Canvas error', e);
-    next(e);
+    if (e instanceof DatabaseError)
+      next(new ApiError(Errors.NOT_EXIST, e));
+    else
+      next(e)
   }
 }
 
