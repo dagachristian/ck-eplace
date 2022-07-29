@@ -31,8 +31,10 @@ export function CanvasList() {
     </Helmet>
     <GlobalLayout>
       <List
+        size='large'
         dataSource={canvases}
         loading={isLoading}
+        style={{padding: '10px'}}
         renderItem={(item: ICanvas) => (
           <List.Item>
             <List.Item.Meta

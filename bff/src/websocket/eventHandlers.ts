@@ -1,5 +1,4 @@
 import { client } from '../repositories/redis';
-import config from '../config';
 import { cnvnsp } from '.';
 
 function byteString(n: number) {
@@ -14,7 +13,7 @@ export const updatePixel = (canvasId: string, size: number) => {
     const idx = (size * y + x) << 3;
     const bits = byteString(color);
     const pipeline = client.pipeline();
-    for (let i=0;i<bits.length;i++) {
+    for (let i=0;i<8;i++) {
       pipeline.setbit(canvasId, idx+i, bits[i])
     }
     await pipeline.exec();

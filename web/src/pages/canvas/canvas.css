@@ -1,19 +1,11 @@
 #create-canvas-div {
-  height: 49%;
-  min-height: 450px;
-  border-radius: 3px;
   font-weight: bold;
   position: absolute;
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  padding: 40px 60px 50px;
-  width: 37%;
-  min-width: 200px;
-  max-width: 600px;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  color: black;
 }

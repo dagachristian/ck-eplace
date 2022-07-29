@@ -45,18 +45,16 @@ export default function Canvas({ canvasId='0' }) {
     }, 150);
   }
 
-  const pick = (ctx: CanvasRenderingContext2D) => {
-    return (event: MouseEvent) => {
-      isClicking.current = true;
-      if (!isPanning.current) {
-        const size = canvasRef.current?.width!
-        const scale = document.getElementById('canvas')?.offsetWidth!/size;
-        const x = Math.floor((event.offsetX)/scale);
-        const y = Math.floor((event.offsetY)/scale);
-        updatePixel(to8bit(colorRef.current.rgb), x, y);
-      }
-      isPanning.current = false;
+  const pick = (event: MouseEvent) => {
+    isClicking.current = true;
+    if (!isPanning.current) {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      const scale = canvasRef.current?.width! / rect?.width!
+      const x = Math.floor((event.clientX - rect?.left!) * scale);
+      const y = Math.floor((event.clientY - rect?.top!) * scale);
+      updatePixel(to8bit(colorRef.current.rgb), x, y);
     }
+    isPanning.current = false;
   }
 
   const draw = async (ctx: CanvasRenderingContext2D) => {
@@ -80,26 +78,24 @@ export default function Canvas({ canvasId='0' }) {
   useEffect(() => {
     const canvas = canvasRef.current!
     const ctx = canvas.getContext('2d')!
-    const listener = pick(ctx);
-    canvas.addEventListener('click', listener);
+    canvas.addEventListener('click', pick);
     canvas.addEventListener('mousedown', setIsPanning);
     draw(ctx);
     return function cleanup() {
       wsClient.closeSocket()
-      canvas.removeEventListener('click', listener);
+      canvas.removeEventListener('click', pick);
       canvas.removeEventListener('mousedown', setIsPanning);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <TransformWrapper>
-      <TransformComponent>
-        <div id='canvas-div'>
-          <div className='canvas-container' hidden={!loading}>
-            {noData?<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{color: 'gray'}} />:<Spin size='large' />}
-          </div>
-          <canvas className='canvas-container' id='canvas' hidden={loading} ref={canvasRef}/>
+    <TransformWrapper centerOnInit maxScale={100}>
+      <TransformComponent wrapperClass='canvas-div' contentClass='canvas-container'>
+        <div hidden={!loading}>
+          {noData?<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{color: 'gray'}} />:<Spin size='large' />}
         </div>
+        <canvas id='canvas' hidden={loading} ref={canvasRef}/>
       </TransformComponent>
       <Draggable>
         <div id='controls-div'>

@@ -96,7 +96,7 @@ export class BffApiService {
     return response.data;
   }
 
-  public async createCanvas(token: string, data: Partial<ICanvas>) {
+  public async createCanvas(token: string, data: Partial<ICanvas>): Promise<ICanvas> {
     const url = `${this.baseUrl}/canvas/create`
     const response = await axios.request({
       method: 'POST',
@@ -106,7 +106,7 @@ export class BffApiService {
       },
       data
     })
-    return response.status;
+    return response.data;
   }
 
   private retryFunction() {

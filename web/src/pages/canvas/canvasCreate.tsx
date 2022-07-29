@@ -1,7 +1,8 @@
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Divider, Form, Input, InputNumber } from 'antd';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 
 import GlobalLayout from '../../components/layout';
 import { useAuth } from '../../services/auth';
@@ -15,19 +16,22 @@ interface IFormValues {
   name: string,
   size: number,
   timer: number,
-  private: boolean
+  private: boolean,
+  subs: string[]
 }
 
 export function CanvasCreate() {
   const auth = useAuth();
+  const nav = useNavigate();
   const [ error, setError ] = useState<string | null>(null);
   const [ isLoading, setIsLoading ] = useState(false);
 
-  const onSubmit = async (vals: any) => {
+  const onSubmit = async (vals: Partial<IFormValues>) => {
     setIsLoading(true);
     try {
       console.log(vals);
-      await bffApi.createCanvas(auth.apiToken!, vals);
+      const { id } = await bffApi.createCanvas(auth.apiToken!, vals);
+      nav(`/c/${id}`)
     } catch (e) {
       setError('Failed To Create');
     }
@@ -56,18 +60,74 @@ export function CanvasCreate() {
           <Form.Item
             name='size'
             label='Size'
+            rules={[{min: 1, type: 'number'},{max: 1080, type: 'number'}]}
           >
             <InputNumber placeholder='20px' />
           </Form.Item>
           <Form.Item
             name='timer'
             label='Timer'
+            rules={[{min: 0, type: 'number'}]}
           >
             <InputNumber placeholder='0s' />
           </Form.Item>
           <Form.Item name='private' valuePropName='checked'>
             <Checkbox>Private</Checkbox>
           </Form.Item>
+          <Form.List
+            name='subs'
+          >
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                {fields.map((field, index) => (
+                  <Form.Item
+                    key={field.key}
+                    rules={[
+                      {}
+                    ]}
+                  >
+                    <Form.Item
+                      {...field}
+                      validateTrigger='onBlur'
+                      rules={[
+                        {
+                          required: true,
+                          whitespace: true,
+                          message: "Enter username or delete this field",
+                        }, {
+                          validator: async (_, username) => {
+                            if (username) {
+                              if (username === auth.user?.username) return Promise.reject('Cannot Invite Yourself');
+                              const res = await fetch(bffApi.baseUrl+'/user/'+username);
+                              if (!res.ok) return Promise.reject('User does not exist');
+                            }
+                          }
+                        }
+                      ]}
+                      noStyle
+                    >
+                      <Input placeholder="username" style={{ width: '60%' }} />
+                    </Form.Item>
+                    {' '}
+                    <MinusCircleOutlined
+                      className="dynamic-delete-button"
+                      onClick={() => remove(field.name)}
+                    />
+                  </Form.Item>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    icon={<PlusOutlined />}
+                  >
+                    Invite Friends
+                  </Button>
+                  <Form.ErrorList errors={errors} />
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
           <Divider />
           <Form.Item>
             {isLoading?

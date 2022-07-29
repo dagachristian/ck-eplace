@@ -6,6 +6,7 @@ import type { ICanvas, ICanvasInfo, ICanvasSub } from './interfaces';
 import { ApiError, Errors } from '../errors';
 import { v4 } from 'uuid';
 import { currentContext } from '../context';
+import { getUser } from './userService';
 
 const publishCanvas = (canvas: ICanvas) => {
   delete canvas.meta;
@@ -116,7 +117,9 @@ export const createCanvas = async (canvasOptions: ICanvasInfo) => {
   const tx = new Tx();
   await tx.begin();
   const canvas = await ckCanvasTbl.save(data, tx) as ICanvas;
-  canvasOptions.subs?.forEach(async sub => await ckCanvasSubsTbl.save({sub, canvasId: id}, tx))
+  canvasOptions.subs?.forEach(async sub => {
+    await ckCanvasSubsTbl.save({userId: (await getUser(sub)).id, canvasId: id}, tx)
+  })
   await tx.commit();
 
   if (!canvas) throw new ApiError(Errors.API, 'failed to create canvas')

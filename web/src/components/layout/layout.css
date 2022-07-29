@@ -9,11 +9,11 @@
   align-items: center;
   padding-left: 15px;
   gap: 15px;
-  background: black !important;
+  background: rgb(20, 20, 20) !important;
 }
 
 #sider {
-  background: black !important;
+  /* background: rgb(32, 32, 32) !important; */
 }
 
 .trigger:hover {

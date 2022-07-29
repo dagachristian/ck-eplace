@@ -29,7 +29,8 @@ export const useApp = async () => {
       // API paths.
       /^\/api\/(v\d+\/)?auth\/login/,
       /^\/api\/(v\d+\/)?auth\/register/,
-      {url: /^\/api\/(v\d+\/)?canvas\/.*/, methods: ['GET']}
+      {url: /^\/api\/(v\d+\/)?canvas\/.*/, methods: ['GET']},
+      {url: /^\/api\/(v\d+\/)?user\/.*/, methods: ['GET']}
     ]
   }));
   app.use((req: Request, res, next) => {

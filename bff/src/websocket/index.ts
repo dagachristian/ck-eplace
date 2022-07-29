@@ -40,11 +40,11 @@ export const initSocket = (httpServer: Server) => {
     const userId = socket.data.decoded?.sub || '00000000-00000000-00000000-00000000';
     if (canvasId && canvasId != '0') {
       const canvas = await Query.raw(
-        'SELECT c.size FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR c.user_id = $2 OR cs.user_id = $2)',
+        'SELECT c.size FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR c.user_id = $2 OR cs.user_id = $2) LIMIT 1',
         [canvasId, userId]
       )
       if (!canvas) next(new ApiError(Errors.UNAUTHORIZED));
-      else socket.data.canvas.size = canvas.size;
+      else socket.data.canvas.size = canvas[0].size;
     }
     next();
   });
@@ -56,7 +56,8 @@ export const initSocket = (httpServer: Server) => {
     const { id: canvasId, size } = socket.data.canvas;
     socket.join(canvasId)
     console.log(`${usn} joined canvas room ${canvasId}`)
-    socket.on('updatePixel', events.updatePixel(canvasId, size))
+    const handler = events.updatePixel(canvasId, size);
+    socket.on('updatePixel', handler)
   });
 }
 
