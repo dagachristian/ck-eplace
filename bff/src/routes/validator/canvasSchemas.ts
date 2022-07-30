@@ -10,6 +10,27 @@ export const canvasIdSch: AllowedSchema = {
   },
 };
 
+export const getCanvasesSch: AllowedSchema = {
+  type: "object",
+  properties: {
+    query: {
+      type: "string",
+    },
+    user: {
+      type: "string",
+    },
+    sortBy: {
+      type: "string",
+    },
+    sortByOrder: {
+      type: "string",
+    },
+    page: {
+      type: "number",
+    }
+  },
+}
+
 export const createCanvasSch: AllowedSchema = {
   type: "object",
   properties: {

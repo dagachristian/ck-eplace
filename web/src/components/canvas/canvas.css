@@ -16,10 +16,6 @@
   width: calc(100% - 1px);
   height: calc(100% - 1px);
   cursor: crosshair;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
 }
 
 #controls-div {

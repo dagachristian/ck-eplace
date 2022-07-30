@@ -19,7 +19,7 @@ export default function GlobalLayout({ children, login }: any) {
   const [collapsed, setCollapsed] = useState(true);
 
   return (
-    <Layout className='layout' >
+    <Layout>
       <Header id='header'>
         {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
           className: 'trigger',

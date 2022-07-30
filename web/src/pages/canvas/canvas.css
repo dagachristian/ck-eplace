@@ -9,3 +9,8 @@
   justify-content: center;
   flex-direction: column;
 }
+
+.list-header-div {
+  text-align: center;
+  margin-top: 10px;
+}

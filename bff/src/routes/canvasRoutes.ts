@@ -5,7 +5,7 @@ import * as canvas from '../controllers/canvasController';
 
 const router = express.Router();
 
-router.route('/').get(canvas.getCanvases);
+router.route('/').get(validate({query: canvasSchemas.getCanvasesSch}), canvas.getCanvases);
 router.route('/create').post(validate({body: canvasSchemas.createCanvasSch}), canvas.createCanvas);
 router.route('/:canvasId').get(validate({params: canvasSchemas.canvasIdSch}), canvas.getCanvas);
 router.route('/:canvasId').patch(validate({params: canvasSchemas.canvasIdSch}), canvas.updateCanvas);

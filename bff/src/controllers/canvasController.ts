@@ -14,11 +14,12 @@ import { ApiError, Errors } from '../errors';
 export const getCanvases = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/canvases')
   try {
+    const filters = req.query;
     let userId: string | jwt.JwtPayload | undefined = req.get('authorization');
     if (userId) jwt.verify(userId?.split(' ')[1], config.jwt.secret, (err, decoded) => {
       userId = decoded?.sub;
     })
-    const ret = await canvasSvc.getCanvases(userId as string | undefined);
+    const ret = await canvasSvc.getCanvases(filters, userId as string | undefined);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Get Canvases error', e);
@@ -34,22 +35,10 @@ export const getCanvas = async (req: Request, res: Response, next: NextFunction)
     if (userId) jwt.verify(userId?.split(' ')[1], config.jwt.secret, (err, decoded) => {
       userId = decoded?.sub;
     })
-    const { canvas, buffer } = await canvasSvc.getCanvas(canvasId, userId);
-    let ret: ICanvas | Buffer = canvas;
-    let type = req.query.type?.toString().toLowerCase();
-    switch (type) {
-      case 'png':
-        ret = canvasFnctns.b8ToPNG(buffer);
-        break;
-      case 'bmp':
-        ret = canvasFnctns.b8ToBMP(buffer);
-        break;
-      default:
-        type = 'raw';
-        break;
-    }
-    if (!type.includes('raw')) res.setHeader('Content-Type', `image/${type}`);
-    res.status(httpStatus.OK).send(ret);
+    const imgType = req.query.type?.toString().toLowerCase();
+    const canvas = await canvasSvc.getCanvas(canvasId, imgType, userId);
+    if (imgType) res.setHeader('Content-Type', `image/${imgType}`);
+    res.status(httpStatus.OK).send(canvas);
   } catch (e) {
     console.log('Get Canvas error', e);
     if (e instanceof DatabaseError)

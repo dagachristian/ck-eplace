@@ -15,4 +15,6 @@ export interface ICanvas {
   timer: number,
   private: boolean,
   img?: string,
+  subs?: string[] | string,
+  meta?: any
 }

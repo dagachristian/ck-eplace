@@ -95,7 +95,7 @@ export default function Canvas({ canvasId='0' }) {
         <div hidden={!loading}>
           {noData?<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{color: 'gray'}} />:<Spin size='large' />}
         </div>
-        <canvas id='canvas' hidden={loading} ref={canvasRef}/>
+        <canvas id='canvas' className='pixellated' hidden={loading} ref={canvasRef}/>
       </TransformComponent>
       <Draggable>
         <div id='controls-div'>

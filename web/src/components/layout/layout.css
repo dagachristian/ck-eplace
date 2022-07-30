@@ -1,7 +1,7 @@
-/* .layout {
-  height: 100vh !important;
+.layout {
+  height: 100% !important;
   position: relative !important;
-} */
+}
 
 #header {
   color: #f0f2f5;

@@ -15,6 +15,7 @@ const publishUser = (user: IUser) => {
   delete user.createdBy;
   delete user.lastModified;
   delete user.lastModifiedBy;
+  delete user.ts;
   delete user.password;
   return user;
 }

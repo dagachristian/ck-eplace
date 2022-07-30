@@ -10,8 +10,11 @@ CREATE TABLE IF NOT EXISTS ck_user (
   created timestamp NOT NULL DEFAULT now(),
   created_by uuid NOT NULL,
   last_modified timestamp NOT NULL DEFAULT now(),
-  last_modified_by uuid NOT NULL
+  last_modified_by uuid NOT NULL,
+
+  ts tsvector GENERATED ALWAYS AS (to_tsvector('english', username)) STORED
 );
+CREATE INDEX IF NOT EXISTS ts_idx ON ck_user USING GIN (ts);
 CREATE TABLE IF NOT EXISTS ck_canvas (
   id uuid PRIMARY KEY,
   user_id uuid REFERENCES ck_user ON DELETE CASCADE,
@@ -25,8 +28,11 @@ CREATE TABLE IF NOT EXISTS ck_canvas (
   created timestamp NOT NULL DEFAULT now(),
   created_by uuid NOT NULL,
   last_modified timestamp NOT NULL DEFAULT now(),
-  last_modified_by uuid NOT NULL
+  last_modified_by uuid NOT NULL,
+
+  ts tsvector GENERATED ALWAYS AS (to_tsvector('english', name)) STORED
 );
+CREATE INDEX IF NOT EXISTS ts_idx ON ck_canvas USING GIN (ts);
 CREATE TABLE IF NOT EXISTS ck_canvas_sub (
   user_id uuid REFERENCES ck_user ON DELETE CASCADE,
   canvas_id uuid REFERENCES ck_canvas ON DELETE CASCADE

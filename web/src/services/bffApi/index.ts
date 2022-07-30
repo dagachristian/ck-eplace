@@ -72,14 +72,15 @@ export class BffApiService {
     return response.status;
   }
 
-  public async getCanvases(filters?: string, token?: string) {
-    const url = `${this.baseUrl}/canvas`
+  public async getCanvases(filters?: any, token?: string) {
+    const url = `${this.baseUrl}/canvas/`
     const response = await axios.request({
       method: 'GET',
       url,
       headers: {
         Authorization: `Bearer ${token}`
       },
+      params: filters
     })
     return response.data;
   }
