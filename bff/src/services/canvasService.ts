@@ -12,6 +12,7 @@ import * as canvasFnctns from './canvasFunctions';
 interface IFilters {
   query: string,
   user: string,
+  subbed: boolean,
   sortBy: 'size' | 'created' | 'name' | 'subs',
   sortByOrder: 'asc' | 'desc',
   page: number
@@ -39,14 +40,18 @@ export const getCanvases = async (filters: Partial<IFilters>, userId?: string) =
     query += ` ts @@ to_tsquery('english', $1) AND`;
     params.push(filters.query);
   }
-  if (filters.user) {
+  if (filters.user && !filters.subbed) {
     fltUserId = (await getUser(filters.user)).id;
     query += ` c.user_id = '${fltUserId}' AND`;
   }
-  if (userId && fltUserId == userId)
-    query = query.slice(0, -3);
+  if (userId && fltUserId == userId) {
+    if (filters.subbed)
+      query += ` cs.user_id = '${userId}' `;
+    else
+      query = query.slice(0, -3);
+  }
   else if (userId)
-    query += ` (cs.user_id = '${userId}' OR c.private = false)`;
+    query += ` (cs.user_id = '${userId}' OR c.private = false) `;
   else
     query += ' c.private = false ';
   query += `

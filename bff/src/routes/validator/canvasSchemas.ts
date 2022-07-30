@@ -19,6 +19,9 @@ export const getCanvasesSch: AllowedSchema = {
     user: {
       type: "string",
     },
+    subbed: {
+      type: "boolean",
+    },
     sortBy: {
       type: "string",
     },
