@@ -42,10 +42,6 @@
   right: 5px;
 }
 
-h1 {
-  font-size: 32px;
-}
-
 #controls-div:hover {
   cursor: grab
 }

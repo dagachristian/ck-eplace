@@ -78,7 +78,6 @@ export default function Canvas({ canvasId='0' }) {
       if (canvas.subs.includes(auth.user?.id)) setSubbed(true);
       canvasRef.current!.width = canvas.size;
       canvasRef.current!.height = canvas.size;
-      console.log(canvas)
       const canvasImg = new Image(canvas.size, canvas.size)
       canvasImg.src = `${bffApi.baseUrl}${canvas.img}&cache=${performance.now()}`
       canvasImg.onload = async () => {
@@ -121,8 +120,9 @@ export default function Canvas({ canvasId='0' }) {
               <Button className='top-right' onClick={toggleSubbed}>Subbed</Button>
               :<Button className='top-right' style={{background: 'green'}} onClick={toggleSubbed}>Sub</Button>
           )}
-          <h1>{canvasInfo?.name}</h1>
-          <h2>Choose Color</h2>
+          <h1 style={{fontSize: '38px', fontWeight: 'bold', margin: '0'}}>{canvasInfo?.name}</h1>
+          <h5 style={{color: 'gray', marginTop: '-5px'}}>by {canvasInfo?.creator}</h5>
+          <h2 style={{margin: '0'}}>Choose Color</h2>
           <Divider style={{margin: '10px 0px 15px'}}/>
           <CirclePicker
             color={pickedColor}

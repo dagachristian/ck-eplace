@@ -29,7 +29,6 @@ services:
       - cache
     ports:
       - '8080:8080'
-      - '8443:8443'
     environment:
       NODE_ENV: dev
       PG_HOST: db

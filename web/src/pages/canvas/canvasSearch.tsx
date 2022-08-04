@@ -1,4 +1,4 @@
-import { CaretRightOutlined } from '@ant-design/icons';
+import { CaretRightOutlined, SearchOutlined } from '@ant-design/icons';
 import { Collapse, Input, List, Select } from 'antd';
 import date from 'date-and-time';
 import { useEffect, useState } from 'react';
@@ -37,9 +37,10 @@ export function CanvasSearch() {
         <div id='search'>
           <Input.Search 
             loading={isLoading}
-            enterButton
+            enterButton='Search'
             allowClear
             bordered={false}
+            prefix={<SearchOutlined />}
             placeholder='Search Canvases'
             onChange={e => setFilters({...filters, query: e.target.value})}
             onSearch={search}
@@ -55,8 +56,8 @@ export function CanvasSearch() {
             expandIconPosition='end'>
             <Collapse.Panel header='' extra={<span style={{color: 'var(--tertiary-color)'}}>Filter Options</span>} key='1'>
               <div id='filter-options'>
-                User:
-                <Input onChange={e => setFilters({...filters, user: e.target.value})} />
+                Creator:
+                <Input placeholder='username' onChange={e => setFilters({...filters, user: e.target.value})} />
                 SortBy:
                 <Select defaultValue='subs' onChange={sort => setFilters({...filters, sortBy: sort})}>
                   <Select.Option value='subs'>subs</Select.Option>
@@ -90,7 +91,7 @@ export function CanvasSearch() {
             >
               <List.Item.Meta 
                 title={<Link to={`/c/${item.id}`}>{item.name}</Link>}
-                description={`Owner: ${item.username} Size: ${item.size}, Timer: ${item.timer}, Subs: ${item.subs}, Created ${date.format(new Date(item.created!), 'YYYY/MM/DD HH:mm:ss')}`}
+                description={`Creator: ${item.username} Size: ${item.size}, Timer: ${item.timer}, Subs: ${item.subs}, Created ${date.format(new Date(item.created!), 'YYYY/MM/DD HH:mm:ss')}`}
               />
             </List.Item>
           )}

@@ -1,5 +1,5 @@
 import { LoadingOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Divider, Form, Input, InputNumber, List } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, InputNumber, List, Popconfirm } from 'antd';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -159,9 +159,11 @@ export function CanvasEdit() {
           </Form.Item>
           {isLoading?
             <Button type='primary' danger icon={<LoadingOutlined />} style={{width: '100%'}} />
-            :<Button type='primary' danger style={{width: '100%'}} onClick={onDelete}>
-              Delete
-            </Button>
+            :<Popconfirm title='Confirm Delete' okButtonProps={{danger: true}} onConfirm={onDelete}>
+              <Button type='primary' danger style={{width: '100%'}}>
+                Delete Canvas
+              </Button>
+            </Popconfirm>
           }
         </Form>
       </div>

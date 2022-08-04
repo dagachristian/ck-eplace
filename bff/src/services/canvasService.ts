@@ -29,7 +29,6 @@ const publishCanvas = (canvas: ICanvas) => {
 }
 
 export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload) => {
-  console.log(filters, user)
   const pageSize = 25;
   let query = `
     SELECT c.*, cu.username, COUNT(cs.user_id) AS subs 
@@ -71,6 +70,7 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
 
 export const getCanvas = async (canvasId: string, type?: string, userId?: string) => {
   let subs: ICanvasSub[] = [];
+  let creator = 'Everyone';
   
   // must be consistent with redis list length
   let canvas: Buffer | Partial<ICanvas> | null = await client.getBuffer(canvasId || '0');
@@ -90,7 +90,8 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
             clause: 't.id = :canvasId',
             params: { canvasId }
           }
-        }) || {} as Partial<ICanvas>
+        }) as ICanvas
+        if (!canvas) throw new ApiError(Errors.NOT_EXIST);
         subs = await Query.findMany(
           {
             cs: 'ck_canvas_sub',
@@ -109,6 +110,7 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
         })
         if (canvas.private && !(userId && (canvas.userId == userId || subs.filter((v) => v.userId == userId))))
           throw new ApiError(Errors.UNAUTHORIZED);
+        creator = (await getUser((canvas as ICanvas).userId)).username
       }
       canvas = publishCanvas({
         id: '0',
@@ -119,6 +121,7 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
         private: false,
         img: '/canvas/0?type=png',
         ...canvas,
+        creator,
         subs: subs.map((v) => v.userId)
       })
       break;

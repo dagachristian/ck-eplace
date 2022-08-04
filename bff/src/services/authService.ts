@@ -9,7 +9,7 @@ import { currentContext } from '../context';
 import config from '../config';
 import { ApiError, Errors } from '../errors';
 
-const publishUser = (user: IUser) => {
+export const publishUser = (user: IUser) => {
   delete user.enabled;
   delete user.created;
   delete user.createdBy;

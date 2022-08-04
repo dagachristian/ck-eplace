@@ -72,6 +72,31 @@ export class BffApiService {
     return response.status;
   }
 
+  public async updateUser(userId: string, data: Partial<IUser>, token: string): Promise<IUser> {
+    const url = `${this.baseUrl}/user/${userId}`
+    const response = await axios.request({
+      method: 'PATCH',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data
+    })
+    return response.data;
+  }
+
+  public async deleteUser(userId: string, token: string): Promise<IUser> {
+    const url = `${this.baseUrl}/user/${userId}`
+    const response = await axios.request({
+      method: 'DELETE',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+    return response.data;
+  }
+
   public async getCanvases(filters?: Partial<IFilters>, token?: string) {
     const url = `${this.baseUrl}/canvas/`
     const response = await axios.request({

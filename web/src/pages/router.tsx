@@ -39,7 +39,7 @@ export default function Router() {
           <Route path='/home' element={<Home />}/>
           <Route path='/login' element={(loggedIn || sameSession)?<Navigate to={savedPath} replace />:<Login />}/>
           <Route path='/u' element={<ProtectedRoute />}>
-            <Route path=':userId' element={<Profile />}/>
+            <Route path='profile' element={<Profile />}/>
             <Route path=':userId/canvases' element={<CanvasList />}/>
           </Route>
           <Route path='/c'>
