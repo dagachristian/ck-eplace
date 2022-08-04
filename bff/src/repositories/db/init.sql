@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS ck_user (
 
   ts tsvector GENERATED ALWAYS AS (to_tsvector('english', username)) STORED
 );
-CREATE INDEX IF NOT EXISTS ts_idx ON ck_user USING GIN (ts);
+CREATE INDEX IF NOT EXISTS ts_user_idx ON ck_user USING GIN (ts);
 CREATE TABLE IF NOT EXISTS ck_canvas (
   id uuid PRIMARY KEY,
   user_id uuid REFERENCES ck_user ON DELETE CASCADE,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS ck_canvas (
 
   ts tsvector GENERATED ALWAYS AS (to_tsvector('english', name)) STORED
 );
-CREATE INDEX IF NOT EXISTS ts_idx ON ck_canvas USING GIN (ts);
+CREATE INDEX IF NOT EXISTS ts_canvas_idx ON ck_canvas USING GIN (ts);
 CREATE TABLE IF NOT EXISTS ck_canvas_sub (
   user_id uuid REFERENCES ck_user ON DELETE CASCADE,
   canvas_id uuid REFERENCES ck_canvas ON DELETE CASCADE

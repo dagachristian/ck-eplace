@@ -61,3 +61,8 @@ export const deleteUser = async () => {
   })
   return publishUser(deleted[0]);
 }
+
+export const updateAvatar = async (image: any) => {
+  const ctx = currentContext();
+  return 'uploaded avatar';
+}

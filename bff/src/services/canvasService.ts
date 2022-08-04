@@ -15,7 +15,7 @@ interface IFilters {
   query: string,
   user: string,
   subbed: string,
-  sortBy: 'size' | 'created' | 'name' | 'subs',
+  sortBy: 'size' | 'created' | 'name' | 'subs' | 'relevance',
   sortByOrder: 'asc' | 'desc',
   page: number
 }
@@ -38,8 +38,8 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
     WHERE`;
   let params = [];
   if (filters.query) {
-    params[params.length] = filters.query;
-    query += ` ts @@ to_tsquery('english', $${params.length}) AND`;
+    params[params.length] = `${filters.query}:*`;
+    query += ` c.ts @@ to_tsquery('english', $${params.length}) AND`;
   }
   if (filters.user && (!filters.subbed || filters.subbed.toLowerCase() == 'false')) {
     params[params.length] = filters.user;
@@ -58,9 +58,10 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
     query += ` (cs.user_id = '${user.sub}' OR c.private = false) `;
   else
     query += ' c.private = false ';
-  query += `
-    GROUP BY c.id, cu.username 
-    ORDER BY ${filters.sortBy || 'subs'} ${filters.sortByOrder || 'desc'} 
+  query += 'GROUP BY c.id, cu.username ';
+  if (filters.sortBy && filters.sortBy != 'relevance')
+    query += `ORDER BY ${filters.sortBy || 'subs'} ${filters.sortByOrder || 'desc'} `
+  query += ` 
     OFFSET ${((filters.page || 1)-1)*pageSize} 
     LIMIT ${pageSize};
   `

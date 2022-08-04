@@ -59,7 +59,8 @@ export function CanvasSearch() {
                 Creator:
                 <Input placeholder='username' onChange={e => setFilters({...filters, user: e.target.value})} />
                 SortBy:
-                <Select defaultValue='subs' onChange={sort => setFilters({...filters, sortBy: sort})}>
+                <Select defaultValue='relevance' onChange={sort => setFilters({...filters, sortBy: sort})}>
+                <Select.Option value='relevance'>relevance</Select.Option>
                   <Select.Option value='subs'>subs</Select.Option>
                   <Select.Option value='name'>name</Select.Option>
                   <Select.Option value='size'>size</Select.Option>
