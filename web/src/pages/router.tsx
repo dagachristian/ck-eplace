@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { useAuth } from '../services/auth';
 import Login from './login';
-import Dashboard from './dashboard';
+import Home from './home';
 import Profile from './profile';
+import CanvasPage, { CanvasCreate, CanvasEdit, CanvasList, CanvasSearch } from './canvas';
 
-let savedPath = '/dashboard';
+let savedPath = '/home';
 
 export default function Router() {
   const { loggedIn, currentSession } = useAuth();
@@ -33,12 +34,21 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Navigate to='/dashboard' replace/>}/>
+        <Route path='/' element={<Navigate to='/home' replace/>}/>
         <Route element={<PublicRoute />}>
-          <Route path='/dashboard' element={<Dashboard />}/>
+          <Route path='/home' element={<Home />}/>
           <Route path='/login' element={(loggedIn || sameSession)?<Navigate to={savedPath} replace />:<Login />}/>
-          <Route element={<ProtectedRoute />}>
-            <Route path='/profile' element={<Profile />}/>
+          <Route path='/u' element={<ProtectedRoute />}>
+            <Route path=':userId' element={<Profile />}/>
+            <Route path=':userId/canvases' element={<CanvasList />}/>
+          </Route>
+          <Route path='/c'>
+            <Route path=':canvasId' element={<CanvasPage />} />
+            <Route path='search' element={<CanvasSearch />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path='create' element={<CanvasCreate />} />
+              <Route path=':canvasId/edit' element={<CanvasEdit />} />
+            </Route>
           </Route>
         </Route>
         <Route

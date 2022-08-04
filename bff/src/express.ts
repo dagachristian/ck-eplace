@@ -1,4 +1,5 @@
-import express, { NextFunction, Response } from 'express';
+import express from 'express';
+import type { NextFunction, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
 import helmet from 'helmet';
@@ -22,12 +23,14 @@ export const useApp = async () => {
   app.use((req, res, next) => {
     createContext(next, { req, res })
   });
+  app.use(/^\/api\/(v\d+\/)?auth\/renewSession/, jwt({ secret: config.jwt.refreshSecret, algorithms: ['HS256']}));
   app.use('/api', jwt({secret: config.jwt.secret, algorithms: ['HS256']}).unless({
     path: [
       // API paths.
       /^\/api\/(v\d+\/)?auth\/login/,
       /^\/api\/(v\d+\/)?auth\/register/,
-      /^\/api\/(v\d+\/)?canvas/,
+      {url: /^\/api\/(v\d+\/)?canvas\/.*/, methods: ['GET']},
+      {url: /^\/api\/(v\d+\/)?user\/.*/, methods: ['GET']}
     ]
   }));
   app.use((req: Request, res, next) => {

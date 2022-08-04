@@ -1,9 +1,9 @@
 import axios, { AxiosError } from 'axios'
 import axiosRetry, { exponentialDelay } from 'axios-retry'
-import { IUser } from '../interfaces'
+import type { ICanvas, IFilters, IUser } from '../interfaces'
 
 export class BffApiService {
-  private readonly baseUrl: string | undefined
+  public readonly baseUrl: string | undefined
   /**
    *
    */
@@ -72,18 +72,100 @@ export class BffApiService {
     return response.status;
   }
 
-  public async getCanvas(type?: string) {
-    const url = `${this.baseUrl}/canvas`
+  public async getCanvases(filters?: Partial<IFilters>, token?: string) {
+    const url = `${this.baseUrl}/canvas/`
     const response = await axios.request({
       method: 'GET',
       url,
-      responseType: 'arraybuffer',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: filters
+    })
+    return response.data;
+  }
+
+  public async getCanvas(id?: string, token?: string) {
+    const url = `${this.baseUrl}/canvas/${id || '0'}`
+    const response = await axios.request({
+      method: 'GET',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+    return response.data;
+  }
+
+  public async createCanvas(token: string, data: Partial<ICanvas>): Promise<ICanvas> {
+    const url = `${this.baseUrl}/canvas/create`
+    const response = await axios.request({
+      method: 'POST',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data
+    })
+    return response.data;
+  }
+
+  public async updateCanvas(canvasId: string, data: Partial<ICanvas>, token: string): Promise<ICanvas> {
+    const url = `${this.baseUrl}/canvas/${canvasId}`
+    const response = await axios.request({
+      method: 'PATCH',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data
+    })
+    return response.data;
+  }
+
+  public async deleteCanvas(canvasId: string, token: string): Promise<ICanvas> {
+    const url = `${this.baseUrl}/canvas/${canvasId}`
+    const response = await axios.request({
+      method: 'DELETE',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+    return response.data;
+  }
+
+  public async addSub(subId: string, canvasId: string, token: string) {
+    const url = `${this.baseUrl}/canvas/${canvasId || '0'}/sub`
+    const response = await axios.request({
+      method: 'POST',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       params: {
-        type: type || 'raw'
+        subId
       }
     })
     return response.data;
   }
+
+  public async removeSub(subId: string, canvasId: string, token: string) {
+    const url = `${this.baseUrl}/canvas/${canvasId || '0'}/sub`
+    const response = await axios.request({
+      method: 'DELETE',
+      url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        subId
+      }
+    })
+    return response.data;
+  }
+
+  
 
   private retryFunction() {
     return (retryCount: number, error: AxiosError) => {

@@ -1,32 +1,26 @@
-#canvas-div {
-  width: 100vw;
-  height: calc(100vh - 124px);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.canvas-div {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .canvas-container {
-  width: min(100vw, calc(100vh - 124px));
-  height: min(100vw, calc(100vh - 124px));
-  background: white;
-  display: flex;
+  width: min(100vw, calc(100vh - 124px)) !important;
+  height: min(100vw, calc(100vh - 124px)) !important;
+  /* background: white; */
+  display: flex !important;
   justify-content: center;
   align-items: center;
 }
 
 #canvas {
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
   cursor: crosshair;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
 }
 
 #controls-div {
-  width: 290px;
-  height: 370px;
+  width: 300px;
+  height: 450px;
   background: var(--dark-color);
   box-shadow: 0.1em 0.2em 3px;
   border-radius: 3px;
@@ -37,8 +31,19 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 30%;
+  top: 20%;
   right: 0;
+  text-align: center;
+}
+
+.top-right {
+  position: absolute !important;
+  top: 5px;
+  right: 5px;
+}
+
+h1 {
+  font-size: 32px;
 }
 
 #controls-div:hover {

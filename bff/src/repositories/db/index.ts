@@ -1,5 +1,6 @@
 import * as db from './db';
 import ckUserTbl from './ckUserTable';
-import ckCanvasHistoryTbl from './ckCanvasHistoryTable';
+import ckCanvasTbl from './ckCanvasTable';
+import ckCanvasSubsTbl from './ckCanvasSubsTable';
 
-export { db, ckUserTbl, ckCanvasHistoryTbl };
+export { db, ckUserTbl, ckCanvasTbl, ckCanvasSubsTbl };

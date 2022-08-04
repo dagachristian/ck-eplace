@@ -1,5 +1,7 @@
 import { PNG } from 'pngjs';
 import bmp from 'bmp-js';
+import imagemin from 'imagemin';
+import imageminPngquant from 'imagemin-pngquant';
 
 export const bToRGBA = (color: number, rgbaBuf: Buffer | Uint8ClampedArray, idx: number) => {
   rgbaBuf[idx] = (color >> 5) * 255 / 7;
@@ -28,7 +30,7 @@ export const b8ToRaw = (buffer: Buffer) => {
   return raw;
 }
 
-export const b8ToPNG = (buffer: Buffer) => {
+export const b8ToPNG = async (buffer: Buffer) => {
   const dim = Math.floor(Math.sqrt(buffer.length));
   const png = new PNG({
     width: dim,
@@ -41,7 +43,9 @@ export const b8ToPNG = (buffer: Buffer) => {
       bToRGBA(color, png.data, idx);
     }
   }
-  return PNG.sync.write(png);
+  return await imagemin.buffer(PNG.sync.write(png), {
+    plugins: [imageminPngquant()]
+  });
 }
 
 export const updPNGb8 = (pngBuf: Buffer, x: number, y: number, color: number) => {

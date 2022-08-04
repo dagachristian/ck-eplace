@@ -1,8 +1,8 @@
-import { Response, NextFunction } from 'express';
-import { Request } from 'express-jwt';
+import type { Response, NextFunction } from 'express';
+import type { Request } from 'express-jwt';
 import httpStatus from 'http-status';
 
-import * as userSvc from '../services/userService';
+import * as userSvc from '../services/authService';
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   console.log('/login')
@@ -39,7 +39,8 @@ export const renewSession = async (req: Request, res: Response, next: NextFuncti
   console.log('/renewSession')
   try {
     const { ip } = req;
-    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth!, ip);
+    const userAgent = req.get('user-agent') || '';
+    const { user, sessionId, apiToken } = await userSvc.renewSession(req.auth!, ip, userAgent);
 
     // res.cookie('session', sessionId, { httpOnly: true, secure: true, signed: true });
     res.status(httpStatus.OK).json({

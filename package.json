@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rm -rf node_modules && npm run clean -ws",
     "docker:dev": "docker-compose -f docker-compose-dev.yml up --build -d",
-    "docker:pp": "source .envrc && npm run clean && npm i && npm run build -ws && docker build -t ckoled/ck-eplace_app ."
+    "docker:pp": "docker tag ck-eplace_app ckoled/ck-eplace_app && docker push ckoled/ck-eplace_app"
   },
   "author": "Christian Daga",
   "license": "ISC",

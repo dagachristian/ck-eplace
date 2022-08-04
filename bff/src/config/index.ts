@@ -17,7 +17,8 @@ let config: {
   signed: {
     cookie: {
       secret: string[]
-    }
+    },
+    salt: number
   },
   db: {
     host: string,
@@ -33,6 +34,7 @@ let config: {
   },
   jwt: {
     secret: string,
+    refreshSecret: string,
     expiresIn: {
       api: string,
       refresh: string

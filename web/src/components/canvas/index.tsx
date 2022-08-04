@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { Buffer } from 'buffer';
-import { Divider, Spin, Typography } from 'antd';
+import { Button, Divider, Empty, Spin } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { CirclePicker, ColorResult } from 'react-color';
 import Draggable from 'react-draggable';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'; 
+import { TransformWrapper, TransformComponent } from '@pronestor/react-zoom-pan-pinch'; 
 
 import { bffApi } from '../../services/bffApi';
 import { wsClient } from '../../services/bffApi/websocket';
 import { updatePixel } from '../../services/bffApi/websocket/emitters';
+import { useAuth } from '../../services/auth';
+import { ICanvas } from '../../services/interfaces';
 
 import './canvas.css';
 
@@ -24,14 +27,25 @@ const to8bit = ({r, g, b}: {r:number,g:number,b:number}) => {
   return Math.floor((r * 7 / 255) << 5) + Math.floor((g * 7 / 255) << 2) + Math.floor((b * 3 / 255))
 }
 
-export default function Canvas() {
+export default function Canvas({ canvasId='0' }) {
+  const auth = useAuth();
+  const nav = useNavigate();
   const [ loading, setLoading ] = useState(true);
+  const [ noData, setNoData ] = useState(false);
+  const [ subbed, setSubbed ] = useState(false);
+  const [ canvasInfo, setCanvasInfo ] = useState<ICanvas>();
   const [ pickedColor, _setPickedColor ] = useState<any>();
   const isPanning = useRef(false);
   const isClicking = useRef(false);
   const colorRef = useRef(pickedColor);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
+  const toggleSubbed = async () => {
+    setSubbed(!subbed);
+    if (subbed) await bffApi.removeSub(auth.user?.id!, canvasInfo?.id!, auth.apiToken!);
+    else await bffApi.addSub(auth.user?.id!, canvasInfo?.id!, auth.apiToken!);
+  }
+
   const setPickedColor = (val: ColorResult) => {
     colorRef.current = val;
     _setPickedColor(val)
@@ -42,59 +56,73 @@ export default function Canvas() {
     setTimeout(() => {
       if (!isClicking.current)
         isPanning.current = true;
-    }, 100);
+    }, 150);
   }
 
-  const pick = (ctx: CanvasRenderingContext2D) => {
-    return (event: MouseEvent) => {
-      isClicking.current = true;
-      if (!isPanning.current) {
-        const scale = document.getElementById('canvas')?.offsetWidth!/canvasRef.current?.width!;
-        const x = Math.round((event.offsetX-16)/scale);
-        const y = Math.round((event.offsetY-14)/scale);
-        updatePixel(to8bit(colorRef.current.rgb), x, y);
-      }
-      isPanning.current = false;
+  const pick = (event: MouseEvent) => {
+    isClicking.current = true;
+    if (!isPanning.current) {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      const scale = canvasRef.current?.width! / rect?.width!
+      const x = Math.floor((event.clientX - rect?.left!) * scale);
+      const y = Math.floor((event.clientY - rect?.top!) * scale);
+      updatePixel(to8bit(colorRef.current.rgb), x, y);
     }
+    isPanning.current = false;
   }
 
   const draw = async (ctx: CanvasRenderingContext2D) => {
-    const canvasRaw = await bffApi.getCanvas('rawRGBA');
-    const canvasArr = new Uint8ClampedArray(Buffer.from(canvasRaw));
-    const size = Math.floor(Math.sqrt(canvasArr.length >> 2));
-    const canvasImg = await createImageBitmap(new ImageData(canvasArr, size, size));
-    canvasRef.current!.width = size;
-    canvasRef.current!.height = size;
-    ctx.drawImage(canvasImg, 0, 0);
-    await wsClient.initCanvasSocket();
-    setLoading(false);
+    try {
+      const canvas = await bffApi.getCanvas(canvasId, auth.apiToken);
+      setCanvasInfo(canvas);
+      if (canvas.subs.includes(auth.user?.id)) setSubbed(true);
+      canvasRef.current!.width = canvas.size;
+      canvasRef.current!.height = canvas.size;
+      console.log(canvas)
+      const canvasImg = new Image(canvas.size, canvas.size)
+      canvasImg.src = `${bffApi.baseUrl}${canvas.img}&cache=${performance.now()}`
+      canvasImg.onload = async () => {
+        ctx.drawImage(canvasImg, 0, 0);
+        await wsClient.initCanvasSocket(canvasId);
+        setLoading(false);
+      }
+    } catch (e) {
+      setNoData(true);
+    }
   }
 
   useEffect(() => {
     const canvas = canvasRef.current!
     const ctx = canvas.getContext('2d')!
-    const listener = pick(ctx);
-    canvas.addEventListener('click', listener);
+    canvas.addEventListener('click', pick);
     canvas.addEventListener('mousedown', setIsPanning);
     draw(ctx);
     return function cleanup() {
       wsClient.closeSocket()
-      canvas.removeEventListener('click', listener);
+      canvas.removeEventListener('click', pick);
       canvas.removeEventListener('mousedown', setIsPanning);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <TransformWrapper>
-      <TransformComponent>
-        <div id='canvas-div'>
-          <div className='canvas-container' hidden={!loading}><Spin size='large' /></div>
-          <canvas className='canvas-container' id='canvas' hidden={loading} ref={canvasRef}/>
+    <TransformWrapper centerOnInit maxScale={100}>
+      <TransformComponent wrapperClass='canvas-div' contentClass='canvas-container'>
+        <div hidden={!loading}>
+          {noData?<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{color: 'gray'}} />:<Spin size='large' />}
         </div>
+        <canvas id='canvas' className='pixellated' hidden={loading} ref={canvasRef}/>
       </TransformComponent>
       <Draggable>
         <div id='controls-div'>
-          <Typography.Title style={{marginBottom: '0px'}}>Choose Color</Typography.Title>
+          {auth.loggedIn && canvasInfo?.id !== '0' && (auth.user?.id === canvasInfo?.userId?
+            <Button className='top-right' style={{border: '0px'}} ghost icon={<EditOutlined />} onClick={() => nav('edit')} />
+            :subbed?
+              <Button className='top-right' onClick={toggleSubbed}>Subbed</Button>
+              :<Button className='top-right' style={{background: 'green'}} onClick={toggleSubbed}>Sub</Button>
+          )}
+          <h1>{canvasInfo?.name}</h1>
+          <h2>Choose Color</h2>
           <Divider style={{margin: '10px 0px 15px'}}/>
           <CirclePicker
             color={pickedColor}

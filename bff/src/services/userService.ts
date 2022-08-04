@@ -1,98 +1,58 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { v4 } from 'uuid';
-
-import { ckUserTbl } from '../repositories/db';
-import { IUser, IUserInfo } from './interfaces';
+import type { IUser } from "./interfaces"
+import { ckUserTbl } from "../repositories/db";
 import Query from '../repositories/db/Query';
-import { currentContext } from '../context';
-import config from '../config';
-import { ApiError, Errors } from '../errors';
+import { ApiError, Errors } from "../errors";
+import { currentContext } from "../context";
 
-const saltRounds = 6;
-
-const publishUser = (user: IUser) => {
-  delete user.enabled;
-  delete user.created;
-  delete user.createdBy;
-  delete user.lastModified;
-  delete user.lastModifiedBy;
-  delete user.password;
-  return user;
+export const checkUuid = (id: string) => {
+  return id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
 }
 
-const newSession = async (user: IUser, ip: string, userAgent?: string) => {
+const publishPublicUser = (user: any) => {
+  return {
+    id: user.id,
+    username: user.username
+  }
+}
+
+export const getUsers = async (filters?: any) => {
+  return await Query.findMany({t: 'ck_user'}, {});
+}
+
+export const getUser = async (identity: string) => {
+  const params = {
+    id: '00000000-00000000-00000000-00000000',
+    username: identity
+  }
+  if (checkUuid(identity))
+    params.id = identity;
+  const user = await Query.findOne({t: 'ck_user'}, {
+    select: {
+      clause: 't.id, t.username'
+    },
+    where: {
+      clause: 't.id = :id OR t.username = :username',
+      params
+    }
+  })
+  if (!user) throw new ApiError(Errors.NOT_EXIST);
+  return publishPublicUser(user);
+}
+
+export const updateUser = async (updateInfo: Partial<IUser>) => {
   const ctx = currentContext();
-  ctx.userId = user.id;
-  ctx.appId = userAgent?ip + userAgent:ip;
-
-  const sessionId = v4();
-  const apiToken = jwt.sign(
-    { username: user.username, iat: ctx.now.unix(), audience: ctx.appId },
-    config.jwt.secret,
-    {
-      expiresIn: config.jwt.expiresIn.api,
-      issuer: config.api.endpoint,
-      subject: user.id,
-      jwtid: sessionId
-    }
-  )
-  const refreshToken = jwt.sign(
-    { username: user.username, iat: ctx.now.unix(), audience: ip },
-    config.jwt.secret,
-    {
-      expiresIn: config.jwt.expiresIn.refresh,
-      issuer: config.api.endpoint,
-      subject: user.id,
-      jwtid: sessionId
-    }
-  )
-
-  return { sessionId, apiToken, refreshToken }
+  const updated = await ckUserTbl.update(updateInfo, {
+    clause: 't.id = :userId',
+    params: { userId: ctx.userId }
+  });
+  return updated;
 }
 
-export const login = async (userInfo: IUserInfo) => {
-  const user = await Query.findOne(
-    { t: 'ck_user' },
-    {
-      where: {
-        clause: 't.username = :username AND t.enabled = :enabled',
-        params: { username: userInfo.username, enabled: true }
-      }
-    }
-  ) as IUser;
-  if (user && bcrypt.compareSync(userInfo.password, user.password!)) {
-    const { sessionId, apiToken, refreshToken } = await newSession(user, userInfo.ip, userInfo.userAgent);
-    return { user: publishUser(user), sessionId, apiToken, refreshToken };
-  } else if (!user)
-    throw new ApiError(Errors.NOT_EXIST);
-  else
-    throw new ApiError(Errors.UNAUTHORIZED);
-}
-
-export const renewSession = async (refreshToken: jwt.JwtPayload, ip: string) => {
-  const user = await Query.findOne(
-    { t: 'ck_user' },
-    {
-      where: {
-        clause: 't.id = :id AND t.enabled = :enabled',
-        params: { id: refreshToken.sub, enabled: true }
-      }
-    }
-  ) as IUser;
-  if (user && refreshToken.audience == ip) {
-    const { sessionId, apiToken } = await newSession(user, ip);
-    return { user: publishUser(user), sessionId, apiToken };
-  } else if (!user)
-    throw new ApiError(Errors.NOT_EXIST);
-  else
-    throw new ApiError(Errors.UNAUTHORIZED);
-}
-
-export const createUser = async (user: IUser) => {
-  user.id = v4();
-  user.password = bcrypt.hashSync(user.password!, saltRounds);
-  const createdUser = await ckUserTbl.save(user);
-  if (createdUser) return createdUser
-  throw new ApiError(Errors.EXISTS);
+export const deleteUser = async () => {
+  const ctx = currentContext();
+  const deleted = await ckUserTbl.delete({
+    clause: 't.id = :userId',
+    params: { userId: ctx.userId }
+  })
+  return deleted;
 }

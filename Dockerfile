@@ -9,8 +9,8 @@ FROM node:14.17.0-alpine
 
 COPY --from=build bff/dist dist
 COPY --from=build web/build dist/build
-COPY ./bff/package.json /package.json
-COPY ./bff/package-lock.json /package-lock.json
+COPY --from=build bff/package.json package.json
+COPY --from=build bff/package-lock.json package-lock.json
 RUN npm i
 
 EXPOSE 8080

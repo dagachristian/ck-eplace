@@ -6,6 +6,8 @@ import { createAdapter } from '@socket.io/redis-adapter';
 import { client } from '../repositories/redis';
 import config from '../config';
 import * as events from './eventHandlers';
+import Query from '../repositories/db/Query';
+import { ApiError, Errors } from '../errors';
 
 let io: SocketIO;
 export let cnvnsp: Namespace;
@@ -24,25 +26,38 @@ export const initSocket = (httpServer: Server) => {
     });
   });
   cnvnsp = io.of('/canvas');
-  cnvnsp.use((socket, next) => {
+  cnvnsp.use(async (socket, next) => {
     if (socket.handshake.auth && socket.handshake.auth.token) {
       jwt.verify(socket.handshake.auth.token, config.jwt.secret, (err: any, decoded: any) => {
         if (decoded) socket.data.decoded = decoded
       });
     }
+    const { canvasId } = socket.handshake.query;
+    socket.data.canvas = {
+      id: canvasId || '0',
+      size: config.canvas.size
+    }
+    const userId = socket.data.decoded?.sub || '00000000-00000000-00000000-00000000';
+    if (canvasId && canvasId != '0') {
+      const canvas = await Query.raw(
+        'SELECT c.size FROM ck_canvas c LEFT JOIN ck_canvas_sub cs ON c.id = cs.canvas_id WHERE c.id = $1 AND (c.private = false OR c.user_id = $2 OR cs.user_id = $2) LIMIT 1',
+        [canvasId, userId]
+      )
+      if (!canvas) next(new ApiError(Errors.UNAUTHORIZED));
+      else socket.data.canvas.size = canvas[0].size;
+    }
     next();
   });
-  cnvnsp.on('connection', (socket) => {
-    if (socket.data.decoded) {
-      const usn = socket.data.decoded.username;
-      console.log(`${usn} connected to canvas nsp`)
-    } else {
-      console.log('Anonymous connected to canvas nsp')
-    }
+  cnvnsp.on('connection', async (socket) => {
+    const usn = socket.data.decoded?.username;
     socket.conn.on("close", (reason) => {
       console.log('Closed connection', reason);
     });
-    socket.on('updatePixel', events.updatePixel)
+    const { id: canvasId, size } = socket.data.canvas;
+    socket.join(canvasId)
+    console.log(`${usn} joined canvas room ${canvasId}`)
+    const handler = events.updatePixel(canvasId, size);
+    socket.on('updatePixel', handler)
   });
 }
 

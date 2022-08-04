@@ -1,0 +1,30 @@
+#change-canvas-div {
+  font-weight: bold;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#search-div {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#filter-options {
+  width: 500px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.list-header-div {
+  text-align: center;
+  margin-top: 10px;
+}

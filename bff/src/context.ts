@@ -1,7 +1,7 @@
 import { createNamespace, getNamespace } from 'cls-hooked';
 import moment from 'moment';
 import shortId from 'shortid';
-import { NextFunction } from 'express';
+import type { NextFunction } from 'express';
 
 const namespaceName = 'context';
 createNamespace(namespaceName);

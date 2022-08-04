@@ -9,7 +9,8 @@ export interface IUser {
   created?: Date | moment.Moment, 
   createdBy?: string,
   lastModified?: Date | moment.Moment,
-  lastModifiedBy?: string
+  lastModifiedBy?: string,
+  ts?: string,
 }
 
 export interface IUserInfo {
@@ -19,10 +20,32 @@ export interface IUserInfo {
   userAgent: string
 }
 
-export interface ISession {
+export interface ICanvas {
   id: string
   userId: string,
-  address: string,
-  userAgent: string,
-  expire: moment.Moment,
+  name: string,
+  size: number,
+  timer: number,
+  private: boolean,
+  img?: string,
+  subs?: string[],
+  meta?: any,
+  created?: Date | moment.Moment, 
+  createdBy?: string,
+  lastModified?: Date | moment.Moment,
+  lastModifiedBy?: string,
+  ts?: string,
+}
+
+export interface ICanvasSub {
+  userId: string,
+  canvasId: string
+}
+
+export interface ICanvasInfo {
+  name?: string,
+  size?: number,
+  timer?: number,
+  private?: boolean,
+  subs?: string[]
 }
