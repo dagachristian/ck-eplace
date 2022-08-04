@@ -96,7 +96,7 @@ export function CanvasSearch() {
             >
               <List.Item.Meta 
                 title={<Link to={`/c/${item.id}`}>{item.name}</Link>}
-                description={`Creator: ${item.username} Size: ${item.size}, Timer: ${item.timer}, Subs: ${item.subs}, Created ${date.format(new Date(item.created!), 'YYYY/MM/DD HH:mm:ss')}`}
+                description={`Creator: ${item.username}, Size: ${item.size}, Timer: ${item.timer}, Subs: ${item.subs}, Created ${date.format(new Date(item.created!), 'YYYY/MM/DD HH:mm:ss')}`}
               />
             </List.Item>
           )}
