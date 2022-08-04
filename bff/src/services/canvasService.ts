@@ -25,13 +25,14 @@ const publishCanvas = (canvas: ICanvas) => {
   delete canvas.lastModified;
   delete canvas.lastModifiedBy;
   delete canvas.ts;
+  delete canvas.totalCount;
   return canvas;
 }
 
 export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload) => {
-  const pageSize = 25;
+  const pageSize = 10;
   let query = `
-    SELECT c.*, cu.username, COUNT(cs.user_id) AS subs 
+    SELECT c.*, cu.username, COUNT(cs.user_id) AS subs, COUNT(c.*) OVER() AS total_count 
     FROM (ck_canvas c JOIN ck_user cu ON c.user_id = cu.id) 
     LEFT OUTER JOIN ck_canvas_sub cs 
     ON c.id = cs.canvas_id 
@@ -49,6 +50,7 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
     } = $${params.length} AND`
   }
   if (user && filters.user == user.username) {
+    filters.page = 0;
     if (filters.subbed && filters.subbed.toLowerCase() !== 'false')
       query += ` cs.user_id = '${user.sub}' `;
     else
@@ -61,12 +63,14 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
   query += 'GROUP BY c.id, cu.username ';
   if (filters.sortBy && filters.sortBy != 'relevance')
     query += `ORDER BY ${filters.sortBy || 'subs'} ${filters.sortByOrder || 'desc'} `
-  query += ` 
-    OFFSET ${((filters.page || 1)-1)*pageSize} 
-    LIMIT ${pageSize};
-  `
-  const ret = await Query.raw(query, params)
-  return { canvases: ret.map(v => publishCanvas(v)) }
+  if (filters.page != 0)
+    query += ` 
+      OFFSET ${((filters.page || 1)-1)*pageSize} 
+      LIMIT ${pageSize};
+    `
+  const ret = await Query.raw(query, params);
+  const total = parseInt(ret[0]?.totalCount || '0');
+  return { canvases: ret.map(v => publishCanvas(v)), total }
 }
 
 export const getCanvas = async (canvasId: string, type?: string, userId?: string) => {

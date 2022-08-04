@@ -36,6 +36,7 @@ export interface ICanvas {
   lastModified?: Date | moment.Moment,
   lastModifiedBy?: string,
   ts?: string,
+  totalCount?: string
 }
 
 export interface ICanvasSub {

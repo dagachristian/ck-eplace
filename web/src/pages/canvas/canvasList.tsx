@@ -23,8 +23,8 @@ export function CanvasList() {
 
   useEffect(() => {
     const getCanvases = async () => {
-      const mycnvs = await bffApi.getCanvases({user: params.userId}, auth.apiToken!);
-      const subdcnvs = await bffApi.getCanvases({user: params.userId, subbed: 'true'}, auth.apiToken!);
+      const mycnvs = await bffApi.getCanvases({user: params.userId, page: 0}, auth.apiToken!);
+      const subdcnvs = await bffApi.getCanvases({user: params.userId, subbed: 'true', page: 0}, auth.apiToken!);
       setMyCanvases(mycnvs.canvases);
       setSubdCanvases(subdcnvs.canvases);
       setIsLoading(false);
