@@ -1,3 +1,5 @@
+import type { JwtPayload } from 'jsonwebtoken';
+
 import config from '../config';
 import { ckCanvasTbl, ckCanvasSubsTbl } from '../repositories/db';
 import { client } from '../repositories/redis';
@@ -6,20 +8,19 @@ import type { ICanvas, ICanvasInfo, ICanvasSub } from './interfaces';
 import { ApiError, Errors } from '../errors';
 import { v4 } from 'uuid';
 import { currentContext } from '../context';
-import { getUser } from './userService';
+import { checkUuid, getUser } from './userService';
 import * as canvasFnctns from './canvasFunctions';
 
 interface IFilters {
   query: string,
   user: string,
-  subbed: boolean,
+  subbed: string,
   sortBy: 'size' | 'created' | 'name' | 'subs',
   sortByOrder: 'asc' | 'desc',
   page: number
 }
 
 const publishCanvas = (canvas: ICanvas) => {
-  delete canvas.created;
   delete canvas.createdBy;
   delete canvas.lastModified;
   delete canvas.lastModifiedBy;
@@ -27,35 +28,39 @@ const publishCanvas = (canvas: ICanvas) => {
   return canvas;
 }
 
-export const getCanvases = async (filters: Partial<IFilters>, userId?: string) => {
+export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload) => {
+  console.log(filters, user)
   const pageSize = 25;
   let query = `
-    SELECT c.*, COUNT(cs.user_id) AS subs 
-    FROM ck_canvas c LEFT OUTER JOIN ck_canvas_sub cs 
+    SELECT c.*, cu.username, COUNT(cs.user_id) AS subs 
+    FROM (ck_canvas c JOIN ck_user cu ON c.user_id = cu.id) 
+    LEFT OUTER JOIN ck_canvas_sub cs 
     ON c.id = cs.canvas_id 
     WHERE`;
   let params = [];
-  let fltUserId;
   if (filters.query) {
-    query += ` ts @@ to_tsquery('english', $1) AND`;
-    params.push(filters.query);
+    params[params.length] = filters.query;
+    query += ` ts @@ to_tsquery('english', $${params.length}) AND`;
   }
-  if (filters.user && !filters.subbed) {
-    fltUserId = (await getUser(filters.user)).id;
-    query += ` c.user_id = '${fltUserId}' AND`;
+  if (filters.user && (!filters.subbed || filters.subbed.toLowerCase() == 'false')) {
+    params[params.length] = filters.user;
+    query += ` cu.${checkUuid(filters.user)?
+      'user_id':
+      'username'
+    } = $${params.length} AND`
   }
-  if (userId && fltUserId == userId) {
-    if (filters.subbed)
-      query += ` cs.user_id = '${userId}' `;
+  if (user && filters.user == user.username) {
+    if (filters.subbed && filters.subbed.toLowerCase() !== 'false')
+      query += ` cs.user_id = '${user.sub}' `;
     else
       query = query.slice(0, -3);
   }
-  else if (userId)
-    query += ` (cs.user_id = '${userId}' OR c.private = false) `;
+  else if (user)
+    query += ` (cs.user_id = '${user.sub}' OR c.private = false) `;
   else
     query += ' c.private = false ';
   query += `
-    GROUP BY c.id 
+    GROUP BY c.id, cu.username 
     ORDER BY ${filters.sortBy || 'subs'} ${filters.sortByOrder || 'desc'} 
     OFFSET ${((filters.page || 1)-1)*pageSize} 
     LIMIT ${pageSize};
@@ -86,11 +91,21 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
             params: { canvasId }
           }
         }) || {} as Partial<ICanvas>
-        subs = await Query.findMany({t: 'ck_canvas_sub'}, {
-          where: {
-            clause: 't.canvas_id = :canvasId',
-            params: { canvasId }
-          }
+        subs = await Query.findMany(
+          {
+            cs: 'ck_canvas_sub',
+            cu: 'ck_user'
+          }, {
+            select: {
+              clause: 'cs.canvas_id, cu.username AS user_id'
+            },
+            join: {
+              cu: 'cs.user_id = cu.id'
+            },
+            where: {
+              clause: 'cs.canvas_id = :canvasId',
+              params: { canvasId }
+            },
         })
         if (canvas.private && !(userId && (canvas.userId == userId || subs.filter((v) => v.userId == userId))))
           throw new ApiError(Errors.UNAUTHORIZED);
@@ -98,7 +113,7 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
       canvas = publishCanvas({
         id: '0',
         userId: '0',
-        name: 'El Grande',
+        name: 'Welcome',
         size: config.canvas.size,
         timer: 0,
         private: false,
@@ -174,6 +189,8 @@ export const deleteCanvas = async (canvasId: string) => {
 }
 
 export const addSub = async (subId: string, canvasId: string) => {
+  if (!checkUuid(subId))
+    subId = (await getUser(subId)).id
   const sub = await ckCanvasSubsTbl.save({
     userId: subId,
     canvasId

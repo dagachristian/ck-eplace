@@ -20,7 +20,7 @@ export const getCanvasesSch: AllowedSchema = {
       type: "string",
     },
     subbed: {
-      type: "boolean",
+      type: "string",
     },
     sortBy: {
       type: "string",

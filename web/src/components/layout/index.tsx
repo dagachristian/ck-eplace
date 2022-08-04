@@ -65,7 +65,7 @@ export default function GlobalLayout({ children, login }: any) {
           <Menu style={{background: 'transparent'}} mode='inline' inlineCollapsed={collapsed} items={[
             { key: 'create', label: 'Create Canvas', disabled: !auth.loggedIn, icon: <FileAddOutlined />, onClick: () => nav('/c/create') },
             { key: 'subbed', label: 'My Canvases', disabled: !auth.loggedIn, icon: <UnorderedListOutlined />, onClick: () => nav(`/u/${auth.user?.username}/canvases`) },
-            { key: 'find', label: 'Find Canvas', icon: <SearchOutlined /> },
+            { key: 'find', label: 'Find Canvas', icon: <SearchOutlined />, onClick: () => nav('/c/search') },
           ]} />
         </Sider>}
         <Content id='content'>

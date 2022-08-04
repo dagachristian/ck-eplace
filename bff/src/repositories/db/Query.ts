@@ -212,7 +212,7 @@ export default class Query {
 
   static async raw(rawSql: string, params?: string[], options?: Options): Promise<any[]> {
     const { tx } = options || {};
-    console.log(`raw(),\nquery=${rawSql}`);
+    console.log(`raw(),\nquery=${rawSql}\nparams=${params}`);
     const dbClient = tx ? tx.db : pool;
     const { rows } = await dbClient.query(rawSql, params || []);
     return rows.map((row: Obj) => convertDbFieldsToModel(row));

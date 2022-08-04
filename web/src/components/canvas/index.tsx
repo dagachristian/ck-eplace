@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Divider, Empty, Spin, Typography } from 'antd';
+import { Button, Divider, Empty, Spin } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { CirclePicker, ColorResult } from 'react-color';
 import Draggable from 'react-draggable';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'; 
@@ -7,6 +9,8 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { bffApi } from '../../services/bffApi';
 import { wsClient } from '../../services/bffApi/websocket';
 import { updatePixel } from '../../services/bffApi/websocket/emitters';
+import { useAuth } from '../../services/auth';
+import { ICanvas } from '../../services/interfaces';
 
 import './canvas.css';
 
@@ -24,14 +28,24 @@ const to8bit = ({r, g, b}: {r:number,g:number,b:number}) => {
 }
 
 export default function Canvas({ canvasId='0' }) {
+  const auth = useAuth();
+  const nav = useNavigate();
   const [ loading, setLoading ] = useState(true);
   const [ noData, setNoData ] = useState(false);
+  const [ subbed, setSubbed ] = useState(false);
+  const [ canvasInfo, setCanvasInfo ] = useState<ICanvas>();
   const [ pickedColor, _setPickedColor ] = useState<any>();
   const isPanning = useRef(false);
   const isClicking = useRef(false);
   const colorRef = useRef(pickedColor);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
+  const toggleSubbed = async () => {
+    setSubbed(!subbed);
+    if (subbed) await bffApi.removeSub(auth.user?.id!, canvasInfo?.id!, auth.apiToken!);
+    else await bffApi.addSub(auth.user?.id!, canvasInfo?.id!, auth.apiToken!);
+  }
+
   const setPickedColor = (val: ColorResult) => {
     colorRef.current = val;
     _setPickedColor(val)
@@ -59,7 +73,9 @@ export default function Canvas({ canvasId='0' }) {
 
   const draw = async (ctx: CanvasRenderingContext2D) => {
     try {
-      const canvas = await bffApi.getCanvas(canvasId);
+      const canvas = await bffApi.getCanvas(canvasId, auth.apiToken);
+      setCanvasInfo(canvas);
+      if (canvas.subs.includes(auth.user?.id)) setSubbed(true);
       canvasRef.current!.width = canvas.size;
       canvasRef.current!.height = canvas.size;
       console.log(canvas)
@@ -99,7 +115,14 @@ export default function Canvas({ canvasId='0' }) {
       </TransformComponent>
       <Draggable>
         <div id='controls-div'>
-          <Typography.Title style={{marginBottom: '0px'}}>Choose Color</Typography.Title>
+          {auth.apiToken && (auth.user?.id === canvasInfo?.userId?
+            <Button className='top-right' style={{border: '0px'}} ghost icon={<EditOutlined />} onClick={() => nav('edit')} />
+            :subbed?
+              <Button className='top-right' onClick={toggleSubbed}>Subbed</Button>
+              :<Button className='top-right' style={{background: 'green'}} onClick={toggleSubbed}>Sub</Button>
+          )}
+          <h1>{canvasInfo?.name}</h1>
+          <h2>Choose Color</h2>
           <Divider style={{margin: '10px 0px 15px'}}/>
           <CirclePicker
             color={pickedColor}

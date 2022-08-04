@@ -22,3 +22,4 @@ export default function CanvasPage() {
 export { CanvasEdit } from './canvasEdit';
 export { CanvasCreate } from './canvasCreate';
 export { CanvasList } from './canvasList';
+export { CanvasSearch } from './canvasSearch';

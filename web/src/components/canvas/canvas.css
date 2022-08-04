@@ -19,8 +19,8 @@
 }
 
 #controls-div {
-  width: 290px;
-  height: 370px;
+  width: 300px;
+  height: 450px;
   background: var(--dark-color);
   box-shadow: 0.1em 0.2em 3px;
   border-radius: 3px;
@@ -31,8 +31,19 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 30%;
+  top: 20%;
   right: 0;
+  text-align: center;
+}
+
+.top-right {
+  position: absolute !important;
+  top: 5px;
+  right: 5px;
+}
+
+h1 {
+  font-size: 32px;
 }
 
 #controls-div:hover {

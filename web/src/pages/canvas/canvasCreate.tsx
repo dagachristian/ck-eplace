@@ -43,7 +43,7 @@ export function CanvasCreate() {
       <title>{TITLE}</title>
     </Helmet>
     <GlobalLayout>
-      <div id='create-canvas-div'>
+      <div id='change-canvas-div'>
         <h1 style={{alignSelf:'center', fontSize:'3em', fontWeight:'bold'}}>Create Canvas</h1>
         <span style={{color: 'red', fontWeight: 'lighter', margin: '0 0 5px', fontSize:'.7em'}}>{error}</span>
         <Form

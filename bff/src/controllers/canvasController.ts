@@ -4,8 +4,6 @@ import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import { DatabaseError } from 'pg';
 
-import type { ICanvas } from '../services/interfaces';
-import * as canvasFnctns from '../services/canvasFunctions';
 import * as canvasSvc from '../services/canvasService';
 import config from '../config';
 import { ApiError, Errors } from '../errors';
@@ -15,11 +13,11 @@ export const getCanvases = async (req: Request, res: Response, next: NextFunctio
   console.log('/canvases')
   try {
     const filters = req.query;
-    let userId: string | jwt.JwtPayload | undefined = req.get('authorization');
-    if (userId) jwt.verify(userId?.split(' ')[1], config.jwt.secret, (err, decoded) => {
-      userId = decoded?.sub;
+    let user: string | jwt.JwtPayload | undefined = req.get('authorization');
+    if (user) jwt.verify(user?.split(' ')[1], config.jwt.secret, (err, decoded) => {
+      user = decoded;
     })
-    const ret = await canvasSvc.getCanvases(filters, userId as string | undefined);
+    const ret = await canvasSvc.getCanvases(filters, user as jwt.JwtPayload | undefined);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
     console.log('Get Canvases error', e);

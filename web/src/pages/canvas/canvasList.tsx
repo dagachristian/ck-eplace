@@ -17,17 +17,20 @@ export function CanvasList() {
   const auth = useAuth();
   const params = useParams();
   const nav = useNavigate();
-  const [canvases, setCanvases] = useState<ICanvas[]>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [ myCanvases, setMyCanvases ] = useState<ICanvas[]>();
+  const [ subdCanvases, setSubdCanvases ] = useState<ICanvas[]>();
+  const [ isLoading, setIsLoading ] = useState(true);
 
   useEffect(() => {
     const getCanvases = async () => {
-      const cnvs = await bffApi.getCanvases({user: params.userId}, auth.apiToken!);
-      setCanvases(cnvs.canvases);
+      const mycnvs = await bffApi.getCanvases({user: params.userId}, auth.apiToken!);
+      const subdcnvs = await bffApi.getCanvases({user: params.userId, subbed: 'true'}, auth.apiToken!);
+      setMyCanvases(mycnvs.canvases);
+      setSubdCanvases(subdcnvs.canvases);
       setIsLoading(false);
     }
     getCanvases();
-  }, [auth.apiToken, params.userId, setCanvases]);
+  }, [auth.apiToken, params.userId, setMyCanvases]);
 
   return (<>
     <Helmet>
@@ -38,7 +41,7 @@ export function CanvasList() {
         <TabPane tab='Created' key='1'>
           <List
             size='large'
-            dataSource={canvases}
+            dataSource={myCanvases}
             loading={isLoading}
             style={{paddingTop: '20px'}}
             grid={{ column: 5 }}
@@ -56,7 +59,24 @@ export function CanvasList() {
           />
         </TabPane>
         <TabPane tab='Subbed' key='2'>
-          Subbed
+          <List
+            size='large'
+            dataSource={subdCanvases}
+            loading={isLoading}
+            style={{paddingTop: '20px'}}
+            grid={{ column: 5 }}
+            renderItem={(item: ICanvas) => (
+              <List.Item>
+                <Card
+                  hoverable
+                  cover={<img className='pixellated' alt='' src={bffApi.baseUrl! + item.img!} />}
+                  onClick={() => nav(`/c/${item.id}`)}
+                >
+                  <Meta title={item.name} description={`Size: ${item.size}, Timer: ${item.timer}, Private: ${item.private}, Subs: ${item.subs}`} />
+                </Card>
+              </List.Item>
+            )}
+          />
         </TabPane>
       </Tabs>
     </GlobalLayout>

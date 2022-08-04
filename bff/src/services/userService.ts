@@ -4,6 +4,10 @@ import Query from '../repositories/db/Query';
 import { ApiError, Errors } from "../errors";
 import { currentContext } from "../context";
 
+export const checkUuid = (id: string) => {
+  return id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
+}
+
 const publishPublicUser = (user: any) => {
   return {
     id: user.id,
@@ -20,7 +24,7 @@ export const getUser = async (identity: string) => {
     id: '00000000-00000000-00000000-00000000',
     username: identity
   }
-  if (identity.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))
+  if (checkUuid(identity))
     params.id = identity;
   const user = await Query.findOne({t: 'ck_user'}, {
     select: {

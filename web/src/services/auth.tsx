@@ -8,7 +8,7 @@ type AC = {
   signIn: (username: string, password: string, remember: boolean) => Promise<boolean>
   signOut: () => Promise<any>
   currentSession: () => Promise<string | null>
-  apiToken: string | null
+  apiToken: string | undefined
   user: IUser | null
 }
 
@@ -17,7 +17,7 @@ const AuthContext = createContext<AC>({
   signIn: () => Promise.resolve(false),
   signOut: () => Promise.resolve(),
   currentSession: () => Promise.resolve(null),
-  apiToken: null,
+  apiToken: undefined,
   user: null
 })
 
@@ -27,7 +27,7 @@ interface IAuthProviderProps {
 
 const AuthProvider = (props: IAuthProviderProps) => {
   const [loggedIn, setLoggedIn] = useState<AC['loggedIn']>(false)
-  const [apiToken, setApiToken] = useState<AC['apiToken']>(null)
+  const [apiToken, setApiToken] = useState<AC['apiToken']>(undefined)
   const [user, setUser] = useState<IUser | null>(null)
 
   const signIn = useCallback(async (username: string, password: string, remember: boolean): Promise<any> => {
@@ -49,7 +49,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
       await bffApi.logout(apiToken!);
     } catch (e) {}
     setLoggedIn(false)
-    setApiToken(null)
+    setApiToken(undefined)
     setUser(null)
     sessionStorage.clear()
     localStorage.clear()
