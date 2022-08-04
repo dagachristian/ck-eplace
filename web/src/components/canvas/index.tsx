@@ -4,7 +4,7 @@ import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CirclePicker, ColorResult } from 'react-color';
 import Draggable from 'react-draggable';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'; 
+import { TransformWrapper, TransformComponent } from '@pronestor/react-zoom-pan-pinch'; 
 
 import { bffApi } from '../../services/bffApi';
 import { wsClient } from '../../services/bffApi/websocket';
@@ -115,7 +115,7 @@ export default function Canvas({ canvasId='0' }) {
       </TransformComponent>
       <Draggable>
         <div id='controls-div'>
-          {auth.apiToken && (auth.user?.id === canvasInfo?.userId?
+          {auth.loggedIn && canvasInfo?.id !== '0' && (auth.user?.id === canvasInfo?.userId?
             <Button className='top-right' style={{border: '0px'}} ghost icon={<EditOutlined />} onClick={() => nav('edit')} />
             :subbed?
               <Button className='top-right' onClick={toggleSubbed}>Subbed</Button>
