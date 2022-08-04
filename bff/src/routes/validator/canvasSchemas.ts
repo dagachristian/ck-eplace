@@ -21,15 +21,18 @@ export const getCanvasesSch: AllowedSchema = {
     },
     subbed: {
       type: "string",
+      enum: ["true", "false", "True", "False"]
     },
     sortBy: {
       type: "string",
+      enum: ["subs", "size", "created", "name", "relevance"]
     },
     sortByOrder: {
       type: "string",
+      enum: ["asc", "desc"]
     },
     page: {
-      type: "number",
+      type: "string",
     }
   },
 }

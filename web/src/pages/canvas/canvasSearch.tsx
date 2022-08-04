@@ -14,17 +14,19 @@ const TITLE = 'Search Canvas | Eplace';
 export function CanvasSearch() {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ filters, setFilters ] = useState<Partial<IFilters>>({});
-  const [ searchResults, setSearchResults ] = useState<ICanvasResult[]>();
+  const [ searchResults, setSearchResults ] = useState<ICanvasResult[]>([]);
+  const [ resultsLength, setResultsLength ] = useState(0);
 
-  const search = async () => {
+  const search = async (_value: any, _event?: any, page?: number) => {
     setIsLoading(true);
-    const results = await bffApi.getCanvases(filters);
+    const results = await bffApi.getCanvases({...filters, page});
+    setResultsLength(results.total);
     setSearchResults(results.canvases);
     setIsLoading(false);
   }
 
   useEffect(() => {
-    search()
+    search(null,null,1)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -77,12 +79,14 @@ export function CanvasSearch() {
         <List
           loading={isLoading}
           pagination={{
+            total: resultsLength,
+            showSizeChanger: false,
+            defaultCurrent: 1,
             onChange: async page => {
-              setFilters({...filters, page})
-              await search()
+              await search(null,null,page)
               console.log(page)
             },
-            pageSize: 25
+            pageSize: 10
           }}
           dataSource={searchResults}
           renderItem={item => (
