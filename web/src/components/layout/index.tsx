@@ -34,7 +34,7 @@ export default function GlobalLayout({ children, login }: any) {
               {
                 key: '1',
                 label: (
-                  <Button type='text' size='small' onClick={() => nav(`/u/${auth.user?.username}`)}>{t('layout.profile')}</Button>
+                  <Button type='text' size='small' onClick={() => nav(`/u/profile`)}>{t('layout.profile')}</Button>
                 ),
               },
               {

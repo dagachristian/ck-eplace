@@ -15,7 +15,7 @@ interface IFilters {
   query: string,
   user: string,
   subbed: string,
-  sortBy: 'size' | 'created' | 'name' | 'subs',
+  sortBy: 'size' | 'created' | 'name' | 'subs' | 'relevance',
   sortByOrder: 'asc' | 'desc',
   page: number
 }
@@ -29,7 +29,6 @@ const publishCanvas = (canvas: ICanvas) => {
 }
 
 export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload) => {
-  console.log(filters, user)
   const pageSize = 25;
   let query = `
     SELECT c.*, cu.username, COUNT(cs.user_id) AS subs 
@@ -39,8 +38,8 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
     WHERE`;
   let params = [];
   if (filters.query) {
-    params[params.length] = filters.query;
-    query += ` ts @@ to_tsquery('english', $${params.length}) AND`;
+    params[params.length] = `${filters.query}:*`;
+    query += ` c.ts @@ to_tsquery('english', $${params.length}) AND`;
   }
   if (filters.user && (!filters.subbed || filters.subbed.toLowerCase() == 'false')) {
     params[params.length] = filters.user;
@@ -59,9 +58,10 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
     query += ` (cs.user_id = '${user.sub}' OR c.private = false) `;
   else
     query += ' c.private = false ';
-  query += `
-    GROUP BY c.id, cu.username 
-    ORDER BY ${filters.sortBy || 'subs'} ${filters.sortByOrder || 'desc'} 
+  query += 'GROUP BY c.id, cu.username ';
+  if (filters.sortBy && filters.sortBy != 'relevance')
+    query += `ORDER BY ${filters.sortBy || 'subs'} ${filters.sortByOrder || 'desc'} `
+  query += ` 
     OFFSET ${((filters.page || 1)-1)*pageSize} 
     LIMIT ${pageSize};
   `
@@ -71,6 +71,7 @@ export const getCanvases = async (filters: Partial<IFilters>, user?: JwtPayload)
 
 export const getCanvas = async (canvasId: string, type?: string, userId?: string) => {
   let subs: ICanvasSub[] = [];
+  let creator = 'Everyone';
   
   // must be consistent with redis list length
   let canvas: Buffer | Partial<ICanvas> | null = await client.getBuffer(canvasId || '0');
@@ -90,7 +91,8 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
             clause: 't.id = :canvasId',
             params: { canvasId }
           }
-        }) || {} as Partial<ICanvas>
+        }) as ICanvas
+        if (!canvas) throw new ApiError(Errors.NOT_EXIST);
         subs = await Query.findMany(
           {
             cs: 'ck_canvas_sub',
@@ -109,6 +111,7 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
         })
         if (canvas.private && !(userId && (canvas.userId == userId || subs.filter((v) => v.userId == userId))))
           throw new ApiError(Errors.UNAUTHORIZED);
+        creator = (await getUser((canvas as ICanvas).userId)).username
       }
       canvas = publishCanvas({
         id: '0',
@@ -119,6 +122,7 @@ export const getCanvas = async (canvasId: string, type?: string, userId?: string
         private: false,
         img: '/canvas/0?type=png',
         ...canvas,
+        creator,
         subs: subs.map((v) => v.userId)
       })
       break;

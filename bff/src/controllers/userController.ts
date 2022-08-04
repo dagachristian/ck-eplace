@@ -22,7 +22,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
     const ret = await userSvc.getUser(identity);
     res.status(httpStatus.OK).send({ users: ret });
   } catch (e) {
-    console.log('Get Users error', e)
+    console.log('Get User error', e)
     next(e);
   }
 }
@@ -33,7 +33,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     const ret = await userSvc.updateUser(req.body);
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
-    console.log('Get Users error', e)
+    console.log('Update User error', e)
     next(e);
   }
 }
@@ -44,7 +44,18 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
     const ret = await userSvc.deleteUser();
     res.status(httpStatus.OK).send(ret);
   } catch (e) {
-    console.log('Get Users error', e)
+    console.log('Delete User error', e)
+    next(e);
+  }
+}
+
+export const updateAvatar = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('/upload avatar')
+  try {
+    const ret = await userSvc.updateAvatar(req.body);
+    res.status(httpStatus.OK).send(ret);
+  } catch (e) {
+    console.log('Update Avatar error', e)
     next(e);
   }
 }

@@ -10,4 +10,6 @@ router.route('/:userId').get(user.getUser);
 router.route('/:userId').patch(user.updateUser);
 router.route('/:userId').delete(user.deleteUser);
 
+router.route('/:userId/upload').post(user.updateAvatar);
+
 export default router;

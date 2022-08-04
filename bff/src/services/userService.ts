@@ -1,11 +1,15 @@
+import bcrypt from 'bcrypt';
+
 import type { IUser } from "./interfaces"
 import { ckUserTbl } from "../repositories/db";
 import Query from '../repositories/db/Query';
 import { ApiError, Errors } from "../errors";
 import { currentContext } from "../context";
+import config from '../config';
+import { publishUser } from './authService';
 
-export const checkUuid = (id: string) => {
-  return id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
+export const checkUuid = (id?: string) => {
+  return id?.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
 }
 
 const publishPublicUser = (user: any) => {
@@ -41,11 +45,12 @@ export const getUser = async (identity: string) => {
 
 export const updateUser = async (updateInfo: Partial<IUser>) => {
   const ctx = currentContext();
+  if (updateInfo.password) updateInfo.password = bcrypt.hashSync(updateInfo.password, config.signed.salt);
   const updated = await ckUserTbl.update(updateInfo, {
     clause: 't.id = :userId',
     params: { userId: ctx.userId }
   });
-  return updated;
+  return publishUser(updated[0]);
 }
 
 export const deleteUser = async () => {
@@ -54,5 +59,10 @@ export const deleteUser = async () => {
     clause: 't.id = :userId',
     params: { userId: ctx.userId }
   })
-  return deleted;
+  return publishUser(deleted[0]);
+}
+
+export const updateAvatar = async (image: any) => {
+  const ctx = currentContext();
+  return 'uploaded avatar';
 }

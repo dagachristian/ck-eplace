@@ -23,6 +23,7 @@ export interface IUserInfo {
 export interface ICanvas {
   id: string
   userId: string,
+  creator?: string,
   name: string,
   size: number,
   timer: number,
