@@ -12,16 +12,19 @@
  - some kubernetes cluster(ofc)
  - kubectl
  - metrics-server[^1]
- - kubernetes-dashboard*
 
-*Optional
 [^1]: https://github.com/kubernetes-sigs/metrics-server/issues/1061
 
 ## To Run
 
-  1. `kubectl apply -f environment`
-  2. `kubectl apply -f app`
+  ```
+    kubectl apply -f environment
+  ```
+  ```
+    kubectl apply -f app
+  ```
 
+## Notes
 ### TODO
 
  - statefulset
