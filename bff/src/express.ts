@@ -49,11 +49,12 @@ export const useApp = async () => {
   // define a route handler for the default home page
   app.use('/api', routes);
 
-  const root = path.join(__dirname, 'build');
-  app.use(express.static(root));
-  app.get('/*', (req, res) => {
-    res.sendFile('index.html', { root });
-  });
+  // For Serving webapp
+  // const root = path.join(__dirname, 'build');
+  // app.use(express.static(root));
+  // app.get('/*', (req, res) => {
+  //   res.sendFile('index.html', { root });
+  // });
 
   app.use((req, res, next) => {
     const err = new ApiError(Errors.API);
