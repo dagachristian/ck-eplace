@@ -1,4 +1,5 @@
 resources:
+  - nginx.yaml
   - postgres.yaml
   - redis.yaml
   - bff.yaml

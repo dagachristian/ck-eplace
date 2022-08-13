@@ -30,7 +30,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: release-name-postgresql
+  name: postgresql
   namespace: "eplace"
   labels:
     app.kubernetes.io/name: postgresql
@@ -46,7 +46,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: release-name-postgresql-init-scripts
+  name: postgresql-init-scripts
   namespace: "eplace"
   labels:
     app.kubernetes.io/name: postgresql
@@ -99,7 +99,7 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-postgresql-hl
+  name: postgresql-hl
   namespace: "eplace"
   labels:
     app.kubernetes.io/name: postgresql
@@ -132,7 +132,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-postgresql
+  name: postgresql
   namespace: "eplace"
   labels:
     app.kubernetes.io/name: postgresql
@@ -156,7 +156,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: release-name-postgresql
+  name: postgresql
   namespace: "eplace"
   labels:
     app.kubernetes.io/name: postgresql
@@ -166,7 +166,7 @@ metadata:
     app.kubernetes.io/component: primary
 spec:
   replicas: 1
-  serviceName: release-name-postgresql-hl
+  serviceName: postgresql-hl
   updateStrategy:
     rollingUpdate: {}
     type: RollingUpdate
@@ -177,7 +177,7 @@ spec:
       app.kubernetes.io/component: primary
   template:
     metadata:
-      name: release-name-postgresql
+      name: postgresql
       labels:
         app.kubernetes.io/name: postgresql
         helm.sh/chart: postgresql-11.7.1
@@ -248,7 +248,7 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: release-name-postgresql
+                  name: postgresql
                   key: postgres-password
             - name: POSTGRES_DB
               value: "postgres"
@@ -319,7 +319,7 @@ spec:
       volumes:
         - name: custom-init-scripts
           configMap:
-            name: release-name-postgresql-init-scripts
+            name: postgresql-init-scripts
         - name: dshm
           emptyDir:
             medium: Memory

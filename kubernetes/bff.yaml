@@ -29,6 +29,7 @@ spec:
       containers:
       - name: bff
         image: ckoled/ck-eplace_bff
+        imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
             name: bff-secret

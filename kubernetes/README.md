@@ -1,13 +1,17 @@
 # Kubernetes Cluster
 
-### Namespace ```eplace```
-
 ## Helm Charts
- - bitnami/nginx-ingress-controller
+
+ - ingress-nginx/ingress-nginx
  - bitnami/redis
  - bitnami/postgresql
 
 ## To Run
-```kubectl kustomize .```
 
-kubectl -n kubernetes-dashboard create token admin-user
+`kubectl create namespace eplace`
+`kubectl apply -k .`
+
+### Copy n' Paste
+
+`kubectl -n kubernetes-dashboard create token admin-user`
+`kubectl port-forward service/ingress-nginx-controller 8080:80 -n eplace`
