@@ -1,0 +1,24 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: eplace-ingress
+  namespace: eplace
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        backend:
+          service:
+            name: bff
+            port:
+              number: 8080
+        path: "/api"
+      - pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 8080
+        path: "/"

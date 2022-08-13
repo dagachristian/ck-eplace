@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bff-secret
+  labels:
+    app: bff
+  namespace: eplace
+data:
+  CANVAS_SIZE: "50"
+  PG_HOST: postgresql
+  REDIS_HOST: redis-master
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: bff
+  labels:
+    app: bff
+  namespace: eplace
+spec:
+  replicas: 3
+  selector:
+    app: bff
+  template:
+    metadata:
+      labels:
+        app: bff
+    spec:
+      containers:
+      - name: bff
+        image: ckoled/ck-eplace_bff
+        envFrom:
+        - configMapRef:
+            name: bff-secret
+        ports:
+        - name: bff-server
+          containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: bff
+  labels:
+    app: bff
+  namespace: eplace
+spec:
+  ports:
+  - port: 8080
+    targetPort: bff-server
+  selector:
+    app: bff
+  type: NodePort
