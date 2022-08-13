@@ -1,7 +1,0 @@
-resources:
-  - nginx.yaml
-  - postgres.yaml
-  - redis.yaml
-  - bff.yaml
-  - web.yaml
-  - ingress.yaml
