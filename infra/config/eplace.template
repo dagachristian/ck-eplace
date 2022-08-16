@@ -1,0 +1,15 @@
+server {
+  listen 80;
+
+  location /api {
+    proxy_pass http://${API_HOST}:${API_PORT};
+  }
+
+  location /socket.io {
+    proxy_pass http://${API_HOST}:${API_PORT};
+  }
+
+  location / {
+    proxy_pass http://${WEB_HOST}:${WEB_PORT};
+  }
+}
