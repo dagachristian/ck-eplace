@@ -58,6 +58,7 @@ services:
   nginx:
     container_name: ck-nginx
     image: nginx
+    restart: always
     depends_on:
       - bff
       - web
